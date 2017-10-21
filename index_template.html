@@ -18,23 +18,39 @@
              background-color: #222222;
          }
 
-         #graph {
-             width: 1200px;
-             height: 600px;
+         #cy-container {
+             width: 100%;
+             height: 500px;
              border: 1px solid #444444;
              background-color: #222222;
          }
         </style>
     </head>
-    <link rel="stylesheet" href="vis.min.css">
+    <link rel="stylesheet" href="simple-grid.min.css">
     <script type="text/javascript" src="cytoscape.min.js"></script>
     <script type="text/javascript" src="lodash.min.js"></script>
     <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
     <body>
-        <div>XPiratez Research Tree Explorer</div>
-        <div id="graph"></div>
+        <div class="container-x" >
+            <div class="row" >
+                <div class="col-9" >
+                    <h3>XPiratez Research Tree Explorer</h3>
+                </div>
+                <div class="col-3" >
+                    <input type="text" value="Search text goes here" />
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-9" >
+                    <div id="cy-container"></div>
+                </div>
+                <div class="col-3" >
+                </div>
+            </div>
+        </div>
         <script type="text/javascript">
-         var researchData = <%= researchData %>;
+         var allInputData = <%= allData %>;
+         var researchData = allInputData.researchData;
          var addedTopics = {};
          var dupeTopics = [];
          var elements = [];
@@ -129,7 +145,7 @@
              });
 
              var cy = cytoscape({
-                 container: document.getElementById('graph'),
+                 container: document.getElementById('cy-container'),
                  elements: elements,
 
                  /*

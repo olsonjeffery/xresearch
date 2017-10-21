@@ -8,10 +8,10 @@ data = {};
 
 app.get('/', (req, res) => {
     var indexCompiled = _.template(fs.readFileSync('index_template.html', 'utf8'));
-    res.send(indexCompiled( { researchData: data } ));
+    res.send(indexCompiled( { allData: data } ));
 });
 app.use(express.static('public'));
 app.listen(3000, () => {
-    data = JSON.stringify(parser.getResearch());
+    data = JSON.stringify(parser.getAllData());
     console.log("data is parsed");
 });

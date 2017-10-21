@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const _ = require('lodash');
 
-module.exports.getResearch = () => {
+module.exports.getAllData = () => {
     var mainRulesetFile = 'Piratez.rul';
     var langRulesetFile = 'Piratez_lang.rul';
 
@@ -14,7 +14,9 @@ module.exports.getResearch = () => {
     var research = _.filter(ruleset.research, (i) => { return !i.delete && i.name !== 'STR_UNAVAILABLE'; });
     //lang.extraStrings[0].strings[research[0].name]
 
-    return _.map(research, (item) => {
+    var addedKeys = {};
+    var researchData = _.map(research, (item) => {
+        addedKeys[item.name] = true;
         var output = {
             id: item.name,
             label: lang.extraStrings[0].strings[item.name],
@@ -38,4 +40,16 @@ module.exports.getResearch = () => {
         }
         return output;
     });
+
+    var langInverted = _.chain(addedKeys).keys().reduce((memo, k) => {
+        var val = lang.extraStrings[0].strings[k];
+        memo[val] = k;
+        return memo;
+    }, {}).value();
+
+    return {
+        researchData: researchData,
+        langKeys: lang.extraStrings[0].strings,
+        langInverted: langInverted
+    };
 };

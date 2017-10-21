@@ -1,0 +1,16 @@
+{
+  "name": "xresearchviz",
+  "version": "1.0.0",
+  "description": "tool to parse and provide visualization for the xpiratez research tree",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Olson <olson.jeffery@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "js-yaml": "^3.10.0",
+    "lodash": "^4.17.4",
+  }
+}

@@ -78,9 +78,11 @@
         </script>
         <script type="text/javascript" src="GraphComponent.js"></script>
         <script type="text/javascript" src="AppComponent.js"></script>
-        <script type="text/javascript" src="xresearch.js"></script>
         <script type="text/javascript">
-         initXResearch(dataInput);
+         (() => {
+            const e = React.createElement;
+            ReactDOM.render(e(xrComponents.AppComponent, {data: dataInput}, null), document.getElementById('app-root'));
+         })();
         </script>
     </body>
 </html>

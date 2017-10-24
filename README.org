@@ -1,0 +1,52 @@
+*  XPiratez Research Tree Explorer (aka xresearch)
+
+`xresearch` is a web-based application meant to allow exploration of the XPiratez research tree data.
+
+This web application is released into the public domain with no license, copyright or warranty claims made.
+
+
+For better or worse, this app was developed and tested in Chrome, so use that if you want it to run w/ relatively little hassle.
+
+** Dependencies
+*** XPiratez, of course, without whom we wouldn't have the glorious data to explore
+**** `xresearch` relies upon a copy of the `Piratez.rul` and `Piratez_lang.rul` files, provided as a part of the XPiratez mod distro. They may have been modified to address YAML parsing issues, only.
+*** node.js for the ruleset parser and dev server
+*** `js-yaml` for YAML parsing (the format for the `.rul` file representation)
+*** `simple-grid.css` for a barebones CSS grid
+*** `lodash` is great; everyone should use it
+*** `jquery` for a document ready function i guess, lol
+*** `cytoscape.js` a wonderful and *performant* graph viz library (funded with public money, no less!)
+*** `redux` for view state management
+
+** Run development server locally
+*** have recent node.js + npm installed
+*** clone this repository to your local machine
+*** entire repo and run `npm install` command
+*** `node app.js` to bring up the development server
+*** Once you see "data is parsed" displayed, you can navigate to `http://localhost:3000` in Chrome to see the app
+
+** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
+*** TODO
+
+** Pending work items
+- [X] write Piratez/Piratez_lang.rul files parse
+- [X] import parsed JSON into a static html display
+- [X] Basic, whole-tree display/visualization
+- [ ] Integrate redux for basic view-state management
+- [ ] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
+  - [ ] all of the above edge-relationships (excluding requires) are represented as <a> links and, upon clicking, prune graph display to the selected node and it's immediate neighbors and populate it in the detail display
+  - [ ] node details empties/hides itself when another sidebar mode is focused
+- [ ] Clicking on a graph node displays the detail sidebar view
+- [ ] show sub-graph when detail display is displayed for a given node
+  - [ ] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
+  - [ ] try to use the "cose" layout
+- [ ] add "Show Entire Research Tree" button to top of page to reset the display
+- [ ] node search + sidebar view
+  - [ ] utilizing the input on the top-right of the page, search the tree topic names for matches
+  - [ ] display them in a <ul> list on the sidebar
+- [ ] support for a "<-- Go Back" link in the top of the sidebar view
+  - [ ] steps to the previous displayed sidebar item (would leverage Redux for undo history to interpret action log)
+  - [ ] imples a "Go Forward -->" as well? (would be destroyed when a new decision is made
+- [ ] router support in URL (probably implies a more advanced view manager?)
+- [ ] show ruleset version in page display
+- [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic

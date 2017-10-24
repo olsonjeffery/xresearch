@@ -14,9 +14,10 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 - `js-yaml` for YAML parsing (the format for the `.rul` file representation)
 - `simple-grid.css` for a barebones CSS grid
 - `lodash` is great; everyone should use it
-- `jquery` for a document ready function i guess, lol
 - `cytoscape.js` a wonderful and *performant* graph viz library (funded with public money, no less!)
 - `redux` for view state management
+- `react` as a view engine and structural pattern
+- `font-awesome` for icons
 
 ** Run development server locally
 - have recent node.js + npm installed

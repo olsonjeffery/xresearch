@@ -1,7 +1,7 @@
 *  XPiratez Research Tree Explorer (aka xresearch)
 `xresearch` is a web-based application meant to allow exploration of the XPiratez research tree data.
 
-This web application is released into the public domain with no license, copyright or warranty claims made.
+This web application is released into the public domain with no license, copyright or warranty claims made. Dependent libraries carry their own licenses as part of their source (or implied by the license available at their repository/website-of-record).
 
 For better or worse, this app was developed and tested in Chrome, so use that if you want it to run w/ relatively little hassle.
 

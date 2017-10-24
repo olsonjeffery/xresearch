@@ -5,6 +5,8 @@ This web application is released into the public domain with no license, copyrig
 
 For better or worse, this app was developed and tested in Chrome, so use that if you want it to run w/ relatively little hassle.
 
+This application was conceived-of and developed-by Jeffery Olson for the sake of exploring the data and as an opportunity to develop with tools like React, cytoscape.js, etc. Also, `xresearch` has a somewhat unorthodox application structure, owing to my still-evolving grasp of assorted haute webdev tools/pipelines (and trying to manage the cognitive load thereof). So it's not structured according to what's observed as best practice. Please do forgive me.
+
 ** Dependencies
 - XPiratez, of course, without whom we wouldn't have the glorious data to explore
   - `xresearch` relies upon a copy of the `Piratez.rul` and `Piratez_lang.rul` files, provided as a part of the XPiratez mod distro. They may have been modified to address YAML parsing issues, only.
@@ -46,6 +48,7 @@ TODO
 - [ ] support for a "<-- Go Back" link in the top of the sidebar view
   - [ ] steps to the previous displayed sidebar item (would leverage Redux for undo history to interpret action log)
   - [ ] imples a "Go Forward -->" as well? (would be destroyed when a new decision is made
+- [ ] static HTML generation for running as a github site
 - [ ] router support in URL (probably implies a more advanced view manager?)
 - [ ] show ruleset version in page display
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic

@@ -1,32 +1,30 @@
 *  XPiratez Research Tree Explorer (aka xresearch)
-
 `xresearch` is a web-based application meant to allow exploration of the XPiratez research tree data.
 
 This web application is released into the public domain with no license, copyright or warranty claims made.
 
-
 For better or worse, this app was developed and tested in Chrome, so use that if you want it to run w/ relatively little hassle.
 
 ** Dependencies
-*** XPiratez, of course, without whom we wouldn't have the glorious data to explore
-**** `xresearch` relies upon a copy of the `Piratez.rul` and `Piratez_lang.rul` files, provided as a part of the XPiratez mod distro. They may have been modified to address YAML parsing issues, only.
-*** node.js for the ruleset parser and dev server
-*** `js-yaml` for YAML parsing (the format for the `.rul` file representation)
-*** `simple-grid.css` for a barebones CSS grid
-*** `lodash` is great; everyone should use it
-*** `jquery` for a document ready function i guess, lol
-*** `cytoscape.js` a wonderful and *performant* graph viz library (funded with public money, no less!)
-*** `redux` for view state management
+- XPiratez, of course, without whom we wouldn't have the glorious data to explore
+  - `xresearch` relies upon a copy of the `Piratez.rul` and `Piratez_lang.rul` files, provided as a part of the XPiratez mod distro. They may have been modified to address YAML parsing issues, only.
+- node.js for the ruleset parser and dev server
+- `js-yaml` for YAML parsing (the format for the `.rul` file representation)
+- `simple-grid.css` for a barebones CSS grid
+- `lodash` is great; everyone should use it
+- `jquery` for a document ready function i guess, lol
+- `cytoscape.js` a wonderful and *performant* graph viz library (funded with public money, no less!)
+- `redux` for view state management
 
 ** Run development server locally
-*** have recent node.js + npm installed
-*** clone this repository to your local machine
-*** entire repo and run `npm install` command
-*** `node app.js` to bring up the development server
-*** Once you see "data is parsed" displayed, you can navigate to `http://localhost:3000` in Chrome to see the app
+- have recent node.js + npm installed
+- clone this repository to your local machine
+- entire repo and run `npm install` command
+- `node app.js` to bring up the development server
+- Once you see "data is parsed" displayed, you can navigate to `http://localhost:3000` in Chrome to see the app
 
 ** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
-*** TODO
+TODO
 
 ** Pending work items
 - [X] write Piratez/Piratez_lang.rul files parse

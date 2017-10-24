@@ -32,7 +32,7 @@ For better or worse, this app was developed and tested in Chrome, so use that if
 - [X] write Piratez/Piratez_lang.rul files parse
 - [X] import parsed JSON into a static html display
 - [X] Basic, whole-tree display/visualization
-- [X] integrate react and refactor to components
+- [X] integrate react and refactor to component
 - [ ] Integrate redux for basic view-state management
 - [ ] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
   - [ ] all of the above edge-relationships (excluding requires) are represented as <a> links and, upon clicking, prune graph display to the selected node and it's immediate neighbors and populate it in the detail display

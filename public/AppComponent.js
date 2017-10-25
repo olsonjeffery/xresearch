@@ -13,13 +13,13 @@
                               e('div', {className: 'col-9'},
                                 e('h3', null, e('i', {className: 'fa fa-eye'}, null), ' XPiratez Research Tree Explorer (xresearch)')),
                               e('div', {className: 'col-3', style: {paddingTop: '15px'} },
-                                e('span', {className: 'search-icon'}, e('i', {className: 'fa fa-search'}, null)),
-                                e('input', {id: 'search', type: 'text', value: 'Search text!', readOnly: true})));
+                                e(xrComponents.SearchBarComponent, {store: this.props.store, searchText: 'Enter topic name...'}, null)));
             var containerRow = e('div', {className: 'row'},
                               e('div', {className: 'col-9'},
                                 e(xrComponents.GraphComponent, {data: this.props.data}, null)),
                               e('div', {className: 'col-3'},
-                                e('p', null, 'sidebar views go here')));
+                                e(xrComponents.SearchResultsListComponent, {store: this.props.store, active: false, nodes: [], title: 'Search Results'}, null),
+                                e(xrComponents.NodeDetailsComponent, {store: this.props.store, active: false, id: -1, name: ''})));
             return e('div', null, headerRow, containerRow);
         }
     }

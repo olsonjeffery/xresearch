@@ -13,7 +13,7 @@
 
         <style>
          body {
-             color: #d3d3d3;
+             color: #d3d3d3 !important;
              font: 12pt arial;
              background-color: #222222;
          }
@@ -66,22 +66,38 @@
     </head>
     <script type="text/javascript" src="lodash.min.js"></script>
     <script type="text/javascript" src="react.development.js"></script>
+    <script type="text/javascript" src="prop-types.min.js"></script>
     <script type="text/javascript" src="react-dom.development.js"></script>
+    <script type="text/javascript" src="react-redux.min.js"></script>
     <script type="text/javascript" src="cytoscape.min.js"></script>
     <script type="text/javascript" src="redux.min.js"></script>
+    <script type="text/javascript" src="lunr.js"></script>
     <body>
         <div id="app-root">
         </div>
         <script type="text/javascript">
-         var dataInput = <%= allData %>;
+         var xrData = <%= allData %>;
          var xrComponents = {};
+         var xrActions = {};
+         var __store = {};
         </script>
+        <script type="text/javascript" src="store-setup.js"></script>
         <script type="text/javascript" src="GraphComponent.js"></script>
+        <script type="text/javascript" src="SearchBarComponent.js"></script>
+        <script type="text/javascript" src="SidebarNodeListComponent.js"></script>
+        <script type="text/javascript" src="NodeDetailsComponent.js"></script>
         <script type="text/javascript" src="AppComponent.js"></script>
         <script type="text/javascript">
          (() => {
-            const e = React.createElement;
-            ReactDOM.render(e(xrComponents.AppComponent, {data: dataInput}, null), document.getElementById('app-root'));
+             // FIXME: move this into the parser
+             xrData.keysIndexMap = {};
+             _.each(xrData.researchData, (x, idx) => {
+                 xrData.keysIndexMap[x.id] = idx;
+             });
+             const e = React.createElement;
+             __store = xrActions.createConfiguredStore(xrData);
+             __store.dispatch(xrActions.setXrData(xrData));
+             ReactDOM.render(e(xrComponents.AppComponent, {data: xrData, store: __store}, null), document.getElementById('app-root'));
          })();
         </script>
     </body>

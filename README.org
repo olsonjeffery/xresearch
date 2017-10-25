@@ -34,22 +34,27 @@ TODO
 - [X] import parsed JSON into a static html display
 - [X] Basic, whole-tree display/visualization
 - [X] integrate react and refactor to component
-- [ ] Integrate redux for basic view-state management
-- [ ] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
-  - [ ] all of the above edge-relationships (excluding requires) are represented as <a> links and, upon clicking, prune graph display to the selected node and it's immediate neighbors and populate it in the detail display
-  - [ ] node details empties/hides itself when another sidebar mode is focused
-- [ ] Clicking on a graph node displays the detail sidebar view
-- [ ] show sub-graph when detail display is displayed for a given node
+- [X] Integrate redux for basic view-state management
+- [X] node search + sidebar view
+  - [X] utilizing the input on the top-right of the page, search the tree topic names for matches
+  - [X] display them in a <ul> list on the sidebar
+- [-] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
+  - [X] display dependencies
+  - [ ] display unlocks
+  - [ ] display getOneFree
+- [ ] when "searchText" is empty, return nothing; when > 20 results, return nothing
+- [ ] CYTOSCAPE: Clicking on a graph node dispatches NODE_SELECTION action
+- [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
+- [ ] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
+  - [ ] depended-upon-by
+  - [ ] unlocked-by
+  - [ ] get-for-free-from
+- [ ] CYTOSCAPE: show sub-graph when NodeDetail is displayed for a given node
   - [ ] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
   - [ ] try to use the "cose" layout
-- [ ] add "Show Entire Research Tree" button to top of page to reset the display
-- [ ] node search + sidebar view
-  - [ ] utilizing the input on the top-right of the page, search the tree topic names for matches
-  - [ ] display them in a <ul> list on the sidebar
-- [ ] support for a "<-- Go Back" link in the top of the sidebar view
-  - [ ] steps to the previous displayed sidebar item (would leverage Redux for undo history to interpret action log)
-  - [ ] imples a "Go Forward -->" as well? (would be destroyed when a new decision is made
+- [ ] add "Show Entire Research Tree" button/link to top of page to reset the display
 - [ ] static HTML generation for running as a github site
 - [ ] router support in URL (probably implies a more advanced view manager?)
 - [ ] show ruleset version in page display
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
+- [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys

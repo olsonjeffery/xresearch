@@ -1,23 +1,25 @@
 {
-  "name": "xresearchviz",
-  "version": "1.0.0",
-  "description": "tool to parse and provide visualization for the xpiratez research tree",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Jeff Olson <olson.jeffery@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "express": "^4.16.2",
-    "js-yaml": "^3.10.0",
-    "lodash": "^4.17.4",
-    "lunr": "^2.1.4",
-    "prop-types": "^15.6.0",
-    "react": "^16.0.0",
-    "react-devtools": "^2.5.2",
-    "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
-  }
+    "name": "xresearch",
+    "version": "0.0.1",
+    "description": "tool to parse and provide visualization for the xpiratez research tree",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Jeffery Olson <olson.jeffery@gmail.com>",
+    "license": "Unlicense",
+    "repository": "https://github.com/olsonjeffery/xresearch",
+    "dependencies": {
+        "cytoscape": "^3.2.4",
+        "express": "^4.16.2",
+        "js-yaml": "^3.10.0",
+        "lodash": "^4.17.4",
+        "lunr": "^2.1.4",
+        "prop-types": "^15.6.0",
+        "react": "^16.0.0",
+        "react-devtools": "^2.5.2",
+        "react-dom": "^16.0.0",
+        "react-redux": "^5.0.6",
+        "redux": "^3.7.2"
+    }
 }

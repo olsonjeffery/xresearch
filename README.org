@@ -42,6 +42,8 @@ TODO
   - [X] display dependencies
   - [ ] display unlocks
   - [ ] display getOneFree
+- [ ] integrate webpack bundling
+- [ ] fix dark text coloring in page style
 - [ ] when "searchText" is empty, return nothing; when > 20 results, return nothing
 - [ ] CYTOSCAPE: Clicking on a graph node dispatches NODE_SELECTION action
 - [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
@@ -49,6 +51,7 @@ TODO
   - [ ] depended-upon-by
   - [ ] unlocked-by
   - [ ] get-for-free-from
+  - [ ] add all of the above to NodeDetails
 - [ ] CYTOSCAPE: show sub-graph when NodeDetail is displayed for a given node
   - [ ] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
   - [ ] try to use the "cose" layout

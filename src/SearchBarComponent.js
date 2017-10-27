@@ -12,12 +12,13 @@ class SearchBarComponent extends Component {
     render() {
         return e('div', {},
                     e('span', {className: 'search-icon'}, e('i', {className: 'fa fa-search'}, null)),
-                    e('input', {id: 'search', type: 'text', value: this.props.searchText, onChange: (e) => this.props.onChange(e)}));
+                 e('input', {id: 'search', type: 'text', value: this.props.searchText, onChange: (e) => this.props.onChange(e), onClick: (e) => this.props.onClick(e)}));
     }
 }
 
 SearchBarComponent.propTypes = {
     onChange: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
     searchText: PropTypes.string.isRequired
 };
 
@@ -31,6 +32,11 @@ var mapDispatchToProps = (dispatch, ownProps) => {
         onChange: (e) => {
             dispatch(xrActions.searchTextChange(e.currentTarget.value));
             dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_SEARCH_RESULTS));
+        },
+        onClick: (e) => {
+            if(e.currentTarget.value == xrActions.DEFAULT_SEARCHTEXT) {
+                dispatch(xrActions.searchTextChange(''));
+            }
         }
     };
 };

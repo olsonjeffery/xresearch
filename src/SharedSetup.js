@@ -2,6 +2,7 @@ import {combineReducers, createStore } from 'redux';
 
 var xrActions = {};
 // sidebar modes
+xrActions.DEFAULT_SEARCHTEXT = 'Enter topic to search';
 xrActions.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
 xrActions.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
 
@@ -44,7 +45,7 @@ var xrData = (state = {}, action) => {
         return state;
     }
 };
-var searchText = (state = '', action) => {
+var searchText = (state = 'Enter topic to search', action) => {
     switch(action.type) {
     case xrActions.SEARCH_TEXT_CHANGE:
         return action.searchText;

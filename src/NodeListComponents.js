@@ -60,9 +60,15 @@ var buildNodeListFromSearch = (xrData, searchText) => {
             });
         });
     }
+    if (searchText == '') {
+        return [];
+    }
     var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
         return {id: x.ref, name: getLabelFromXrData(xrData, x.ref)};
     });
+    if(results.length > 40) {
+        return [];
+    }
     return results;
 };
 

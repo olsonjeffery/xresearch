@@ -1,6 +1,5 @@
 import { createElement as e, Component } from 'react';
-import gc from './GraphComponent';
-const { GraphComponent } = gc;
+import GraphComponent from './GraphComponent';
 import SearchBarComponent from './SearchBarComponent';
 import nodeLists from './NodeListComponents.js';
 import NodeDetailsComponent from './NodeDetailsComponent.js';
@@ -20,7 +19,7 @@ class AppComponent extends Component {
                             e(SearchBarComponent, {store: this.props.store, searchText: 'Enter topic name...'}, null)));
         var containerRow = e('div', {className: 'row'},
                             e('div', {className: 'col-9'},
-                            e(GraphComponent, {data: this.props.data}, null)),
+                              e(GraphComponent, {store: this.props.store}, null)),
                             e('div', {className: 'col-3'},
                             e(nodeLists.SearchResultsListComponent, {store: this.props.store, active: false, nodes: [], title: 'Search Results'}, null),
                             e(NodeDetailsComponent, {store: this.props.store, active: false, id: '', name: ''})));

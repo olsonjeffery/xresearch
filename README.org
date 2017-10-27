@@ -25,39 +25,46 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 - entire repo and run `npm install` command
 - `node app.js` to bring up the development server
 - Once you see "data is parsed" displayed, you can navigate to `http://localhost:3000` in Chrome to see the app
+- You should also install webpack and run it locally within the repo (which includes a `webpack.config.js`) in order to update the `dist/bundle.js` file as you make changes
 
 ** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
 TODO
 
-** Pending work items
-- [X] write Piratez/Piratez_lang.rul files parse
-- [X] import parsed JSON into a static html display
-- [X] Basic, whole-tree display/visualization
-- [X] integrate react and refactor to component
-- [X] Integrate redux for basic view-state management
-- [X] node search + sidebar view
-  - [X] utilizing the input on the top-right of the page, search the tree topic names for matches
-  - [X] display them in a <ul> list on the sidebar
+** Pending work items [11/22]
 - [-] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
   - [X] display dependencies
   - [ ] display unlocks
   - [ ] display getOneFree
-- [ ] integrate webpack bundling
-- [ ] fix dark text coloring in page style
-- [ ] when "searchText" is empty, return nothing; when > 20 results, return nothing
-- [ ] CYTOSCAPE: Clicking on a graph node dispatches NODE_SELECTION action
+  - [ ] show research cost and score mod
+- [ ] error in displaying The Mutant Alliance (possibly due to nodes whose lang entry is in the vanille files (e.g. STR_WORKSHOP)
+- [ ] CYTOSCAPE: polish on graph component
+  - [ ] a header atop the container div that shows the node of the selected node (or "All Topics" if an individual node isn't selected)
+  - [ ] a loading spinner displayed in the header that is triggered on layout.on("stop")
+  - [ ] "show all topics" option
 - [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
 - [ ] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
   - [ ] depended-upon-by
   - [ ] unlocked-by
   - [ ] get-for-free-from
   - [ ] add all of the above to NodeDetails
-- [ ] CYTOSCAPE: show sub-graph when NodeDetail is displayed for a given node
-  - [ ] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
-  - [ ] try to use the "cose" layout
 - [ ] add "Show Entire Research Tree" button/link to top of page to reset the display
 - [ ] static HTML generation for running as a github site
 - [ ] router support in URL (probably implies a more advanced view manager?)
 - [ ] show ruleset version in page display
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
 - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+- [X] CYTOSCAPE: show sub-graph when NodeDetail is displayed for a given node
+  - [X] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
+  - [X] try to use the "cose" layout
+- [X] CYTOSCAPE: Clicking on a graph node dispatches NODE_SELECTION action
+- [X] fix dark text coloring in page style
+- [X] write Piratez/Piratez_lang.rul files parse
+- [X] import parsed JSON into a static html display
+- [X] Basic, whole-tree display/visualization
+- [X] integrate react and refactor to component
+- [X] integrate webpack bundling
+- [X] node search + sidebar view
+  - [X] utilizing the input on the top-right of the page, search the tree topic names for matches
+  - [X] display them in a <ul> list on the sidebar
+- [X] when "searchText" is empty, return nothing; when > 20 results, return nothing
+- [X] Integrate redux for basic view-state management

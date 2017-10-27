@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
 });
 app.use(express.static('public'));
 app.use(express.static('dist'));
+app.use('src', express.static('src'));
 app.listen(3000, () => {
     data = JSON.stringify(parser.getAllData());
     console.log("data is parsed");

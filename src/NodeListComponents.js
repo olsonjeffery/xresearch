@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import lunr from 'lunr';
 
-import xrActions from './SharedSetup';
+import {xrActions} from './SharedSetup';
 
 class SidebarNodeListCompoent extends Component {
     constructor(props) {
@@ -37,7 +37,12 @@ SidebarNodeListCompoent.propTypes = {
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
 const getLabelFromXrData = (xrData, id) => {
-    if(xrData.researchData[xrData.keysIndexMap[id]].label == undefined) {
+    var keyIdx = xrData.keysIndexMap[id];
+    if(keyIdx == undefined) {
+        // FIXME: the key is probably coming from vanilla
+        return id;
+    }
+    else if(xrData.researchData[xrData.keysIndexMap[id]].label == undefined) {
         return id;
     } else {
         return xrData.researchData[xrData.keysIndexMap[id]].label;
@@ -82,15 +87,15 @@ const resultsMapStateToProps = (state) => {
     return {active, nodes};
 };
 
-const dependenciesMapStateToProps = (state) => {
+const nodeListMapStatToProps = (state, edgeName) => {
     var active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
     var nodes = [];
     if(active) {
         var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
-        if(typeof(matchedNode.dependencies) == 'undefined') {
+        if(typeof(matchedNode[edgeName]) == 'undefined') {
             nodes = [];
         } else {
-            nodes = matchedNode.dependencies.map((x) => {
+            nodes = matchedNode[edgeName].map((x) => {
                 return {id: x, name: getLabelFromXrData(xrData, x)};
             });
         }
@@ -109,5 +114,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 export default {
     SearchResultsListComponent: connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent),
-    DependenciesResultsListComponent: connect(dependenciesMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent)
+    DependenciesResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent),
+    UnlocksResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent),
+    GetOneFreeResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'getOneFree'), mapDispatchToProps)(SidebarNodeListCompoent),
+    RequiresResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'requires'), mapDispatchToProps)(SidebarNodeListCompoent)
 };

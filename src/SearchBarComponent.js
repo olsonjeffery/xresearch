@@ -2,7 +2,7 @@ import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import xrActions from './SharedSetup.js';
+import {xrActions} from './SharedSetup.js';
 
 class SearchBarComponent extends Component {
     constructor(props) {

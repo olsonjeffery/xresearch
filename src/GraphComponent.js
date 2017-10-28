@@ -3,7 +3,7 @@ import cytoscape from 'cytoscape';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import xrActions from './SharedSetup';
+import {xrActions} from './SharedSetup';
 
 var dupeTopics = [];
 var buildElements = (data) => {
@@ -23,7 +23,7 @@ var buildElements = (data) => {
         elements.push({
             data: {
                 id: topic.id,
-                name: topic.label,
+                name: topic.label == undefined ? topic.id : topic.label,
                 weight: idx
             },
             classes: topic.needItem ? 'idea' : 'item'
@@ -31,72 +31,52 @@ var buildElements = (data) => {
         return true;
     });
 
+    const addEdge = (dep, topicId, edgeClass, idx) => {
+        // this is for nodes that aren't in the topics tree (possibly they are from vanilla or events like STR_ALIEN_TERROR, etc)
+        if(!addedTopics[dep]) {
+            elements.push({
+                data: {
+                    id: dep,
+                    name: dep,
+                    weight: idx
+                },
+                classes: event
+            });
+        }
+        if(addedTopics[topicId] && addedTopics[dep]) {
+            elements.push({
+                data: {
+                    id: dep+"->"+topicId,
+                    target: topicId,
+                    source: dep
+                },
+                classes: edgeClass
+            });
+        }
+    };
+
     // a second traversal to add edges; we can't do this until we
     // know what all of the topics are
-    _.each(researchData, function(topic) {
+    _.each(researchData, (topic, idx) => {
         if(topic.dependencies) {
             _.each(topic.dependencies, function(dep) {
-                if(addedTopics[topic.id] && addedTopics[dep]) {
-                    elements.push({
-                        data: {
-                            id: dep+"->"+topic.id,
-                            target: topic.id,
-                            source: dep
-                        },
-                        classes: 'dep'
-                    });
-                }
+                addEdge(dep, topic.id, 'dep', idx);
             });
         }
         if(topic.unlocks) {
             _.each(topic.unlocks, function(dep) {
-                if(addedTopics[topic.id] && addedTopics[dep]) {
-                    elements.push({
-                        data: {
-                            id: dep+"->"+topic.id,
-                            target: topic.id,
-                            source: dep
-                        },
-                        classes: 'unlocks'
-                    });
-                }
+                addEdge(dep, topic.id, 'unlocks', idx);
             });
         }
         if(topic.requires) {
             _.each(topic.requires, function(dep) {
                 // these are events mostly
-                if(!addedTopics[dep]) {
-                    elements.push({
-                        data: {
-                            id: dep,
-                            name: dep,
-                            weight: idx
-                        },
-                        classes: event
-                    });
-                }
-                elements.push({
-                    data: {
-                        id: dep+"->"+topic.id,
-                        target: topic.id,
-                        source: dep
-                    },
-                    classes: 'requires'
-                });
+                addEdge(dep, topic.id, 'requires', idx);
             });
         }
         if(topic.getOneFree) {
             _.each(topic.getOneFree, function(dep) {
-                if(addedTopics[topic.id] && addedTopics[dep]) {
-                    elements.push({
-                        data: {
-                            id: dep+"->"+topic.id,
-                            target: topic.id,
-                            source: dep
-                        },
-                        classes: 'getOneFree'
-                    });
-                }
+                addEdge(dep, topic.id, 'getOneFree', idx);
             });
         }
     });

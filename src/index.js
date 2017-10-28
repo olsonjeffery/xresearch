@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { createElement as e } from 'react';
+import {Provider} from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import xrActions from './SharedSetup.js';
+import { initializeStore, xrActions } from './SharedSetup.js';
 import AppComponent from './AppComponent.js';
 
 (() => {
@@ -12,7 +13,8 @@ import AppComponent from './AppComponent.js';
     _.each(xrData.researchData, (x, idx) => {
         xrData.keysIndexMap[x.id] = idx;
     });
-    __store = xrActions.createConfiguredStore(xrData);
+    __store = initializeStore(xrData);
     __store.dispatch(xrActions.setXrData(xrData));
-    ReactDOM.render(e(AppComponent, {data: xrData, store: __store}, null), document.getElementById('app-root'));
+    ReactDOM.render(e(Provider, {store: __store},
+                      e(AppComponent, {data: xrData}, null)), document.getElementById('app-root'));
 })();

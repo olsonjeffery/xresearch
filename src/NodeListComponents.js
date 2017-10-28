@@ -55,9 +55,6 @@ var buildNodeListFromSearch = (xrData, searchText) => {
 
             _.each(xrData.researchData, x => {
                 var name = x.id;
-                if(x.label == undefined) {
-                    console.log(x.id);
-                }
                 if(x.label != undefined) {
                     name = x.label.toLowerCase();
                 }
@@ -113,6 +110,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 export default {
+    getLabelFromXrData,
     SearchResultsListComponent: connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent),
     DependenciesResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent),
     UnlocksResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent),

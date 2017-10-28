@@ -15,30 +15,54 @@ module.exports.getAllData = () => {
     //lang.extraStrings[0].strings[research[0].name]
 
     var addedKeys = {};
+
+    // "inverse" relationships that need to be mapped
+    var dependedUponBy = {};
+    var unlockedBy = {};
+    var gottenForFreeFrom = {};
+    var requiredBy = {};
+
+    var createOrUpdateItemInObject = (obj, key, item) => {
+        if(!obj[key]) {
+            obj[key] = [];
+        }
+        obj[key].push(item);
+    };
+
     var researchData = _.map(research, (item) => {
         addedKeys[item.name] = true;
         var output = {
             id: item.name,
             label: lang.extraStrings[0].strings[item.name],
-            points: item.points,
-            cost: item.cost
+            points: item.points ? item.points : 0,
+            cost: item.cost ? item.cost : 0
         };
         if(item.dependencies) {
             output.dependencies = item.dependencies;
+            _.each(item.dependencies, x=>{createOrUpdateItemInObject(dependedUponBy, x, item.name);});
         }
         if(typeof(item.needItem) != "undefined") {
             output.needItem = item.needItem;
         }
         if(item.getOneFree) {
             output.getOneFree = item.getOneFree;
+            _.each(item.getOneFree, x=>{createOrUpdateItemInObject(gottenForFreeFrom, x, item.name);});
         }
         if(item.unlocks) {
             output.unlocks = item.unlocks;
+            _.each(item.unlocks, x=>{createOrUpdateItemInObject(unlockedBy, x, item.name);});
         }
         if(item.requires) {
             output.requires = item.requires;
+            _.each(item.requires, x=>{createOrUpdateItemInObject(requiredBy, x, item.name);});
         }
         return output;
+    });
+    _.each(researchData, (item) => {
+        item.dependedUponBy = dependedUponBy[item.id] ? dependedUponBy[item.id] : [];
+        item.unlockedBy = unlockedBy[item.id] ? unlockedBy[item.id] : [];
+        item.gottenForFreeFrom = gottenForFreeFrom[item.id] ? gottenForFreeFrom[item.id] : [];
+        item.requiredBy = requiredBy[item.id] ? requiredBy[item.id] : [];
     });
 
     var langInverted = _.chain(addedKeys).keys().reduce((memo, k) => {

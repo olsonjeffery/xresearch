@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {xrActions} from './SharedSetup';
 
 var dupeTopics = [];
+const TIMEOUT_LENGTH_MS = 100;
 var buildElements = (data) => {
     var addedTopics = {};
     dupeTopics = [];
@@ -194,12 +195,12 @@ var __allElems = {};
 class GraphComponent extends Component {
     constructor(props) {
         super(props);
-        this.queryContainerId = 'cy-query-container';
         this.containerId = 'cy-container';
     }
 
     componentDidMount() {
         var self = this;
+        self.props.dispatch(xrActions.graphUpdatingChange(true));
         setTimeout(() => {
             self.cyQuery = cytoscape({
                 headless: true,
@@ -218,41 +219,57 @@ class GraphComponent extends Component {
                 self.cy.add(self.cyQuery.elements());
                 var layout = self.cy.layout(concentricTotalLayout);
                 layout.run();
+                self.cy.reset();
                 self.cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-            }, 10);
+                self.props.dispatch(xrActions.graphUpdatingChange(false));
+            }, TIMEOUT_LENGTH_MS);
             window.__cyQuery = self.cyQuery;
-        }, 10);
+        }, TIMEOUT_LENGTH_MS);
     }
 
     render() {
         return e('div', {},
-                 e('div', {id: this.queryContainerId, style: {display: "none"}}, null),
                  e('div', {id: this.containerId}, null));
     }
 }
 
 var previousSelectedNodeId = null;
-const showSelectedNodeInGraph = (targetId) => {
-    var newNodes = window.__cyQuery.filter(x=>x.id() == targetId).neighborhood().add(window.__cyQuery.getElementById(targetId));
+const showSelectedNodeInGraph = (targetId, self) => {
+    var newNodes = [];
+    var selectedLayout = {};
+    self.props.dispatch(xrActions.graphUpdatingChange(true));
+    if(targetId === null) {
+        //show all topics
+        newNodes = window.__cyQuery.elements();
+        selectedLayout = concentricTotalLayout;
+    } else {
+        newNodes = window.__cyQuery.filter(x=>x.id() == targetId).neighborhood().add(window.__cyQuery.getElementById(targetId));
+        selectedLayout = coseLayout;
+    }
     window.__cy.elements().remove();
-    window.__cy.add(newNodes);
-    var newLayout = window.__cy.layout(coseLayout);
-    newLayout.run();
+    setTimeout(() => {
+        window.__cy.elements().remove();
+        window.__cy.add(newNodes);
+        var newLayout = window.__cy.layout(selectedLayout);
+        newLayout.run();
+        window.__cy.reset();
+        self.props.dispatch(xrActions.graphUpdatingChange(false));
+    }, TIMEOUT_LENGTH_MS);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
-        showSelectedNodeInGraph(state.selectedNodeId);
+        showSelectedNodeInGraph(state.selectedNodeId, {props: {dispatch: __store.dispatch}});
     }
     return {
         xrData: state.xrData
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch, state) => {
     return {
         onNodeSelection: (e) => {
             var targetId = e.target.id();
@@ -260,9 +277,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 dispatch(xrActions.nodeSelection(targetId));
                 dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_NODE_DETAILS));
             } else {
-                showSelectedNodeInGraph(targetId);
+                showSelectedNodeInGraph(targetId, {props: {dispatch}});
             }
-        }
+        },
+        dispatch
     };
 };
 

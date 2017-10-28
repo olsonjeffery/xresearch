@@ -31,22 +31,21 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 TODO
 
 ** Pending work items [14/21]
-- [ ] expand UX to include left/right details pain
-  - [ ] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
-    - [ ] depended-upon-by, unlocked-by, get-for-free-from
-    - [ ] PARSER: verify/add base cost and score points
-    - [ ] add all of the above to NodeDetails
-  - [ ] graph header
-    - [ ] a header atop the container div that shows the node of the selected node (or "All Topics" if an individual node isn't selected)
-    - [ ] base research cost, points shown for selected node
-    - [ ] "show all topics X" button on r-hand side if node is selected
-    - [ ] a loading spinner displayed l-hand side of header that is triggered onNodeSelection and removed on layout.on("stop")
+- [-] expand UX to include left/right details pain
   - [ ] cytoscape polish
     - [ ] show arrows & sort out source/target designation
   - [ ] the existing node details moves to the left pane
   - [ ] the right-pane includes newly added "depended-upon-by" etc
   - [ ] the graph takes up a narrower viewport in the center
   - [ ] validate data consistency of xresearch vs in-game tech viewer
+  - [X] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
+    - [X] depended-upon-by, unlocked-by, get-for-free-from
+    - [X] PARSER: verify/add base cost and score points
+  - [X] graph header
+    - [X] a header atop the container div that shows the node of the selected node (or "All Topics" if an individual node isn't selected)
+    - [X] base research cost, points shown for selected node
+    - [X] "show all topics X" button on r-hand side if node is selected
+    - [X] a loading message displayed l-hand side of header that is triggered onNodeSelection and removed on layout.on("stop")
 - [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
 - [ ] static HTML generation for running as a github site
 - [ ] router support in URL

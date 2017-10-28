@@ -560,6 +560,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 var xrActionsLocal = {};
 // sidebar modes
 xrActionsLocal.DEFAULT_SEARCHTEXT = 'Enter topic to search';
+xrActionsLocal.SIDEBAR_MODE_SPLASH = 'SIDEBAR_MODE_SPLASH';
 xrActionsLocal.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
 xrActionsLocal.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
 
@@ -567,7 +568,14 @@ xrActionsLocal.SET_XR_DATA = 'SET_XR_DATA';
 xrActionsLocal.SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
 xrActionsLocal.SIDEBAR_MODE_CHANGE = 'SIDEBAR_MODE_CHANGE';
 xrActionsLocal.NODE_SELECTION = 'NODE_SELECTION';
+xrActionsLocal.GRAPH_UPDATING_CHANGE = 'GRAPH_UPDATING_CHANGE';
 // action dispatchers
+xrActionsLocal.graphUpdatingChange = (graphUpdating) => {
+    return {
+        type: xrActionsLocal.GRAPH_UPDATING_CHANGE,
+        graphUpdating
+    };
+};
 xrActionsLocal.nodeSelection = (id) => {
     return {
         type: xrActionsLocal.NODE_SELECTION,
@@ -610,7 +618,7 @@ var searchText = (state = 'Enter topic to search', action) => {
         return state;
     }
 };
-var sidebarMode = (state = 'SIDEBAR_SPLASH', action) => {
+var sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
     switch(action.type) {
     case xrActionsLocal.SIDEBAR_MODE_CHANGE:
         return action.sidebarMode;
@@ -627,7 +635,16 @@ var selectedNodeId = (state = null, action) => {
     }
 };
 
-var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({xrData, searchText, sidebarMode, selectedNodeId});
+var graphUpdating = (state = true, action) => {
+    switch(action.type) {
+    case xrActionsLocal.GRAPH_UPDATING_CHANGE:
+        return action.graphUpdating;
+    default:
+        return state;
+    }
+};
+
+var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({xrData, searchText, sidebarMode, selectedNodeId, graphUpdating});
 const initializeStoreImpl = () => {
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
 };
@@ -2178,9 +2195,6 @@ var buildNodeListFromSearch = (xrData, searchText) => {
 
             _.each(xrData.researchData, x => {
                 var name = x.id;
-                if(x.label == undefined) {
-                    console.log(x.id);
-                }
                 if(x.label != undefined) {
                     name = x.label.toLowerCase();
                 }
@@ -2236,6 +2250,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+    getLabelFromXrData,
     SearchResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent),
     DependenciesResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStatToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent),
     UnlocksResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStatToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent),
@@ -40810,6 +40825,8 @@ module.exports = performance || {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__ = __webpack_require__(85);
+
 
 
 
@@ -40824,18 +40841,21 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     componentDidMount() {
     }
     render() {
-        var headerRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' XPiratez Research Tree Explorer (xresearch)')),
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3', style: {paddingTop: '15px'} },
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
+        var pageHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' XPiratez Research Tree Explorer (xresearch)')),
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3', style: {paddingTop: '15px'} },
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
+        var containerHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__["a" /* default */], {}, null);
         var containerRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)),
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["a" /* default */].SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
-                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* default */], {active: false, id: '', name: ''})));
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, headerRow, containerRow);
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* default */], {active: false, id: '', name: ''})),
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-6'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)),
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["a" /* default */].SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* default */], {active: false, id: '', name: ''})));
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, pageHeaderRow, containerHeaderRow, containerRow);
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (AppComponent);
@@ -40862,6 +40882,7 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
 
 var dupeTopics = [];
+const TIMEOUT_LENGTH_MS = 100;
 var buildElements = (data) => {
     var addedTopics = {};
     dupeTopics = [];
@@ -41050,12 +41071,12 @@ var __allElems = {};
 class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
-        this.queryContainerId = 'cy-query-container';
         this.containerId = 'cy-container';
     }
 
     componentDidMount() {
         var self = this;
+        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
         setTimeout(() => {
             self.cyQuery = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
                 headless: true,
@@ -41074,41 +41095,57 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 self.cy.add(self.cyQuery.elements());
                 var layout = self.cy.layout(concentricTotalLayout);
                 layout.run();
+                self.cy.reset();
                 self.cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-            }, 10);
+                self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+            }, TIMEOUT_LENGTH_MS);
             window.__cyQuery = self.cyQuery;
-        }, 10);
+        }, TIMEOUT_LENGTH_MS);
     }
 
     render() {
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {id: this.queryContainerId, style: {display: "none"}}, null),
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {id: this.containerId}, null));
     }
 }
 
 var previousSelectedNodeId = null;
-const showSelectedNodeInGraph = (targetId) => {
-    var newNodes = window.__cyQuery.filter(x=>x.id() == targetId).neighborhood().add(window.__cyQuery.getElementById(targetId));
+const showSelectedNodeInGraph = (targetId, self) => {
+    var newNodes = [];
+    var selectedLayout = {};
+    self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+    if(targetId === null) {
+        //show all topics
+        newNodes = window.__cyQuery.elements();
+        selectedLayout = concentricTotalLayout;
+    } else {
+        newNodes = window.__cyQuery.filter(x=>x.id() == targetId).neighborhood().add(window.__cyQuery.getElementById(targetId));
+        selectedLayout = coseLayout;
+    }
     window.__cy.elements().remove();
-    window.__cy.add(newNodes);
-    var newLayout = window.__cy.layout(coseLayout);
-    newLayout.run();
+    setTimeout(() => {
+        window.__cy.elements().remove();
+        window.__cy.add(newNodes);
+        var newLayout = window.__cy.layout(selectedLayout);
+        newLayout.run();
+        window.__cy.reset();
+        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+    }, TIMEOUT_LENGTH_MS);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
-        showSelectedNodeInGraph(state.selectedNodeId);
+        showSelectedNodeInGraph(state.selectedNodeId, {props: {dispatch: __store.dispatch}});
     }
     return {
         xrData: state.xrData
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch, state) => {
     return {
         onNodeSelection: (e) => {
             var targetId = e.target.id();
@@ -41116,9 +41153,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].nodeSelection(targetId));
                 dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
             } else {
-                showSelectedNodeInGraph(targetId);
+                showSelectedNodeInGraph(targetId, {props: {dispatch}});
             }
-        }
+        },
+        dispatch
     };
 };
 
@@ -74706,6 +74744,68 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(NodeDetailsPresentationComponent));
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__ = __webpack_require__(32);
+
+
+
+
+
+
+class NodeSummaryComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    render() {
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {float: 'left', margin: '22px'}}, this.props.graphUpdatingMessage)), // spinner goes here
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-8'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', { style: {textAlign: 'center'}}, `${this.props.label} ${this.props.suffix}`)),
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, this.props.showClearSelected === false ?
+                   null
+                   : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {onClick: this.props.onShowAllTopics, style: {margin: '22px', float: 'right'}, href:'#'}, `Show All Topics`, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', { className: 'fa fa-times'}, null))));
+    }
+}
+
+const ALL_TOPICS = 'All Topics';
+const mapStateToProps = (state) => {
+    var label = state.selectedNodeId != null ?
+        __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* default */].getLabelFromXrData(state.xrData, state.selectedNodeId)
+        : ALL_TOPICS;
+    var suffix = '';
+    if(state.selectedNodeId != null) {
+        var topic = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
+        suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
+    }
+    var graphUpdatingMessage = state.graphUpdating ?
+        'Graph Updating...'
+        : '';
+    return {
+        xrData: state.xrData,
+        label,
+        suffix,
+        graphUpdatingMessage,
+        showClearSelected: label !== ALL_TOPICS
+    };
+};
+
+const mapDispatchToProps = (dispatch, state) => {
+    return {
+        onShowAllTopics: () => {
+            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].nodeSelection(null));
+            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_SPLASH));
+        }
+    };
+};
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(NodeSummaryComponent));
 
 
 /***/ })

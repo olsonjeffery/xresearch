@@ -30,18 +30,21 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 ** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
 TODO
 
-** Pending work items [15/25]
-- [ ] update to 099H2 ruleset files
+** Pending work items [16/27]
 - [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
 - [ ] colorize Red/Green/Blue as it appears in node list descriptions
 - [ ] add checkbox filtering to each node list category in both panes
-  - [ ] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree }
+  - [ ] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
     - [ ] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
     - [ ] add reducer that switches on filteringCategory as will as action.type and sets the key in detailFilteringCategories with whatever is in `value`
   - [ ] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
   - [ ] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true
     - [ ] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
   - [ ] changing selectedNodeId (either selecting a node or setting to null as in Show All Topics) should reset detailFilteringCategories to all true
+- [ ] hovering over the title div on a NodeLinkListComponent will fatten/highlight all edge-styles matching that edgeName in the graph
+  - [ ] add `edgeHighlight: string` to state
+  - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
+  - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
 - [ ] increase neighorhood depth from 1 to 2 .. could this be easy? or is it more involved?
 - [ ] add manufacturing tasks
   - [ ] modify parser to pull needed stuff from Piratez.rul
@@ -52,6 +55,7 @@ TODO
 - [ ] show ruleset version in page display
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
 - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+- [X] update to 099H2 ruleset files
 - [X] expand UX to include left/right details pain
   - [X] validate data consistency of xresearch vs in-game tech viewer
   - [X] duplicate nodedetails & map left/right edge displayers:

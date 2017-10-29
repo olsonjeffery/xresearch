@@ -1,3 +1,6 @@
+# ignore ".orig" ruleset files
+*.orig.*.rul
+
 # Logs
 logs
 *.log

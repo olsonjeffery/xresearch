@@ -2130,6 +2130,12 @@ exports.clearImmediate = clearImmediate;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getLabelFromXrData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SearchResultsListComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeLinkListComponent; });
+/* unused harmony export DependenciesResultsListComponent */
+/* unused harmony export UnlocksResultsListComponent */
+/* unused harmony export GetOneFreeResultsListComponent */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
@@ -2176,7 +2182,7 @@ SidebarNodeListCompoent.propTypes = {
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
-const getLabelFromXrData = (xrData, id) => {
+var getLabelFromXrData = (xrData, id) => {
     var keyIdx = xrData.keysIndexMap[id];
     if(keyIdx == undefined) {
         // FIXME: the key is probably coming from vanilla
@@ -2224,7 +2230,24 @@ const resultsMapStateToProps = (state) => {
     return {active, nodes};
 };
 
-const nodeListMapStatToProps = (state, edgeName) => {
+const nodeLinkMapStateToProps = (state, ownProps) => {
+    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
+    var edgeName = ownProps.edgeName;
+    var nodes = [];
+    if(active) {
+        var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
+        if(typeof(matchedNode[edgeName]) == 'undefined') {
+            nodes = [];
+        } else {
+            nodes = matchedNode[edgeName].map((x) => {
+                return {id: x, name: getLabelFromXrData(xrData, x)};
+            });
+        }
+    }
+    return {active, nodes, edgeName};
+};
+
+const nodeListMapStateToProps = (state, edgeName) => {
     var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
     var nodes = [];
     if(active) {
@@ -2249,14 +2272,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-/* harmony default export */ __webpack_exports__["a"] = ({
-    getLabelFromXrData,
-    SearchResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent),
-    DependenciesResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStatToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent),
-    UnlocksResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStatToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent),
-    GetOneFreeResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStatToProps(state, 'getOneFree'), mapDispatchToProps)(SidebarNodeListCompoent),
-    RequiresResultsListComponent: Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStatToProps(state, 'requires'), mapDispatchToProps)(SidebarNodeListCompoent)
-});
+var SearchResultsListComponent =  Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+var NodeLinkListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+var DependenciesResultsListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStateToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent);
+var UnlocksResultsListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStateToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent);
+var GetOneFreeResultsListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])((state) => nodeListMapStateToProps(state, 'getOneFree'), mapDispatchToProps)(SidebarNodeListCompoent);
 
 
 /***/ }),
@@ -40849,12 +40869,12 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         var containerHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__["a" /* default */], {}, null);
         var containerRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* default */], {active: false, id: '', name: ''})),
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-6'},
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)),
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["a" /* default */].SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* default */], {active: false, id: '', name: ''})));
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["b" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, pageHeaderRow, containerHeaderRow, containerRow);
     }
 }
@@ -40966,29 +40986,37 @@ var cyStyle = [
      "style": {
          "width": "1px",
          "line-color": "#1a1",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#1a1"
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": "#1a1"
      }},
     {"selector": ".unlocks",
      "style": {
          "width": "1px",
          "line-color": "#11a",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#11a"
+         "mid-source-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-source-arrow-shape": "triangle",
+         "mid-source-arrow-color": "#11a"
      }},
     {"selector": ".requires",
      "style": {
          "width": "1px",
          "line-color": "#aaa",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#aaa"
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": "#aaa"
      }},
     {"selector": ".getOneFree",
      "style": {
          "width": "1px",
          "line-color": "#a11",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#a11"
+         "mid-source-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-source-arrow-shape": "triangle",
+         "mid-source-arrow-color": "#a11"
      }},
     // node styles
     {"selector": "node.idea",
@@ -74692,6 +74720,8 @@ lunr.QueryParser.parseBoost = function (parser) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LeftDetailsComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return RightDetailsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(7);
@@ -74704,16 +74734,14 @@ lunr.QueryParser.parseBoost = function (parser) {
 
 
 
-const {DependenciesResultsListComponent, UnlocksResultsListComponent, GetOneFreeResultsListComponent, RequiresResultsListComponent} = __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* default */];
 
 class NodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     render() {
         if(this.props.active) {
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
-                        Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', {}, `${this.props.name} (${this.props.id})`),
-                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(DependenciesResultsListComponent, {title: 'Dependencies', store: this.props.store}, null),
-                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(UnlocksResultsListComponent, {title: 'Unlocks', store: this.props.store}, null),
-                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(GetOneFreeResultsListComponent, {title: 'Gives One For Free', store: this.props.store}, null)
+                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* NodeLinkListComponent */], {edgeName: this.props.depEdgeName, title: this.props.depTitle}, null),
+                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* NodeLinkListComponent */], {edgeName: this.props.unlEdgeName, title: this.props.unlTitle}, null),
+                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* NodeLinkListComponent */], {edgeName: this.props.gofEdgeName, title: this.props.gofTitle}, null),
                     );
         }
         return null;
@@ -74721,21 +74749,34 @@ class NodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_react
 }
 
 NodeDetailsPresentationComponent.propTypes = {
-    id: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
-    name: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired
+    active: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.bool.isRequired
 };
 
-const mapStateToProps = (state) => {
+const leftMapStateToProps = (state) => {
     var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
-    var name = state.selectedNodeId;
-    if(state.xrData.keysIndexMap[state.selectedNodeId]) {
-        name = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]].label;
-    }
     // map dependencies
     return {
-        id: state.selectedNodeId == null ? '' : state.selectedNodeId,
-        name: state.selectedNodeId == null ? '' : name,
-        active
+        active,
+        depEdgeName: 'dependencies',
+        depTitle: 'Dependencies (Green towards)',
+        unlEdgeName: 'unlockedBy',
+        unlTitle: 'Unlocked By (Blue towards)',
+        gofEdgeName: 'giveOneFree',
+        gofTitle: 'Get For Free From (Red towards)'
+    };
+};
+
+const rightMapStateToProps = (state) => {
+    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
+    // map dependencies
+    return {
+        active,
+        depEdgeName: 'dependedUponBy',
+        depTitle: 'Depended Upon By (Green away)',
+        unlEdgeName: 'unlocks',
+        unlTitle: 'Unlocks (Blue away)',
+        gofEdgeName: 'getOneFree',
+        gofTitle: 'Gives One Free (Red away)'
     };
 };
 
@@ -74743,7 +74784,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {};
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(NodeDetailsPresentationComponent));
+var LeftDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(leftMapStateToProps, mapDispatchToProps)(NodeDetailsPresentationComponent);
+var RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(rightMapStateToProps, mapDispatchToProps)(NodeDetailsPresentationComponent);
 
 
 /***/ }),
@@ -74778,7 +74820,7 @@ class NodeSummaryComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Componen
 const ALL_TOPICS = 'All Topics';
 const mapStateToProps = (state) => {
     var label = state.selectedNodeId != null ?
-        __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* default */].getLabelFromXrData(state.xrData, state.selectedNodeId)
+        Object(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["c" /* getLabelFromXrData */])(state.xrData, state.selectedNodeId)
         : ALL_TOPICS;
     var suffix = '';
     if(state.selectedNodeId != null) {

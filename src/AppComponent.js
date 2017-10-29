@@ -1,8 +1,8 @@
 import { createElement as e, Component } from 'react';
 import GraphComponent from './GraphComponent';
 import SearchBarComponent from './SearchBarComponent';
-import nodeLists from './NodeListComponents.js';
-import NodeDetailsComponent from './NodeDetailsComponent.js';
+import {SearchResultsListComponent} from './NodeListComponents.js';
+import {LeftDetailsComponent, RightDetailsComponent} from './NodeDetailsComponent.js';
 import NodeSummaryComponent from './NodeSummaryComponent.js';
 
 class AppComponent extends Component {
@@ -21,12 +21,12 @@ class AppComponent extends Component {
         var containerHeaderRow = e(NodeSummaryComponent, {}, null);
         var containerRow = e('div', {className: 'row'},
                              e('div', {className: 'col-3'},
-                               e(NodeDetailsComponent, {active: false, id: '', name: ''})),
+                               e(LeftDetailsComponent, {}, null)),
                              e('div', {className: 'col-6'},
                                e(GraphComponent, {}, null)),
                              e('div', {className: 'col-3'},
-                               e(nodeLists.SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
-                               e(NodeDetailsComponent, {active: false, id: '', name: ''})));
+                               e(SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
+                               e(RightDetailsComponent, {}, null)));
         return e('div', null, pageHeaderRow, containerHeaderRow, containerRow);
     }
 }

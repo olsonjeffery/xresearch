@@ -36,7 +36,7 @@ SidebarNodeListCompoent.propTypes = {
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
-const getLabelFromXrData = (xrData, id) => {
+export var getLabelFromXrData = (xrData, id) => {
     var keyIdx = xrData.keysIndexMap[id];
     if(keyIdx == undefined) {
         // FIXME: the key is probably coming from vanilla
@@ -84,7 +84,24 @@ const resultsMapStateToProps = (state) => {
     return {active, nodes};
 };
 
-const nodeListMapStatToProps = (state, edgeName) => {
+const nodeLinkMapStateToProps = (state, ownProps) => {
+    var active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
+    var edgeName = ownProps.edgeName;
+    var nodes = [];
+    if(active) {
+        var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
+        if(typeof(matchedNode[edgeName]) == 'undefined') {
+            nodes = [];
+        } else {
+            nodes = matchedNode[edgeName].map((x) => {
+                return {id: x, name: getLabelFromXrData(xrData, x)};
+            });
+        }
+    }
+    return {active, nodes, edgeName};
+};
+
+const nodeListMapStateToProps = (state, edgeName) => {
     var active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
     var nodes = [];
     if(active) {
@@ -109,11 +126,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-export default {
-    getLabelFromXrData,
-    SearchResultsListComponent: connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent),
-    DependenciesResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent),
-    UnlocksResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent),
-    GetOneFreeResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'getOneFree'), mapDispatchToProps)(SidebarNodeListCompoent),
-    RequiresResultsListComponent: connect((state) => nodeListMapStatToProps(state, 'requires'), mapDispatchToProps)(SidebarNodeListCompoent)
-};
+export var SearchResultsListComponent =  connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export var NodeLinkListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export var DependenciesResultsListComponent = connect((state) => nodeListMapStateToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent);
+export var UnlocksResultsListComponent = connect((state) => nodeListMapStateToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent);
+export var GetOneFreeResultsListComponent = connect((state) => nodeListMapStateToProps(state, 'getOneFree'), mapDispatchToProps)(SidebarNodeListCompoent);

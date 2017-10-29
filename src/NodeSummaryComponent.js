@@ -2,7 +2,7 @@ import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {xrActions} from './SharedSetup.js';
-import nodeLists from './NodeListComponents.js';
+import {getLabelFromXrData} from './NodeListComponents.js';
 
 class NodeSummaryComponent extends Component {
     render() {
@@ -18,7 +18,7 @@ class NodeSummaryComponent extends Component {
 const ALL_TOPICS = 'All Topics';
 const mapStateToProps = (state) => {
     var label = state.selectedNodeId != null ?
-        nodeLists.getLabelFromXrData(state.xrData, state.selectedNodeId)
+        getLabelFromXrData(state.xrData, state.selectedNodeId)
         : ALL_TOPICS;
     var suffix = '';
     if(state.selectedNodeId != null) {

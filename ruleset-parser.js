@@ -19,7 +19,7 @@ module.exports.getAllData = () => {
     // "inverse" relationships that need to be mapped
     var dependedUponBy = {};
     var unlockedBy = {};
-    var gottenForFreeFrom = {};
+    var giveOneFree = {};
     var requiredBy = {};
 
     var createOrUpdateItemInObject = (obj, key, item) => {
@@ -46,7 +46,7 @@ module.exports.getAllData = () => {
         }
         if(item.getOneFree) {
             output.getOneFree = item.getOneFree;
-            _.each(item.getOneFree, x=>{createOrUpdateItemInObject(gottenForFreeFrom, x, item.name);});
+            _.each(item.getOneFree, x=>{createOrUpdateItemInObject(giveOneFree, x, item.name);});
         }
         if(item.unlocks) {
             output.unlocks = item.unlocks;
@@ -61,7 +61,7 @@ module.exports.getAllData = () => {
     _.each(researchData, (item) => {
         item.dependedUponBy = dependedUponBy[item.id] ? dependedUponBy[item.id] : [];
         item.unlockedBy = unlockedBy[item.id] ? unlockedBy[item.id] : [];
-        item.gottenForFreeFrom = gottenForFreeFrom[item.id] ? gottenForFreeFrom[item.id] : [];
+        item.giveOneFree = giveOneFree[item.id] ? giveOneFree[item.id] : [];
         item.requiredBy = requiredBy[item.id] ? requiredBy[item.id] : [];
     });
 

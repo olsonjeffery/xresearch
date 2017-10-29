@@ -30,14 +30,43 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 ** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
 TODO
 
-** Pending work items [14/21]
-- [-] expand UX to include left/right details pain
-  - [ ] cytoscape polish
-    - [ ] show arrows & sort out source/target designation
-  - [ ] the existing node details moves to the left pane
-  - [ ] the right-pane includes newly added "depended-upon-by" etc
-  - [ ] the graph takes up a narrower viewport in the center
-  - [ ] validate data consistency of xresearch vs in-game tech viewer
+** Pending work items [15/25]
+- [ ] update to 099H2 ruleset files
+- [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
+- [ ] colorize Red/Green/Blue as it appears in node list descriptions
+- [ ] add checkbox filtering to each node list category in both panes
+  - [ ] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree }
+    - [ ] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
+    - [ ] add reducer that switches on filteringCategory as will as action.type and sets the key in detailFilteringCategories with whatever is in `value`
+  - [ ] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
+  - [ ] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true
+    - [ ] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
+  - [ ] changing selectedNodeId (either selecting a node or setting to null as in Show All Topics) should reset detailFilteringCategories to all true
+- [ ] increase neighorhood depth from 1 to 2 .. could this be easy? or is it more involved?
+- [ ] add manufacturing tasks
+  - [ ] modify parser to pull needed stuff from Piratez.rul
+  - [ ] show manufacturing requirements on right node list
+  - [ ] add filtering?
+- [ ] static HTML generation for running as a github site
+- [ ] router support in URL
+- [ ] show ruleset version in page display
+- [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
+- [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+- [X] expand UX to include left/right details pain
+  - [X] validate data consistency of xresearch vs in-game tech viewer
+  - [X] duplicate nodedetails & map left/right edge displayers:
+    - [X] left
+      - [X] dependencies
+      - [X] unlocked-by
+      - [X] get-for-free-from
+    - [X] right
+      - [X] depended-upon-by
+      - [X] unlocks
+      - [X] getOneFree (gives one for free, actually?)
+  - [X] cytoscape polish
+    - [X] show arrows
+    - [X] sort out source/target designation
+  - [X] the graph takes up a narrower viewport in the center
   - [X] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
     - [X] depended-upon-by, unlocked-by, get-for-free-from
     - [X] PARSER: verify/add base cost and score points
@@ -46,12 +75,6 @@ TODO
     - [X] base research cost, points shown for selected node
     - [X] "show all topics X" button on r-hand side if node is selected
     - [X] a loading message displayed l-hand side of header that is triggered onNodeSelection and removed on layout.on("stop")
-- [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
-- [ ] static HTML generation for running as a github site
-- [ ] router support in URL
-- [ ] show ruleset version in page display
-- [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
 - [X] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
   - [X] display dependencies
   - [X] display unlocks

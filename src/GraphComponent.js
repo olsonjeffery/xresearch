@@ -90,29 +90,37 @@ var cyStyle = [
      "style": {
          "width": "1px",
          "line-color": "#1a1",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#1a1"
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": "#1a1"
      }},
     {"selector": ".unlocks",
      "style": {
          "width": "1px",
          "line-color": "#11a",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#11a"
+         "mid-source-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-source-arrow-shape": "triangle",
+         "mid-source-arrow-color": "#11a"
      }},
     {"selector": ".requires",
      "style": {
          "width": "1px",
          "line-color": "#aaa",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#aaa"
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": "#aaa"
      }},
     {"selector": ".getOneFree",
      "style": {
          "width": "1px",
          "line-color": "#a11",
-         "target-arrow-shape": "triangle",
-         "target-arrow-color": "#a11"
+         "mid-source-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-source-arrow-shape": "triangle",
+         "mid-source-arrow-color": "#a11"
      }},
     // node styles
     {"selector": "node.idea",

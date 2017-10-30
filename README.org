@@ -30,9 +30,7 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 ** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
 TODO
 
-** Pending work items [16/27]
-- [ ] PARSER: move keysIndexMap into parser from sidebar or whatever
-- [ ] colorize Red/Green/Blue as it appears in node list descriptions
+** Pending work items [19/28]
 - [ ] add checkbox filtering to each node list category in both panes
   - [ ] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
     - [ ] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
@@ -55,6 +53,9 @@ TODO
 - [ ] show ruleset version in page display
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
 - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+- [X] colorize Red/Green/Blue as it appears in node list descriptions
+- [X] fix bug with duplicate STR_DEEP_ONE entries under dependencies for STR_BUGEYE_VICTIM
+- [X] PARSER: move keysIndexMap into parser from sidebar or whatever
 - [X] update to 099H2 ruleset files
 - [X] expand UX to include left/right details pain
   - [X] validate data consistency of xresearch vs in-game tech viewer

@@ -104,15 +104,6 @@ var cyStyle = [
          "mid-source-arrow-shape": "triangle",
          "mid-source-arrow-color": "#11a"
      }},
-    {"selector": ".requires",
-     "style": {
-         "width": "1px",
-         "line-color": "#aaa",
-         "mid-target-arrow-fill": 'filled',
-         "arrow-scale": 1,
-         "mid-target-arrow-shape": "triangle",
-         "mid-target-arrow-color": "#aaa"
-     }},
     {"selector": ".getOneFree",
      "style": {
          "width": "1px",
@@ -121,6 +112,15 @@ var cyStyle = [
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
          "mid-source-arrow-color": "#a11"
+     }},
+    {"selector": ".requires",
+     "style": {
+         "width": "1px",
+         "line-color": "#aaa",
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": "#aaa"
      }},
     // node styles
     {"selector": "node.idea",
@@ -268,9 +268,10 @@ const showSelectedNodeInGraph = (targetId, self) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+    var dispatchProps = {props: {dispatch: __store.dispatch}};
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
-        showSelectedNodeInGraph(state.selectedNodeId, {props: {dispatch: __store.dispatch}});
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
     }
     return {
         xrData: state.xrData

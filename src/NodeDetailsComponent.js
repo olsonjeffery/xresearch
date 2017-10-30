@@ -8,9 +8,9 @@ class NodeDetailsPresentationComponent extends Component {
     render() {
         if(this.props.active) {
             return e('div', {},
-                     e(NodeLinkListComponent, {edgeName: this.props.depEdgeName, title: this.props.depTitle}, null),
-                     e(NodeLinkListComponent, {edgeName: this.props.unlEdgeName, title: this.props.unlTitle}, null),
-                     e(NodeLinkListComponent, {edgeName: this.props.gofEdgeName, title: this.props.gofTitle}, null),
+                     e(NodeLinkListComponent, {edgeName: this.props.depEdgeName, titlePrefix: this.props.depTitlePrefix, titleColored: 'Green', titleSuffix: this.props.depTitleSuffix, highlightColor: '#1a1'}, null),
+                     e(NodeLinkListComponent, {edgeName: this.props.unlEdgeName, titlePrefix: this.props.unlTitlePrefix, titleColored: 'Blue', titleSuffix: this.props.unlTitleSuffix, highlightColor: '#11a'}, null),
+                     e(NodeLinkListComponent, {edgeName: this.props.gofEdgeName, titlePrefix: this.props.gofTitlePrefix, titleColored: 'Red', titleSuffix: this.props.gofTitleSuffix, highlightColor: '#a11'}, null),
                     );
         }
         return null;
@@ -27,11 +27,16 @@ const leftMapStateToProps = (state) => {
     return {
         active,
         depEdgeName: 'dependencies',
-        depTitle: 'Dependencies (Green towards)',
+        depTitlePrefix: 'Dependencies ( ',
+        depTitleColored: 'Green',
+        depTitleSuffix: ' towards)',
         unlEdgeName: 'unlockedBy',
-        unlTitle: 'Unlocked By (Blue towards)',
+        unlTitlePrefix: 'Unlocked By (',
+        unlTitleColored: 'Blue',
+        unlTitleSuffix: ' towards)',
         gofEdgeName: 'giveOneFree',
-        gofTitle: 'Get For Free From (Red towards)'
+        gofTitlePrefix: 'Get For Free From (',
+        gofTitleSuffix: ' towards)'
     };
 };
 
@@ -41,11 +46,16 @@ const rightMapStateToProps = (state) => {
     return {
         active,
         depEdgeName: 'dependedUponBy',
-        depTitle: 'Depended Upon By (Green away)',
+        depTitlePrefix: 'Depended Upon By ( ',
+        depTitleColored: 'Green',
+        depTitleSuffix: ' towards)',
         unlEdgeName: 'unlocks',
-        unlTitle: 'Unlocks (Blue away)',
+        unlTitlePrefix: 'Unlocks (',
+        unlTitleColored: 'Blue',
+        unlTitleSuffix: ' towards)',
         gofEdgeName: 'getOneFree',
-        gofTitle: 'Gives One Free (Red away)'
+        gofTitlePrefix: 'Give One Free (',
+        gofTitleSuffix: ' towards)'
     };
 };
 

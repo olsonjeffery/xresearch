@@ -12,10 +12,13 @@ class SidebarNodeListCompoent extends Component {
     render() {
         if(this.props.active) {
             var entries = this.props.nodes.map((x) => {
+                if('STR_BUGEYE_VICTIM' == x.id) {
+                    console.log('got em');
+                }
                 return e('li', {key: `sidebar-node-${x.id}`}, e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`));
             });
             return e('div', {},
-                        e('h4', {}, this.props.title),
+                     e('h4', {}, this.props.titlePrefix, e('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix),
                         entries.length == 0 ? e('p', {}, 'None') : e('ul', {}, entries));
         }
         return null;
@@ -23,7 +26,6 @@ class SidebarNodeListCompoent extends Component {
 }
 
 SidebarNodeListCompoent.propTypes = {
-    title: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     nodes: PropTypes.arrayOf(
         PropTypes.shape({
@@ -93,28 +95,23 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
         if(typeof(matchedNode[edgeName]) == 'undefined') {
             nodes = [];
         } else {
-            nodes = matchedNode[edgeName].map((x) => {
+            var previousEntries = {};
+            nodes = matchedNode[edgeName].filter(x=> {
+                var shouldInclude = true;
+                if(previousEntries[x]) {
+                    shouldInclude = false;
+                }
+                previousEntries[x] = true;
+                return shouldInclude;
+            }).map((x) => {
+                if(x == 'STR_BUGEYE_VICTIM') {
+                    console.log('lol got em');
+                }
                 return {id: x, name: getLabelFromXrData(xrData, x)};
             });
         }
     }
     return {active, nodes, edgeName};
-};
-
-const nodeListMapStateToProps = (state, edgeName) => {
-    var active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
-    var nodes = [];
-    if(active) {
-        var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
-        if(typeof(matchedNode[edgeName]) == 'undefined') {
-            nodes = [];
-        } else {
-            nodes = matchedNode[edgeName].map((x) => {
-                return {id: x, name: getLabelFromXrData(xrData, x)};
-            });
-        }
-    }
-    return {active, nodes};
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -128,6 +125,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 export var SearchResultsListComponent =  connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export var NodeLinkListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-export var DependenciesResultsListComponent = connect((state) => nodeListMapStateToProps(state, 'dependencies'), mapDispatchToProps)(SidebarNodeListCompoent);
-export var UnlocksResultsListComponent = connect((state) => nodeListMapStateToProps(state, 'unlocks'), mapDispatchToProps)(SidebarNodeListCompoent);
-export var GetOneFreeResultsListComponent = connect((state) => nodeListMapStateToProps(state, 'getOneFree'), mapDispatchToProps)(SidebarNodeListCompoent);

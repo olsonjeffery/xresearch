@@ -65,6 +65,11 @@ module.exports.getAllData = () => {
         item.requiredBy = requiredBy[item.id] ? requiredBy[item.id] : [];
     });
 
+    var keysIndexMap = {};
+    _.each(researchData, (x, idx) => {
+        keysIndexMap[x.id] = idx;
+    });
+
     var langInverted = _.chain(addedKeys).keys().reduce((memo, k) => {
         var val = lang.extraStrings[0].strings[k];
         memo[val] = k;
@@ -72,8 +77,9 @@ module.exports.getAllData = () => {
     }, {}).value();
 
     return {
-        researchData: researchData,
+        researchData,
         langKeys: lang.extraStrings[0].strings,
-        langInverted: langInverted
+        langInverted,
+        keysIndexMap
     };
 };

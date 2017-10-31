@@ -4,7 +4,9 @@
     "description": "tool to parse and provide visualization for the xpiratez research tree",
     "main": "app.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "node app.js",
+        "genstatic": "node genstatic.js"
     },
     "author": "Jeffery Olson <olson.jeffery@gmail.com>",
     "license": "Unlicense",

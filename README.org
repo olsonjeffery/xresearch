@@ -30,29 +30,31 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 ** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
 TODO
 
-** Pending work items [19/28]
+** Pending work items [20/29]
 - [ ] add checkbox filtering to each node list category in both panes
   - [ ] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
     - [ ] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
-    - [ ] add reducer that switches on filteringCategory as will as action.type and sets the key in detailFilteringCategories with whatever is in `value`
+    - [ ] add reducer that switches on filteringCategory & action.type and sets the key in detailFilteringCategories with whatever is in `value`
   - [ ] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
-  - [ ] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true
+  - [ ] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true/checked
     - [ ] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
   - [ ] changing selectedNodeId (either selecting a node or setting to null as in Show All Topics) should reset detailFilteringCategories to all true
 - [ ] hovering over the title div on a NodeLinkListComponent will fatten/highlight all edge-styles matching that edgeName in the graph
+  - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
   - [ ] add `edgeHighlight: string` to state
   - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
   - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
+- [ ] split SharedSetup.js into Constants, Actions and StoreInit modules
 - [ ] increase neighorhood depth from 1 to 2 .. could this be easy? or is it more involved?
 - [ ] add manufacturing tasks
   - [ ] modify parser to pull needed stuff from Piratez.rul
   - [ ] show manufacturing requirements on right node list
   - [ ] add filtering?
-- [ ] static HTML generation for running as a github site
 - [ ] router support in URL
 - [ ] show ruleset version in page display
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
 - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+- [X] static HTML generation for running as a github site
 - [X] colorize Red/Green/Blue as it appears in node list descriptions
 - [X] fix bug with duplicate STR_DEEP_ONE entries under dependencies for STR_BUGEYE_VICTIM
 - [X] PARSER: move keysIndexMap into parser from sidebar or whatever

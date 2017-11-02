@@ -15,7 +15,7 @@ class AppComponent extends Component {
     render() {
         var pageHeaderRow = e('div', {className: 'row'},
                               e('div', {className: 'col-9'},
-                                e('h3', null, e('i', {className: 'fa fa-eye'}, null), ' XPiratez Research Tree Explorer (xresearch)')),
+                                e('h3', null, e('i', {className: 'fa fa-eye'}, null), ' xresearch')),
                               e('div', {className: 'col-3', style: {paddingTop: '15px'} },
                                 e(SearchBarComponent, {searchText: 'Enter topic name...'}, null)));
         var containerHeaderRow = e(NodeSummaryComponent, {}, null);
@@ -27,7 +27,11 @@ class AppComponent extends Component {
                              e('div', {className: 'col-3'},
                                e(SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
                                e(RightDetailsComponent, {}, null)));
-        return e('div', null, pageHeaderRow, containerHeaderRow, containerRow);
+        var pageFooterRow = e('div', {className: 'row'},
+                              e ('div', {className: 'col-12'},
+                                 e('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
+                                   e('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', e('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')));
+        return e('div', null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
     }
 }
 export default AppComponent;

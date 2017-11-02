@@ -2,6 +2,7 @@ import {Component, createElement as e} from 'react';
 import cytoscape from 'cytoscape';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
 import {xrActions} from './SharedSetup';
 
@@ -41,8 +42,9 @@ var buildElements = (data) => {
                     name: dep,
                     weight: idx
                 },
-                classes: event
+                classes: 'event'
             });
+            addedTopics[dep] = true;
         }
         if(addedTopics[topicId] && addedTopics[dep]) {
             elements.push({
@@ -163,7 +165,7 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": "gray",
+         "background-color": "#ccc",
          "text-outline-color": "#555",
          "text-outline-width": "1px",
          "color": "#fff",
@@ -244,7 +246,14 @@ class GraphComponent extends Component {
 }
 
 var previousSelectedNodeId = null;
-const showSelectedNodeInGraph = (targetId, self) => {
+var previousGraphFilteringCateogories = {};
+const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, category) => {
+    if(!filteringCategories[category]) {
+        _.each(targetNode[category], id =>
+               cy.$(`#${id}`).remove());
+    }
+};
+const showSelectedNodeInGraph = (targetId, self, xrData) => {
     var newNodes = [];
     var selectedLayout = {};
     self.props.dispatch(xrActions.graphUpdatingChange(true));
@@ -258,8 +267,16 @@ const showSelectedNodeInGraph = (targetId, self) => {
     }
     window.__cy.elements().remove();
     setTimeout(() => {
-        window.__cy.elements().remove();
-        window.__cy.add(newNodes);
+        // don't apply filtering when viewing the full graph
+        if(targetId != null) {
+            var targetNode = xrData.researchData[xrData.keysIndexMap[targetId]];
+            window.__cy.add(newNodes);
+
+            // filter based on visible categories
+            _.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>
+                   applyGraphFilteringCategories(window.__cy, targetNode, previousGraphFilteringCateogories, category));
+        }
+
         var newLayout = window.__cy.layout(selectedLayout);
         newLayout.run();
         window.__cy.reset();
@@ -271,7 +288,14 @@ const mapStateToProps = (state, ownProps) => {
     var dispatchProps = {props: {dispatch: __store.dispatch}};
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
+        previousGraphFilteringCateogories = state.graphFilteringCategories;
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
+    } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
+        // is this needlessly expensive?
+        console.log("graph filtering categories have changed");
+        previousSelectedNodeId = state.selectedNodeId;
+        previousGraphFilteringCateogories = state.graphFilteringCategories;
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
     }
     return {
         xrData: state.xrData
@@ -282,11 +306,12 @@ const mapDispatchToProps = (dispatch, state) => {
     return {
         onNodeSelection: (e) => {
             var targetId = e.target.id();
+            previousGraphFilteringCateogories = state.graphFilteringCategories;
             if(previousSelectedNodeId !== targetId) {
                 dispatch(xrActions.nodeSelection(targetId));
                 dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_NODE_DETAILS));
             } else {
-                showSelectedNodeInGraph(targetId, {props: {dispatch}});
+                showSelectedNodeInGraph(targetId, {props: {dispatch}}, state.xrData);
             }
         },
         dispatch

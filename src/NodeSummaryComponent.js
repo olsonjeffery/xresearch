@@ -23,7 +23,11 @@ const mapStateToProps = (state) => {
     var suffix = '';
     if(state.selectedNodeId != null) {
         var topic = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
-        suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
+        if(topic == undefined) {
+            suffix = '';
+        } else {
+            suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
+        }
     }
     var graphUpdatingMessage = state.graphUpdating ?
         'Graph Updating...'
@@ -42,6 +46,7 @@ const mapDispatchToProps = (dispatch, state) => {
         onShowAllTopics: () => {
             dispatch(xrActions.nodeSelection(null));
             dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_SPLASH));
+            dispatch(xrActions.resetGraphFilteringCategories());
         }
     };
 };

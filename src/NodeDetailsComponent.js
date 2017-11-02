@@ -48,14 +48,14 @@ const rightMapStateToProps = (state) => {
         depEdgeName: 'dependedUponBy',
         depTitlePrefix: 'Depended Upon By ( ',
         depTitleColored: 'Green',
-        depTitleSuffix: ' towards)',
+        depTitleSuffix: ' away)',
         unlEdgeName: 'unlocks',
         unlTitlePrefix: 'Unlocks (',
         unlTitleColored: 'Blue',
-        unlTitleSuffix: ' towards)',
+        unlTitleSuffix: ' away)',
         gofEdgeName: 'getOneFree',
         gofTitlePrefix: 'Give One Free (',
-        gofTitleSuffix: ' towards)'
+        gofTitleSuffix: ' away)'
     };
 };
 

@@ -11,14 +11,13 @@ class SidebarNodeListCompoent extends Component {
     }
     render() {
         if(this.props.active) {
+            var headerContent = this.props.title != undefined ?
+                e('h4', {}, this.props.title)
+                : e('h4', {}, this.props.titlePrefix, e('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, e('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));
             var entries = this.props.nodes.map((x) => {
-                if('STR_BUGEYE_VICTIM' == x.id) {
-                    console.log('got em');
-                }
                 return e('li', {key: `sidebar-node-${x.id}`}, e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`));
             });
-            return e('div', {},
-                     e('h4', {}, this.props.titlePrefix, e('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix),
+            return e('div', {}, headerContent,
                         entries.length == 0 ? e('p', {}, 'None') : e('ul', {}, entries));
         }
         return null;
@@ -92,7 +91,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
     var nodes = [];
     if(active) {
         var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
-        if(typeof(matchedNode[edgeName]) == 'undefined') {
+        if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
             nodes = [];
         } else {
             var previousEntries = {};
@@ -111,7 +110,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
             });
         }
     }
-    return {active, nodes, edgeName};
+    return {active, nodes, edgeName, isChecked: state.graphFilteringCategories[edgeName]};
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -119,6 +118,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         onNodeSelection: (e) => {
             dispatch(xrActions.nodeSelection(e.currentTarget.getAttribute("data-id")));
             dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_NODE_DETAILS));
+        },
+        onFilterToggle: (e) => {
+            var newValue = e.target.checked;
+            dispatch(xrActions.graphFilteringCategoryChange(ownProps.edgeName, newValue));
         }
     };
 };

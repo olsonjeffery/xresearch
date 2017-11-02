@@ -428,51 +428,65 @@ module.exports = invariant;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return initializeStore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return xrActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return initializeStore; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(20);
 
 
-var xrActionsLocal = {};
+var xrActions = {};
 // sidebar modes
-xrActionsLocal.DEFAULT_SEARCHTEXT = 'Enter topic to search';
-xrActionsLocal.SIDEBAR_MODE_SPLASH = 'SIDEBAR_MODE_SPLASH';
-xrActionsLocal.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
-xrActionsLocal.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
+xrActions.DEFAULT_SEARCHTEXT = 'Enter topic to search';
+xrActions.SIDEBAR_MODE_SPLASH = 'SIDEBAR_MODE_SPLASH';
+xrActions.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
+xrActions.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
 
-xrActionsLocal.SET_XR_DATA = 'SET_XR_DATA';
-xrActionsLocal.SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
-xrActionsLocal.SIDEBAR_MODE_CHANGE = 'SIDEBAR_MODE_CHANGE';
-xrActionsLocal.NODE_SELECTION = 'NODE_SELECTION';
-xrActionsLocal.GRAPH_UPDATING_CHANGE = 'GRAPH_UPDATING_CHANGE';
+xrActions.SET_XR_DATA = 'SET_XR_DATA';
+xrActions.SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
+xrActions.SIDEBAR_MODE_CHANGE = 'SIDEBAR_MODE_CHANGE';
+xrActions.NODE_SELECTION = 'NODE_SELECTION';
+xrActions.GRAPH_UPDATING_CHANGE = 'GRAPH_UPDATING_CHANGE';
+xrActions.GRAPH_FILTERING_CATEGORY_CHANGE = 'GRAPH_FILTERING_CATEGORY_CHANGE';
+xrActions.RESET_GRAPH_FILTERING_CATEGORIES = 'RESET_GRAPH_FILTERING_CATEGORIES';
 // action dispatchers
-xrActionsLocal.graphUpdatingChange = (graphUpdating) => {
+xrActions.resetGraphFilteringCategories = () => {
     return {
-        type: xrActionsLocal.GRAPH_UPDATING_CHANGE,
+        type: xrActions.GRAPH_FILTERING_CATEGORY_CHANGE
+    };
+};
+xrActions.graphFilteringCategoryChange = (changedCategory, newValue) => {
+    return {
+        type: xrActions.GRAPH_FILTERING_CATEGORY_CHANGE,
+        changedCategory,
+        newValue
+    };
+};
+xrActions.graphUpdatingChange = (graphUpdating) => {
+    return {
+        type: xrActions.GRAPH_UPDATING_CHANGE,
         graphUpdating
     };
 };
-xrActionsLocal.nodeSelection = (id) => {
+xrActions.nodeSelection = (id) => {
     return {
-        type: xrActionsLocal.NODE_SELECTION,
+        type: xrActions.NODE_SELECTION,
         selectedNodeId: id
     };
 };
-xrActionsLocal.setXrData = (xrData) => {
+xrActions.setXrData = (xrData) => {
     return {
-        type: xrActionsLocal.SET_XR_DATA,
+        type: xrActions.SET_XR_DATA,
         xrData
     };
 };
-xrActionsLocal.searchTextChange = (searchText) => {
+xrActions.searchTextChange = (searchText) => {
     return {
-        type: xrActionsLocal.SEARCH_TEXT_CHANGE,
+        type: xrActions.SEARCH_TEXT_CHANGE,
         searchText
     };
 };
-xrActionsLocal.sidebarModeChange = (sidebarMode) => {
+xrActions.sidebarModeChange = (sidebarMode) => {
     return {
-        type: xrActionsLocal.SIDEBAR_MODE_CHANGE,
+        type: xrActions.SIDEBAR_MODE_CHANGE,
         sidebarMode
     };
 };
@@ -480,7 +494,7 @@ xrActionsLocal.sidebarModeChange = (sidebarMode) => {
 // reducers
 var xrData = (state = {}, action) => {
     switch(action.type) {
-    case xrActionsLocal.SET_XR_DATA:
+    case xrActions.SET_XR_DATA:
         return action.xrData;
     default:
         return state;
@@ -488,7 +502,7 @@ var xrData = (state = {}, action) => {
 };
 var searchText = (state = 'Enter topic to search', action) => {
     switch(action.type) {
-    case xrActionsLocal.SEARCH_TEXT_CHANGE:
+    case xrActions.SEARCH_TEXT_CHANGE:
         return action.searchText;
     default:
         return state;
@@ -496,7 +510,7 @@ var searchText = (state = 'Enter topic to search', action) => {
 };
 var sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
     switch(action.type) {
-    case xrActionsLocal.SIDEBAR_MODE_CHANGE:
+    case xrActions.SIDEBAR_MODE_CHANGE:
         return action.sidebarMode;
     default:
         return state;
@@ -504,7 +518,7 @@ var sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
 };
 var selectedNodeId = (state = null, action) => {
     switch(action.type) {
-    case xrActionsLocal.NODE_SELECTION:
+    case xrActions.NODE_SELECTION:
         return action.selectedNodeId;
     default:
         return state;
@@ -513,20 +527,40 @@ var selectedNodeId = (state = null, action) => {
 
 var graphUpdating = (state = true, action) => {
     switch(action.type) {
-    case xrActionsLocal.GRAPH_UPDATING_CHANGE:
+    case xrActions.GRAPH_UPDATING_CHANGE:
         return action.graphUpdating;
     default:
         return state;
     }
 };
 
-var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({xrData, searchText, sidebarMode, selectedNodeId, graphUpdating});
+var graphFilteringCategories = (state = {dependencies: true, dependedUponBy: true, unlocks: true, unlockedBy: true, getOneFree: true, giveOneFree: true}, action) => {
+    switch(action.type) {
+    case xrActions.GRAPH_FILTERING_CATEGORY_CHANGE:
+        var newState = {};
+        Object.assign(newState, state);
+        newState[action.changedCategory] = action.newValue;
+        return newState;
+    case xrActions.RESET_GRAPH_FILTERING_CATEGORIES:
+        return {
+            dependencies: true,
+            dependedUponBy: true,
+            unlocks: true,
+            unlockedBy: true,
+            giveOneFree: true,
+            getOneFree: true
+        };
+    default:
+        return state;
+    }
+};
+
+var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({xrData, searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
 const initializeStoreImpl = () => {
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
 };
 
 var initializeStore = initializeStoreImpl;
-var xrActions = xrActionsLocal;
 
 
 /***/ }),
@@ -1000,14 +1034,13 @@ class SidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compo
     }
     render() {
         if(this.props.active) {
+            var headerContent = this.props.title != undefined ?
+                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.title)
+                : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.titlePrefix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));
             var entries = this.props.nodes.map((x) => {
-                if('STR_BUGEYE_VICTIM' == x.id) {
-                    console.log('got em');
-                }
                 return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('li', {key: `sidebar-node-${x.id}`}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`));
             });
-            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
-                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.titlePrefix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix),
+            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, headerContent,
                         entries.length == 0 ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('p', {}, 'None') : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('ul', {}, entries));
         }
         return null;
@@ -1081,7 +1114,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
     var nodes = [];
     if(active) {
         var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
-        if(typeof(matchedNode[edgeName]) == 'undefined') {
+        if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
             nodes = [];
         } else {
             var previousEntries = {};
@@ -1100,7 +1133,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
             });
         }
     }
-    return {active, nodes, edgeName};
+    return {active, nodes, edgeName, isChecked: state.graphFilteringCategories[edgeName]};
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -1108,6 +1141,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         onNodeSelection: (e) => {
             dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].nodeSelection(e.currentTarget.getAttribute("data-id")));
             dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
+        },
+        onFilterToggle: (e) => {
+            var newValue = e.target.checked;
+            dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphFilteringCategoryChange(ownProps.edgeName, newValue));
         }
     };
 };
@@ -40848,7 +40885,7 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     render() {
         var pageHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
-                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' XPiratez Research Tree Explorer (xresearch)')),
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' xresearch')),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3', style: {paddingTop: '15px'} },
                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
         var containerHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__["a" /* default */], {}, null);
@@ -40860,7 +40897,11 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["b" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, pageHeaderRow, containerHeaderRow, containerRow);
+        var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-12'},
+                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
+                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')));
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (AppComponent);
@@ -40878,7 +40919,10 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SharedSetup__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SharedSetup__ = __webpack_require__(6);
+
 
 
 
@@ -40893,7 +40937,7 @@ var buildElements = (data) => {
     dupeTopics = [];
     var elements = [];
     var researchData = data.researchData;
-    _.each(researchData, function(topic, idx) {
+    __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(researchData, function(topic, idx) {
         if(addedTopics[topic.id]) {
             dupeTopics.push(topic.id);
             // we have to bail because this is a repeat
@@ -40922,8 +40966,9 @@ var buildElements = (data) => {
                     name: dep,
                     weight: idx
                 },
-                classes: event
+                classes: 'event'
             });
+            addedTopics[dep] = true;
         }
         if(addedTopics[topicId] && addedTopics[dep]) {
             elements.push({
@@ -40939,25 +40984,25 @@ var buildElements = (data) => {
 
     // a second traversal to add edges; we can't do this until we
     // know what all of the topics are
-    _.each(researchData, (topic, idx) => {
+    __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(researchData, (topic, idx) => {
         if(topic.dependencies) {
-            _.each(topic.dependencies, function(dep) {
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.dependencies, function(dep) {
                 addEdge(dep, topic.id, 'dep', idx);
             });
         }
         if(topic.unlocks) {
-            _.each(topic.unlocks, function(dep) {
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.unlocks, function(dep) {
                 addEdge(dep, topic.id, 'unlocks', idx);
             });
         }
         if(topic.requires) {
-            _.each(topic.requires, function(dep) {
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.requires, function(dep) {
                 // these are events mostly
                 addEdge(dep, topic.id, 'requires', idx);
             });
         }
         if(topic.getOneFree) {
-            _.each(topic.getOneFree, function(dep) {
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.getOneFree, function(dep) {
                 addEdge(dep, topic.id, 'getOneFree', idx);
             });
         }
@@ -41044,7 +41089,7 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": "gray",
+         "background-color": "#ccc",
          "text-outline-color": "#555",
          "text-outline-width": "1px",
          "color": "#fff",
@@ -41089,7 +41134,7 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
     componentDidMount() {
         var self = this;
-        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
         setTimeout(() => {
             self.cyQuery = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
                 headless: true,
@@ -41112,7 +41157,7 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 self.cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-                self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+                self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
             }, TIMEOUT_LENGTH_MS);
             window.__cyQuery = self.cyQuery;
         }, TIMEOUT_LENGTH_MS);
@@ -41125,10 +41170,17 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 }
 
 var previousSelectedNodeId = null;
-const showSelectedNodeInGraph = (targetId, self) => {
+var previousGraphFilteringCateogories = {};
+const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, category) => {
+    if(!filteringCategories[category]) {
+        __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(targetNode[category], id =>
+               cy.$(`#${id}`).remove());
+    }
+};
+const showSelectedNodeInGraph = (targetId, self, xrData) => {
     var newNodes = [];
     var selectedLayout = {};
-    self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+    self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
     if(targetId === null) {
         //show all topics
         newNodes = window.__cyQuery.elements();
@@ -41139,12 +41191,20 @@ const showSelectedNodeInGraph = (targetId, self) => {
     }
     window.__cy.elements().remove();
     setTimeout(() => {
-        window.__cy.elements().remove();
-        window.__cy.add(newNodes);
+        // don't apply filtering when viewing the full graph
+        if(targetId != null) {
+            var targetNode = xrData.researchData[xrData.keysIndexMap[targetId]];
+            window.__cy.add(newNodes);
+
+            // filter based on visible categories
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>
+                   applyGraphFilteringCategories(window.__cy, targetNode, previousGraphFilteringCateogories, category));
+        }
+
         var newLayout = window.__cy.layout(selectedLayout);
         newLayout.run();
         window.__cy.reset();
-        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
     }, TIMEOUT_LENGTH_MS);
 };
 
@@ -41152,7 +41212,14 @@ const mapStateToProps = (state, ownProps) => {
     var dispatchProps = {props: {dispatch: __store.dispatch}};
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
+        previousGraphFilteringCateogories = state.graphFilteringCategories;
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
+    } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
+        // is this needlessly expensive?
+        console.log("graph filtering categories have changed");
+        previousSelectedNodeId = state.selectedNodeId;
+        previousGraphFilteringCateogories = state.graphFilteringCategories;
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
     }
     return {
         xrData: state.xrData
@@ -41163,11 +41230,12 @@ const mapDispatchToProps = (dispatch, state) => {
     return {
         onNodeSelection: (e) => {
             var targetId = e.target.id();
+            previousGraphFilteringCateogories = state.graphFilteringCategories;
             if(previousSelectedNodeId !== targetId) {
-                dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].nodeSelection(targetId));
-                dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
+                dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].nodeSelection(targetId));
+                dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
             } else {
-                showSelectedNodeInGraph(targetId, {props: {dispatch}});
+                showSelectedNodeInGraph(targetId, {props: {dispatch}}, state.xrData);
             }
         },
         dispatch
@@ -74765,14 +74833,14 @@ const rightMapStateToProps = (state) => {
         depEdgeName: 'dependedUponBy',
         depTitlePrefix: 'Depended Upon By ( ',
         depTitleColored: 'Green',
-        depTitleSuffix: ' towards)',
+        depTitleSuffix: ' away)',
         unlEdgeName: 'unlocks',
         unlTitlePrefix: 'Unlocks (',
         unlTitleColored: 'Blue',
-        unlTitleSuffix: ' towards)',
+        unlTitleSuffix: ' away)',
         gofEdgeName: 'getOneFree',
         gofTitlePrefix: 'Give One Free (',
-        gofTitleSuffix: ' towards)'
+        gofTitleSuffix: ' away)'
     };
 };
 
@@ -74821,7 +74889,11 @@ const mapStateToProps = (state) => {
     var suffix = '';
     if(state.selectedNodeId != null) {
         var topic = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
-        suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
+        if(topic == undefined) {
+            suffix = '';
+        } else {
+            suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
+        }
     }
     var graphUpdatingMessage = state.graphUpdating ?
         'Graph Updating...'
@@ -74840,6 +74912,7 @@ const mapDispatchToProps = (dispatch, state) => {
         onShowAllTopics: () => {
             dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].nodeSelection(null));
             dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_SPLASH));
+            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].resetGraphFilteringCategories());
         }
     };
 };

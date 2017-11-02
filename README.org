@@ -23,22 +23,25 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 - have recent node.js + npm installed
 - clone this repository to your local machine
 - entire repo and run `npm install` command
-- `node app.js` to bring up the development server
+- `npm run dev` to bring up the development server
 - Once you see "data is parsed" displayed, you can navigate to `http://localhost:3000` in Chrome to see the app
 - You should also install webpack and run it locally within the repo (which includes a `webpack.config.js`) in order to update the `dist/bundle.js` file as you make changes
 
-** Update the Piratez.rul/Piratez_lang.rul files & regenerate static HTML
-TODO
+** Update the Piratez.rul/Piratez_lang.rul files
+- Get the latest Xpiratez distro and unzip/unrar it somewhere
+- Pull out the `Piratez.rul` and `Piratez_lang.rul` files from `Dioxine_XPiratez/user/mods/Piratez/Ruleset/` and overwrite the same files in the root of this repository
+- Run `npm run genstatic` to attempt to generate the static HTML output
+- Errors will likely result, pointing to YAML parsing issues in the `.rul` files brought over previously
+- Resolve YAML parsing issues until `npm run genstatic` completes successfully
+- Your ruleset files are now updated
 
-** Pending work items [20/29]
-- [ ] add checkbox filtering to each node list category in both panes
-  - [ ] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
-    - [ ] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
-    - [ ] add reducer that switches on filteringCategory & action.type and sets the key in detailFilteringCategories with whatever is in `value`
-  - [ ] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
-  - [ ] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true/checked
-    - [ ] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
-  - [ ] changing selectedNodeId (either selecting a node or setting to null as in Show All Topics) should reset detailFilteringCategories to all true
+** Regenerate static HTML
+- Run `npm run genstatic`
+
+** Pending work items [24/35]
+- [ ] add crash handler/error boundary at top-level to display message when a crash occurs
+- [ ] add 'X' icon on right side of search bar to clear text
+- [ ] only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
 - [ ] hovering over the title div on a NodeLinkListComponent will fatten/highlight all edge-styles matching that edgeName in the graph
   - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
   - [ ] add `edgeHighlight: string` to state
@@ -52,8 +55,22 @@ TODO
   - [ ] add filtering?
 - [ ] router support in URL
 - [ ] show ruleset version in page display
+- [ ] handling research topics from the vanilla research data (e.g. STR_ALIEN_TERROR)
+  - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
+  - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
 - [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+- [X] bug viewing STR_ALIEN_RESEARCH off of Raider Thug leads to crash
+  - [X] not adding nodes for edges outside research tree; should work?
+  - [X] solution: make topic ids w/ no entry in researchData be just text, not links (disabling node selection)
+- [X] add checkbox filtering to each node list category in both panes
+  - [X] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
+    - [X] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
+    - [X] add reducer that switches on filteringCategory & action.type and sets the key in detailFilteringCategories with whatever is in `value`
+  - [X] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
+  - [X] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true/checked
+    - [X] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
+- [X] fix bug with un-string-delim'd 'event' in GraphComponent:44
+- [X] add footer info w/ links to project repo, xpiratez, etc
 - [X] static HTML generation for running as a github site
 - [X] colorize Red/Green/Blue as it appears in node list descriptions
 - [X] fix bug with duplicate STR_DEEP_ONE entries under dependencies for STR_BUGEYE_VICTIM

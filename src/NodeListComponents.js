@@ -11,7 +11,6 @@ class SidebarNodeListCompoent extends Component {
     }
     render() {
         if(this.props.active) {
-            throw "BARFF?";
             var headerContent = this.props.title != undefined ?
                 e('h4', {}, this.props.title)
                 : e('h4', {}, this.props.titlePrefix, e('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, e('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));

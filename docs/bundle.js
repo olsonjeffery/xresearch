@@ -1034,7 +1034,6 @@ class SidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compo
     }
     render() {
         if(this.props.active) {
-            throw "BARFF?";
             var headerContent = this.props.title != undefined ?
                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.title)
                 : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.titlePrefix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));

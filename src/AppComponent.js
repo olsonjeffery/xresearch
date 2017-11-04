@@ -27,9 +27,11 @@ class AppComponent extends Component {
                                e(SearchResultsListComponent, {active: false, nodes: [], title: 'Search Results'}, null),
                                e(RightDetailsComponent, {}, null)));
         var pageFooterRow = e('div', {className: 'row'},
-                              e ('div', {className: 'col-12'},
+                              e ('div', {className: 'col-2'}),
+                              e ('div', {className: 'col-8'},
                                  e('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
-                                   e('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', e('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')));
+                                   e('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', e('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
+                              e('div', {className: 'col-2'}, null));
         return e('div', null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
     }
 }

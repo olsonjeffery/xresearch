@@ -106,7 +106,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
                 if(x == 'STR_BUGEYE_VICTIM') {
                     console.log('lol got em');
                 }
-                return {id: x, name: getLabelFromXrData(xrData, x)};
+                return {id: x, name: getLabelFromXrData(state.xrData, x)};
             });
         }
     }

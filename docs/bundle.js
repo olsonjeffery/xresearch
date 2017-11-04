@@ -1129,7 +1129,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
                 if(x == 'STR_BUGEYE_VICTIM') {
                     console.log('lol got em');
                 }
-                return {id: x, name: getLabelFromXrData(xrData, x)};
+                return {id: x, name: getLabelFromXrData(state.xrData, x)};
             });
         }
     }
@@ -40897,9 +40897,11 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["b" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-12'},
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-2'}),
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-8'},
                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
-                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')));
+                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, null));
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
     }
 }

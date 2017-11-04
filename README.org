@@ -39,38 +39,49 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** Work items & CHANGELOG
-- PENDING [0/15]
-  - [ ] FEATURE: add watches on ruleset-parser and index_template.html and reload in dev server
-  - [ ] REFACTOR: move 'graph updating...' to be an overlay/spinner over the graph component itself
-  - [ ] FEATURE: add crash handler/error boundary at top-level to display message when a crash occurs
+- PENDING [0/13]
   - [ ] FEATURE: add 'X' icon on right side of search bar to clear text
-  - [ ] FEATURE: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
-  - [ ] FEATURE: hovering over a single entry in NodeLinkListComponent will fatten/highlight that edge+node in the graph
-  - [ ] FEATURE: hovering over the title div on a NodeLinkListComponent will fatten/highlight all edge-styles matching that edgeName in the graph
+  - [ ] FEATURE: hovering on node list entry highlights matching edge in cytoscape
+    - [ ] add edge id (FOO->BAR) to link entries
+    - [ ] on hover-enter, find matching entity via __cy.$() and change its style
+    - [ ] on hover-exit, find again and change style back
+  - [ ] FEATURE: hovering on node list title highlights all matching edge-styles in ctyoscape
     - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
     - [ ] add `edgeHighlight: string` to state
     - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
     - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
   - [ ] REFACTOR: split SharedSetup.js into Constants, Actions and StoreInit modules
-  - [ ] FEATURE: increase neighorhood depth from 1 to 2 .. could this be easy? or is it more involved?
-  - [ ] FEATURE: add manufacturing tasks
+  - [ ] FEATURE: add facilities
+    - [ ] 'facilities' under the root
+  - [ ] FEATURE: add manufacturing tasks & item data
+    - [ ] identify items in the research parser and then pull in data from 'items' in ruleset file
+      - [ ] requiresBuy shows what will make it available in the buy dialog
     - [ ] modify parser to pull needed stuff from Piratez.rul
     - [ ] show manufacturing requirements on right node list
-    - [ ] add filtering?
+    - from Dioxine:
+      - it ain't as simple with items. First of all they need to have non-zero buy price to be even considered buyable
+      - then they can have requiresBuy: or requires:
+      - the latter overrules the former
+      - same is true for craft except there is no "requiresBuy"
   - [ ] FEATURE: search/sidebar refactor show research results as an overlay in search input
     - [ ] suppress brown dropdown behavior (autoComplete attribute in react)
     - [ ] remove "sidebar mode" logic in redux state
+  - [ ] FEATURE: increase neighorhood depth from 1 to 2
   - [ ] FEATURE: router support in URL
     - [ ] all routes represent redux actions
     - [ ] any "multi-dispatch" activities in the application have refactored into robust actions
   - [ ] FEATURE: show ruleset version in page display
-  - [ ] FEATURE: handling research topics from the vanilla research data (e.g. STR_ALIEN_TERROR)
+  - [ ] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR)
     - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+  - [ ] BUG: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.0.2 [2/2]
-  - [X] PARSE: include xresearch version in xrData
+- VERSION 0.0.2 [5/5]
   - [X] BUG: "show all topics" is broken
+  - [X] PARSE: include xresearch version in xrData
+  - [X] REFACTOR: change 'graph updating...' to be an spinner
+  - [X] FEATURE: add watches on ruleset-parser and index_template.html and reload in dev server
+  - [X] FEATURE: add crash handler/error boundary at top-level to show error msg
 - VERSION 0.0.1 [24/24]
   - [X] bug viewing STR_ALIEN_RESEARCH off of Raider Thug leads to crash
     - [X] not adding nodes for edges outside research tree; should work?

@@ -1034,6 +1034,7 @@ class SidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compo
     }
     render() {
         if(this.props.active) {
+            throw "BARFF?";
             var headerContent = this.props.title != undefined ?
                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.title)
                 : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.titlePrefix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));
@@ -1126,9 +1127,6 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
                 previousEntries[x] = true;
                 return shouldInclude;
             }).map((x) => {
-                if(x == 'STR_BUGEYE_VICTIM') {
-                    console.log('lol got em');
-                }
                 return {id: x, name: getLabelFromXrData(state.xrData, x)};
             });
         }
@@ -40868,6 +40866,8 @@ module.exports = performance || {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__ = __webpack_require__(86);
+
 
 
 
@@ -40902,7 +40902,7 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
                                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, null));
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__["a" /* default */], null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (AppComponent);
@@ -41216,8 +41216,6 @@ const mapStateToProps = (state, ownProps) => {
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
     } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
-        // is this needlessly expensive?
-        console.log("graph filtering categories have changed");
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
@@ -74873,8 +74871,13 @@ var RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b"
 
 class NodeSummaryComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     render() {
+        var graphUpdatingMessage = this.props.graphUpdating ?
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {float: 'left', margin: '22px'}},
+              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-refresh fa-spin fa-2x fa-fw'}, null),
+              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {className:'sr-only'}, 'Graph Updating...'))
+            : '';
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {float: 'left', margin: '22px'}}, this.props.graphUpdatingMessage)), // spinner goes here
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, graphUpdatingMessage),
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-8'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', { style: {textAlign: 'center'}}, `${this.props.label} ${this.props.suffix}`)),
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, this.props.showClearSelected === false ?
                    null
@@ -74896,14 +74899,11 @@ const mapStateToProps = (state) => {
             suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
         }
     }
-    var graphUpdatingMessage = state.graphUpdating ?
-        'Graph Updating...'
-        : '';
     return {
         xrData: state.xrData,
         label,
         suffix,
-        graphUpdatingMessage,
+        graphUpdating: state.graphUpdating,
         showClearSelected: label !== ALL_TOPICS
     };
 };
@@ -74918,6 +74918,44 @@ const mapDispatchToProps = (dispatch, state) => {
     };
 };
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(NodeSummaryComponent));
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    componentDidCatch(error, info) {
+        this.setState({ hasError: true, componentStack: info.componentStack});
+    }
+    render() {
+        if(this.state.hasError) {
+            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
+                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingTop: '15px;'}},
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-12'}, ' ')
+                      ),
+                     Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingTop: '15px;'}},
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'}, ' '),
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-6'},
+                         Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{padding: '10px', border: '2px dashed #F0386B', color: '#F0386B', textAlign: 'center'}}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-exclamation-triangle fa-5x', style:{color: '#f0386b'}}, null), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), 'There was an error in xresearch. Component stack trace:', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {textAlign: 'left'}}, this.state.componentStack))),
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'}, ' ')
+                      )
+                    );
+        }
+        return this.props.children;
+    }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (ErrorDisplayComponent);
 
 
 /***/ })

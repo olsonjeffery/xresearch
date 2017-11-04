@@ -291,8 +291,6 @@ const mapStateToProps = (state, ownProps) => {
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
     } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
-        // is this needlessly expensive?
-        console.log("graph filtering categories have changed");
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);

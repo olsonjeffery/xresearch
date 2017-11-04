@@ -6,8 +6,13 @@ import {getLabelFromXrData} from './NodeListComponents.js';
 
 class NodeSummaryComponent extends Component {
     render() {
+        var graphUpdatingMessage = this.props.graphUpdating ?
+            e('span', {style: {float: 'left', margin: '22px'}},
+              e('i', {className: 'fa fa-refresh fa-spin fa-2x fa-fw'}, null),
+              e('span', {className:'sr-only'}, 'Graph Updating...'))
+            : '';
         return e('div', {className: 'row'},
-                 e('div', {className: 'col-2'}, e('span', {style: {float: 'left', margin: '22px'}}, this.props.graphUpdatingMessage)), // spinner goes here
+                 e('div', {className: 'col-2'}, graphUpdatingMessage),
                  e('div', {className: 'col-8'}, e('h3', { style: {textAlign: 'center'}}, `${this.props.label} ${this.props.suffix}`)),
                  e('div', {className: 'col-2'}, this.props.showClearSelected === false ?
                    null
@@ -29,14 +34,11 @@ const mapStateToProps = (state) => {
             suffix = `(Base Research Cost: ${ topic.cost } Points: ${ topic.points })`;
         }
     }
-    var graphUpdatingMessage = state.graphUpdating ?
-        'Graph Updating...'
-        : '';
     return {
         xrData: state.xrData,
         label,
         suffix,
-        graphUpdatingMessage,
+        graphUpdating: state.graphUpdating,
         showClearSelected: label !== ALL_TOPICS
     };
 };

@@ -268,9 +268,9 @@ const showSelectedNodeInGraph = (targetId, self, xrData) => {
     window.__cy.elements().remove();
     setTimeout(() => {
         // don't apply filtering when viewing the full graph
+        window.__cy.add(newNodes);
         if(targetId != null) {
             var targetNode = xrData.researchData[xrData.keysIndexMap[targetId]];
-            window.__cy.add(newNodes);
 
             // filter based on visible categories
             _.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>

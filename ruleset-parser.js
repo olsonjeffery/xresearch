@@ -2,11 +2,13 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const _ = require('lodash');
 
+
 module.exports.getAllData = () => {
     var mainRulesetFile = 'Piratez.rul';
     var langRulesetFile = 'Piratez_lang.rul';
 
     // pull down the ruleset and lang (with str mappings) file from YAML
+    var package = require('./package.json');
     var ruleset = yaml.safeLoad(fs.readFileSync(mainRulesetFile, 'utf8'));
     var lang = yaml.safeLoad(fs.readFileSync(langRulesetFile, 'utf8'));
 
@@ -77,6 +79,7 @@ module.exports.getAllData = () => {
     }, {}).value();
 
     return {
+        version: package.version,
         researchData,
         langKeys: lang.extraStrings[0].strings,
         langInverted,

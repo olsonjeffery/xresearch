@@ -7,8 +7,8 @@ import { initializeStore, xrActions } from './SharedSetup.js';
 import AppComponent from './AppComponent.js';
 
 (() => {
-    __store = initializeStore(xrData);
-    __store.dispatch(xrActions.setXrData(xrData));
+    __store = initializeStore();
+    __store.dispatch(xrActions.setXrData(__xrData));
     ReactDOM.render(e(Provider, {store: __store},
-                      e(AppComponent, {data: xrData}, null)), document.getElementById('app-root'));
+                      e(AppComponent, {xrData: __xrData}, null)), document.getElementById('app-root'));
 })();

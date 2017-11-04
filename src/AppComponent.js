@@ -8,14 +8,13 @@ import NodeSummaryComponent from './NodeSummaryComponent.js';
 class AppComponent extends Component {
     constructor(props) {
         super(props);
-        this.data = props.data;
     }
     componentDidMount() {
     }
     render() {
         var pageHeaderRow = e('div', {className: 'row'},
                               e('div', {className: 'col-9'},
-                                e('h3', null, e('i', {className: 'fa fa-eye'}, null), ' xresearch')),
+                                e('h3', null, e('i', {className: 'fa fa-eye'}, null), ' xresearch v', this.props.xrData.version)),
                               e('div', {className: 'col-3', style: {paddingTop: '15px'} },
                                 e(SearchBarComponent, {searchText: 'Enter topic name...'}, null)));
         var containerHeaderRow = e(NodeSummaryComponent, {}, null);

@@ -2331,10 +2331,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 (() => {
-    __store = Object(__WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__["a" /* initializeStore */])(xrData);
-    __store.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__["b" /* xrActions */].setXrData(xrData));
+    __store = Object(__WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__["a" /* initializeStore */])();
+    __store.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__["b" /* xrActions */].setXrData(__xrData));
     __WEBPACK_IMPORTED_MODULE_3_react_dom___default.a.render(Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2_react_redux__["a" /* Provider */], {store: __store},
-                      Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__AppComponent_js__["a" /* default */], {data: xrData}, null)), document.getElementById('app-root'));
+                      Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__AppComponent_js__["a" /* default */], {xrData: __xrData}, null)), document.getElementById('app-root'));
 })();
 
 
@@ -40878,14 +40878,13 @@ module.exports = performance || {};
 class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
-        this.data = props.data;
     }
     componentDidMount() {
     }
     render() {
         var pageHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
-                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' xresearch')),
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' xresearch v', this.props.xrData.version)),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3', style: {paddingTop: '15px'} },
                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
         var containerHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__["a" /* default */], {}, null);
@@ -41192,9 +41191,9 @@ const showSelectedNodeInGraph = (targetId, self, xrData) => {
     window.__cy.elements().remove();
     setTimeout(() => {
         // don't apply filtering when viewing the full graph
+        window.__cy.add(newNodes);
         if(targetId != null) {
             var targetNode = xrData.researchData[xrData.keysIndexMap[targetId]];
-            window.__cy.add(newNodes);
 
             // filter based on visible categories
             __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>

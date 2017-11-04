@@ -1,125 +1,138 @@
 *  XPiratez Research Tree Explorer (aka xresearch)
-`xresearch` is a web-based application meant to allow exploration of the XPiratez research tree data.
+xresearch is a web-based application meant to allow exploration of the XPiratez research tree data. The contents of this repository's /docs directory are the static website available at https://olsonjeffery.github.io/xresearch.
 
 This web application is released into the public domain with no license, copyright or warranty claims made. Dependent libraries carry their own licenses as part of their source (or implied by the license available at their repository/website-of-record).
 
 For better or worse, this app was developed and tested in Chrome, so use that if you want it to run w/ relatively little hassle.
 
-This application was conceived-of and developed-by Jeffery Olson for the sake of exploring the data and as an opportunity to develop with tools like React, cytoscape.js, etc. Also, `xresearch` has a somewhat unorthodox application structure, owing to my still-evolving grasp of assorted haute webdev tools/pipelines (and trying to manage the cognitive load thereof). So it's not structured according to what's observed as best practice. Please do forgive me.
+This application was conceived-of and developed-by Jeffery Olson for the sake of exploring the in-game research-tree data (which is already explorable via an in-game "tech viewer") and as an opportunity to develop with tools like React, cytoscape.js, etc.
 
 ** Dependencies
-- XPiratez, of course, without whom we wouldn't have the glorious data to explore
-  - `xresearch` relies upon a copy of the `Piratez.rul` and `Piratez_lang.rul` files, provided as a part of the XPiratez mod distro. They may have been modified to address YAML parsing issues, only.
-- node.js for the ruleset parser and dev server
-- `js-yaml` for YAML parsing (the format for the `.rul` file representation)
-- `simple-grid.css` for a barebones CSS grid
-- `lodash` is great; everyone should use it
-- `cytoscape.js` a wonderful and *performant* graph viz library (funded with public money, no less!)
-- `redux` for view state management
-- `react` as a view engine and structural pattern
-- `font-awesome` for icons
+- [[https://openxcom.org/forum/index.php?topic=3626.0][XPiratez]], of course, without whom we wouldn't have the glorious data to explore
+  - xresearch relies upon a copy of the Piratez.rul and Piratez_lang.rul files, provided as a part of the XPiratez mod distro. They may have been modified to address YAML parsing issues, only.
+- [[http://nodejs.org][node.js]] for the ruleset parser and dev server
+- [[https://github.com/nodeca/js-yaml][js-yaml]] for YAML parsing (the format for the '.rul' file representation)
+- [[http://simplegrid.io/][simple-grid.css]] for a barebones CSS grid
+- [[https://lodash.com/][lodash]] is great; everyone should use it
+- [[http://js.cytoscape.org/][cytoscape.js]] a wonderful and *performant* graph viz library (funded with public money, no less!)
+- [[http://redux.js.org/][redux]] for view state management
+- [[https://reactjs.org/][react]] as a view engine and structural pattern
+- [[http://fontawesome.io/][font-awesome]] for icons
 
-** Run development server locally
-- have recent node.js + npm installed
-- clone this repository to your local machine
-- entire repo and run `npm install` command
-- `npm run dev` to bring up the development server
-- Once you see "data is parsed" displayed, you can navigate to `http://localhost:3000` in Chrome to see the app
-- You should also install webpack and run it locally within the repo (which includes a `webpack.config.js`) in order to update the `dist/bundle.js` file as you make changes
+** HOWTO: Run development server locally
+1. have recent node.js + npm installed (also webpack should be installed and available from the CLI)
+2. clone this repository to your local machine
+3. from the CLI, enter the repo directory and run 'npm install'
+4. 'npm run dev' to bring up the development server
+5. Once you see "data is parsed" displayed in the output, you can navigate to 'http://localhost:3000' in Chrome to see the app
+6. You should also run the 'webpack' command within the repo (which includes a 'webpack.config.js') in order to update the '/docs/bundle.js' file as you make changes
 
-** Update the Piratez.rul/Piratez_lang.rul files
-- Get the latest Xpiratez distro and unzip/unrar it somewhere
-- Pull out the `Piratez.rul` and `Piratez_lang.rul` files from `Dioxine_XPiratez/user/mods/Piratez/Ruleset/` and overwrite the same files in the root of this repository
-- Run `npm run genstatic` to attempt to generate the static HTML output
-- Errors will likely result, pointing to YAML parsing issues in the `.rul` files brought over previously
-- Resolve YAML parsing issues until `npm run genstatic` completes successfully
-- Your ruleset files are now updated
+** HOWTO: pdate the Piratez.rul/Piratez_lang.rul files
+1. Get the latest Xpiratez distro and unzip/unrar it somewhere
+2. Pull out the 'Piratez.rul' and 'Piratez_lang.rul' files from 'Dioxine_XPiratez/user/mods/Piratez/Ruleset/' and overwrite the same files in the root of this repository
+3. Run 'npm run genstatic' to attempt to generate the static HTML output
+4. Errors will likely result, pointing to YAML parsing issues in the '.rul' files brought over previously
+5. Resolve YAML parsing issues until 'npm run genstatic' completes successfully
+6. Your ruleset files are now updated
 
-** Regenerate static HTML
-- Run `npm run genstatic`
+** HOWTO: Regenerate static HTML (only needed if index_template.html or parser logic changes, resulting in JSON data differences)
+1. Run 'npm run genstatic'
 
-** Pending work items [24/35]
-- [ ] add crash handler/error boundary at top-level to display message when a crash occurs
-- [ ] add 'X' icon on right side of search bar to clear text
-- [ ] only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
-- [ ] hovering over the title div on a NodeLinkListComponent will fatten/highlight all edge-styles matching that edgeName in the graph
-  - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
-  - [ ] add `edgeHighlight: string` to state
-  - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
-  - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
-- [ ] split SharedSetup.js into Constants, Actions and StoreInit modules
-- [ ] increase neighorhood depth from 1 to 2 .. could this be easy? or is it more involved?
-- [ ] add manufacturing tasks
-  - [ ] modify parser to pull needed stuff from Piratez.rul
-  - [ ] show manufacturing requirements on right node list
-  - [ ] add filtering?
-- [ ] router support in URL
-- [ ] show ruleset version in page display
-- [ ] handling research topics from the vanilla research data (e.g. STR_ALIEN_TERROR)
-  - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
-  - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
-- [ ] extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- [X] bug viewing STR_ALIEN_RESEARCH off of Raider Thug leads to crash
-  - [X] not adding nodes for edges outside research tree; should work?
-  - [X] solution: make topic ids w/ no entry in researchData be just text, not links (disabling node selection)
-- [X] add checkbox filtering to each node list category in both panes
-  - [X] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
-    - [X] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
-    - [X] add reducer that switches on filteringCategory & action.type and sets the key in detailFilteringCategories with whatever is in `value`
-  - [X] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
-  - [X] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true/checked
-    - [X] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
-- [X] fix bug with un-string-delim'd 'event' in GraphComponent:44
-- [X] add footer info w/ links to project repo, xpiratez, etc
-- [X] static HTML generation for running as a github site
-- [X] colorize Red/Green/Blue as it appears in node list descriptions
-- [X] fix bug with duplicate STR_DEEP_ONE entries under dependencies for STR_BUGEYE_VICTIM
-- [X] PARSER: move keysIndexMap into parser from sidebar or whatever
-- [X] update to 099H2 ruleset files
-- [X] expand UX to include left/right details pain
-  - [X] validate data consistency of xresearch vs in-game tech viewer
-  - [X] duplicate nodedetails & map left/right edge displayers:
-    - [X] left
-      - [X] dependencies
-      - [X] unlocked-by
-      - [X] get-for-free-from
-    - [X] right
-      - [X] depended-upon-by
-      - [X] unlocks
-      - [X] getOneFree (gives one for free, actually?)
-  - [X] cytoscape polish
-    - [X] show arrows
-    - [X] sort out source/target designation
-  - [X] the graph takes up a narrower viewport in the center
-  - [X] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
-    - [X] depended-upon-by, unlocked-by, get-for-free-from
-    - [X] PARSER: verify/add base cost and score points
-  - [X] graph header
-    - [X] a header atop the container div that shows the node of the selected node (or "All Topics" if an individual node isn't selected)
-    - [X] base research cost, points shown for selected node
-    - [X] "show all topics X" button on r-hand side if node is selected
-    - [X] a loading message displayed l-hand side of header that is triggered onNodeSelection and removed on layout.on("stop")
-- [X] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
-  - [X] display dependencies
-  - [X] display unlocks
-  - [X] display getOneFree
-  - [X] display requires
-- [X] add Provider component in root of app and strip out manual passing of `store`
-- [X] error in displaying The Mutant Alliance
-  - [X] some are legit nodes whose string lives in vanilla files (STR_WORKSHOP)
-  - [X] some are non-tree events that aren't research topics and probably also have their nodes in vanilla files (STR_ALIEN_TERROR)
-- [X] CYTOSCAPE: show sub-graph when NodeDetail is displayed for a given node
-  - [X] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
-  - [X] try to use the "cose" layout
-- [X] CYTOSCAPE: Clicking on a graph node dispatches NODE_SELECTION action
-- [X] fix dark text coloring in page style
-- [X] write Piratez/Piratez_lang.rul files parse
-- [X] import parsed JSON into a static html display
-- [X] Basic, whole-tree display/visualization
-- [X] integrate react and refactor to component
-- [X] integrate webpack bundling
-- [X] node search + sidebar view
-  - [X] utilizing the input on the top-right of the page, search the tree topic names for matches
-  - [X] display them in a <ul> list on the sidebar
-- [X] when "searchText" is empty, return nothing; when > 20 results, return nothing
-- [X] Integrate redux for basic view-state management
+** Work items & CHANGELOG
+- PENDING [0/15]
+  - [ ] FEATURE: add watches on ruleset-parser and index_template.html and reload in dev server
+  - [ ] REFACTOR: move 'graph updating...' to be an overlay/spinner over the graph component itself
+  - [ ] FEATURE: add crash handler/error boundary at top-level to display message when a crash occurs
+  - [ ] FEATURE: add 'X' icon on right side of search bar to clear text
+  - [ ] FEATURE: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
+  - [ ] FEATURE: hovering over a single entry in NodeLinkListComponent will fatten/highlight that edge+node in the graph
+  - [ ] FEATURE: hovering over the title div on a NodeLinkListComponent will fatten/highlight all edge-styles matching that edgeName in the graph
+    - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
+    - [ ] add `edgeHighlight: string` to state
+    - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
+    - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
+  - [ ] REFACTOR: split SharedSetup.js into Constants, Actions and StoreInit modules
+  - [ ] FEATURE: increase neighorhood depth from 1 to 2 .. could this be easy? or is it more involved?
+  - [ ] FEATURE: add manufacturing tasks
+    - [ ] modify parser to pull needed stuff from Piratez.rul
+    - [ ] show manufacturing requirements on right node list
+    - [ ] add filtering?
+  - [ ] FEATURE: search/sidebar refactor show research results as an overlay in search input
+    - [ ] suppress brown dropdown behavior (autoComplete attribute in react)
+    - [ ] remove "sidebar mode" logic in redux state
+  - [ ] FEATURE: router support in URL
+    - [ ] all routes represent redux actions
+    - [ ] any "multi-dispatch" activities in the application have refactored into robust actions
+  - [ ] FEATURE: show ruleset version in page display
+  - [ ] FEATURE: handling research topics from the vanilla research data (e.g. STR_ALIEN_TERROR)
+    - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
+    - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+  - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
+- VERSION 0.0.2 [2/2]
+  - [X] PARSE: include xresearch version in xrData
+  - [X] BUG: "show all topics" is broken
+- VERSION 0.0.1 [24/24]
+  - [X] bug viewing STR_ALIEN_RESEARCH off of Raider Thug leads to crash
+    - [X] not adding nodes for edges outside research tree; should work?
+    - [X] solution: make topic ids w/ no entry in researchData be just text, not links (disabling node selection)
+  - [X] add checkbox filtering to each node list category in both panes
+    - [X] add detailFilteringCategories: { dependencies, dependedUponBy, unlocks, unlockedBy, getOneFree, giveOneFree } to state
+      - [X] add SET_DETAIL_FILTERING_CATEGORY action type w/ args of { filteringCategory: 'unlocks', value: true }
+      - [X] add reducer that switches on filteringCategory & action.type and sets the key in detailFilteringCategories with whatever is in `value`
+    - [X] on graph draw for selected node display, remove nodes falling into any of the above detailFilteringCategories marked as false
+    - [X] add checkboxes to NodeLinkListComponent (should probably take a memoized function doing an aprop dispatch of SET_DETAIL_FILTERING_CATEGORY); defaulting to true/checked
+      - [X] add onFilteringCheckboxChange to NodeLinkListComponent that gets the toggle and dispatches SET_DETAIL_FILTERING_CATEGORY action w/ the filteringCategory marshalled in props and checkbox checked status as value
+  - [X] fix bug with un-string-delim'd 'event' in GraphComponent:44
+  - [X] add footer info w/ links to project repo, xpiratez, etc
+  - [X] static HTML generation for running as a github site
+  - [X] colorize Red/Green/Blue as it appears in node list descriptions
+  - [X] fix bug with duplicate STR_DEEP_ONE entries under dependencies for STR_BUGEYE_VICTIM
+  - [X] PARSER: move keysIndexMap into parser from sidebar or whatever
+  - [X] update to 099H2 ruleset files
+  - [X] expand UX to include left/right details pain
+    - [X] validate data consistency of xresearch vs in-game tech viewer
+    - [X] duplicate nodedetails & map left/right edge displayers:
+      - [X] left
+        - [X] dependencies
+        - [X] unlocked-by
+        - [X] get-for-free-from
+      - [X] right
+        - [X] depended-upon-by
+        - [X] unlocks
+        - [X] getOneFree (gives one for free, actually?)
+    - [X] cytoscape polish
+      - [X] show arrows
+      - [X] sort out source/target designation
+    - [X] the graph takes up a narrower viewport in the center
+    - [X] PARSER: map inverses of data in .rul entries (get terminology from tech viewer in client) (should be O(2) ):
+      - [X] depended-upon-by, unlocked-by, get-for-free-from
+      - [X] PARSER: verify/add base cost and score points
+    - [X] graph header
+      - [X] a header atop the container div that shows the node of the selected node (or "All Topics" if an individual node isn't selected)
+      - [X] base research cost, points shown for selected node
+      - [X] "show all topics X" button on r-hand side if node is selected
+      - [X] a loading message displayed l-hand side of header that is triggered onNodeSelection and removed on layout.on("stop")
+  - [X] add node details sidebar view (include <ul>'s with dependencies, unlocks, getOneFree, requires (non-interactive))
+    - [X] display dependencies
+    - [X] display unlocks
+    - [X] display getOneFree
+    - [X] display requires
+  - [X] add Provider component in root of app and strip out manual passing of `store`
+  - [X] error in displaying The Mutant Alliance
+    - [X] some are legit nodes whose string lives in vanilla files (STR_WORKSHOP)
+    - [X] some are non-tree events that aren't research topics and probably also have their nodes in vanilla files (STR_ALIEN_TERROR)
+  - [X] CYTOSCAPE: show sub-graph when NodeDetail is displayed for a given node
+    - [X] trim the cytoscape graph display to contain the selected node (bolded/enlarged or whatever), along with its immediate neighbors and the edges that connect them
+    - [X] try to use the "cose" layout
+  - [X] CYTOSCAPE: Clicking on a graph node dispatches NODE_SELECTION action
+  - [X] fix dark text coloring in page style
+  - [X] write Piratez/Piratez_lang.rul files parse
+  - [X] import parsed JSON into a static html display
+  - [X] Basic, whole-tree display/visualization
+  - [X] integrate react and refactor to component
+  - [X] integrate webpack bundling
+  - [X] node search + sidebar view
+    - [X] utilizing the input on the top-right of the page, search the tree topic names for matches
+    - [X] display them in a <ul> list on the sidebar
+  - [X] when "searchText" is empty, return nothing; when > 20 results, return nothing
+  - [X] Integrate redux for basic view-state management

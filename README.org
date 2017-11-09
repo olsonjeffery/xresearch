@@ -39,7 +39,13 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** Work items & CHANGELOG
-- PENDING [0/13]
+- PENDING [0/11]
+  - [ ] REFACTOR: switch CSS grid/styling to bootstrap
+    - [ ] push most of the summary-row stuff into a page nav w/ title & search bar
+    - [ ] expand graph display to entire width of page in the center
+    - [ ] place left/right columns beneath graph, make wider (col-6 or whatever)
+  - [ ] FEATURE: crunch data on nodes and pull down a list of "most connected topics"
+    - [ ] show list as part of "show all topics" display
   - [ ] FEATURE: add 'X' icon on right side of search bar to clear text
   - [ ] FEATURE: hovering on node list entry highlights matching edge in cytoscape
     - [ ] add edge id (FOO->BAR) to link entries
@@ -50,19 +56,6 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - [ ] add `edgeHighlight: string` to state
     - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
     - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
-  - [ ] REFACTOR: split SharedSetup.js into Constants, Actions and StoreInit modules
-  - [ ] FEATURE: add facilities
-    - [ ] 'facilities' under the root
-  - [ ] FEATURE: add manufacturing tasks & item data
-    - [ ] identify items in the research parser and then pull in data from 'items' in ruleset file
-      - [ ] requiresBuy shows what will make it available in the buy dialog
-    - [ ] modify parser to pull needed stuff from Piratez.rul
-    - [ ] show manufacturing requirements on right node list
-    - from Dioxine:
-      - it ain't as simple with items. First of all they need to have non-zero buy price to be even considered buyable
-      - then they can have requiresBuy: or requires:
-      - the latter overrules the former
-      - same is true for craft except there is no "requiresBuy"
   - [ ] FEATURE: search/sidebar refactor show research results as an overlay in search input
     - [ ] suppress brown dropdown behavior (autoComplete attribute in react)
     - [ ] remove "sidebar mode" logic in redux state
@@ -70,16 +63,42 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: router support in URL
     - [ ] all routes represent redux actions
     - [ ] any "multi-dispatch" activities in the application have refactored into robust actions
-  - [ ] FEATURE: show ruleset version in page display
   - [ ] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR)
     - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
   - [ ] BUG: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
+  - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app
+    - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
+- VERSION 0.0.3 [3/8]
+  - [ ] FEATURE: add manufacturing tasks & item data
+    - [ ] annotate different topic types as they appear in researchData: item, idea, manufacture
+    - [ ] add researchData entries for manufacturables when encountered via topic
+    - [ ] item annotation for existing researachable items
+      - [ ] add their requiresBuy/whatever as a dependency and map the inverse
+    - [ ] add a requiresBuy display for nodes that have them in Left node list or wahtever
+    - [ ] add items not in research tree (eg mortar)
+      - [ ] index addedTopics against unique keys in .items to get list of items that needed to be added
+    - [ ] show manufacturing requirements on right node list for manufacturables
+    - from Dioxine:
+      - it ain't as simple with items. First of all they need to have non-zero buy price to be even considered buyable
+      - then they can have requiresBuy: or requires:
+      - the latter overrules the former
+      - same is true for craft except there is no "requiresBuy"
+  - [ ] FEATURE: show STR_ id in node details
+  - [ ] FEATURE: add facilities
+    - [ ] 'facilities' under the root
+  - [ ] REFACTOR: split SharedSetup.js into Constants, Actions and StoreInit modules
+  - [ ] BUG: search bar magnifying glass appears in wrong place in firefox
+  - [X] FEATURE: add STR_ ids to lunr index
+  - [X] REFACTOR: remove xrData from store and factor all uses into a new XrDataQueries module
+    - [X] audit/bottleneck all uses of state.xrData
+    - [X] PARSER: add label as the str_ id if no lang entry is found; remove getLabelFromXrData
+  - [X] FEATURE: show ruleset version in page display
 - VERSION 0.0.2 [5/5]
   - [X] BUG: "show all topics" is broken
   - [X] PARSE: include xresearch version in xrData
-  - [X] REFACTOR: change 'graph updating...' to be an spinner
+  - [X] REFACTOR: change 'graph updating...' to be a spinner
   - [X] FEATURE: add watches on ruleset-parser and index_template.html and reload in dev server
   - [X] FEATURE: add crash handler/error boundary at top-level to show error msg
 - VERSION 0.0.1 [24/24]

@@ -440,7 +440,6 @@ xrActions.SIDEBAR_MODE_SPLASH = 'SIDEBAR_MODE_SPLASH';
 xrActions.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
 xrActions.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
 
-xrActions.SET_XR_DATA = 'SET_XR_DATA';
 xrActions.SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
 xrActions.SIDEBAR_MODE_CHANGE = 'SIDEBAR_MODE_CHANGE';
 xrActions.NODE_SELECTION = 'NODE_SELECTION';
@@ -472,12 +471,6 @@ xrActions.nodeSelection = (id) => {
         selectedNodeId: id
     };
 };
-xrActions.setXrData = (xrData) => {
-    return {
-        type: xrActions.SET_XR_DATA,
-        xrData
-    };
-};
 xrActions.searchTextChange = (searchText) => {
     return {
         type: xrActions.SEARCH_TEXT_CHANGE,
@@ -492,14 +485,6 @@ xrActions.sidebarModeChange = (sidebarMode) => {
 };
 
 // reducers
-var xrData = (state = {}, action) => {
-    switch(action.type) {
-    case xrActions.SET_XR_DATA:
-        return action.xrData;
-    default:
-        return state;
-    }
-};
 var searchText = (state = 'Enter topic to search', action) => {
     switch(action.type) {
     case xrActions.SEARCH_TEXT_CHANGE:
@@ -555,7 +540,7 @@ var graphFilteringCategories = (state = {dependencies: true, dependedUponBy: tru
     }
 };
 
-var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({xrData, searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
+var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
 const initializeStoreImpl = () => {
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
 };
@@ -1010,7 +995,6 @@ module.exports = ExecutionEnvironment;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getLabelFromXrData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SearchResultsListComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NodeLinkListComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
@@ -1020,7 +1004,9 @@ module.exports = ExecutionEnvironment;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lunr__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lunr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lunr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SharedSetup__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SharedSetup__ = __webpack_require__(6);
+
 
 
 
@@ -1060,27 +1046,16 @@ SidebarNodeListCompoent.propTypes = {
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
-var getLabelFromXrData = (xrData, id) => {
-    var keyIdx = xrData.keysIndexMap[id];
-    if(keyIdx == undefined) {
-        // FIXME: the key is probably coming from vanilla
-        return id;
-    }
-    else if(xrData.researchData[xrData.keysIndexMap[id]].label == undefined) {
-        return id;
-    } else {
-        return xrData.researchData[xrData.keysIndexMap[id]].label;
-    }
-};
-var buildNodeListFromSearch = (xrData, searchText) => {
+var buildNodeListFromSearch = (searchText) => {
     if(lunrIndex == null) {
         lunrIndex = __WEBPACK_IMPORTED_MODULE_3_lunr___default()(function() {
             this.field("name");
 
-            _.each(xrData.researchData, x => {
+            _.each(Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["a" /* allResearchData */])(), x => {
                 var name = x.id;
                 if(x.label != undefined) {
                     name = x.label.toLowerCase();
+                    this.add({id: x.id, name: x.id});
                 }
                 this.add({id: x.id, name});
             });
@@ -1090,7 +1065,8 @@ var buildNodeListFromSearch = (xrData, searchText) => {
         return [];
     }
     var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
-        return {id: x.ref, name: getLabelFromXrData(xrData, x.ref)};
+        var targetNode = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* researchById */])(x.ref);
+        return {id: x.ref, name: targetNode.label};
     });
     if(results.length > 40) {
         return [];
@@ -1099,21 +1075,21 @@ var buildNodeListFromSearch = (xrData, searchText) => {
 };
 
 const resultsMapStateToProps = (state) => {
-    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_SEARCH_RESULTS;
+    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_SEARCH_RESULTS;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
-        nodes = buildNodeListFromSearch(state.xrData, state.searchText);
+        nodes = buildNodeListFromSearch(state.searchText);
     }
     return {active, nodes};
 };
 
 const nodeLinkMapStateToProps = (state, ownProps) => {
-    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
+    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
     var edgeName = ownProps.edgeName;
     var nodes = [];
     if(active) {
-        var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
+        var matchedNode = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* researchById */])(state.selectedNodeId);
         if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
             nodes = [];
         } else {
@@ -1126,7 +1102,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
                 previousEntries[x] = true;
                 return shouldInclude;
             }).map((x) => {
-                return {id: x, name: getLabelFromXrData(state.xrData, x)};
+                return {id: x, name: Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* researchById */])(x).label};
             });
         }
     }
@@ -1136,12 +1112,12 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onNodeSelection: (e) => {
-            dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].nodeSelection(e.currentTarget.getAttribute("data-id")));
-            dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
+            dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].nodeSelection(e.currentTarget.getAttribute("data-id")));
+            dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
         },
         onFilterToggle: (e) => {
             var newValue = e.target.checked;
-            dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup__["b" /* xrActions */].graphFilteringCategoryChange(ownProps.edgeName, newValue));
+            dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphFilteringCategoryChange(ownProps.edgeName, newValue));
         }
     };
 };
@@ -2310,16 +2286,13 @@ exports.clearImmediate = clearImmediate;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_dom__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__AppComponent_js__ = __webpack_require__(75);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__AppComponent_js__ = __webpack_require__(75);
 
 
 
@@ -2328,10 +2301,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 (() => {
-    __store = Object(__WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__["a" /* initializeStore */])();
-    __store.dispatch(__WEBPACK_IMPORTED_MODULE_4__SharedSetup_js__["b" /* xrActions */].setXrData(__xrData));
-    __WEBPACK_IMPORTED_MODULE_3_react_dom___default.a.render(Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2_react_redux__["a" /* Provider */], {store: __store},
-                      Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__AppComponent_js__["a" /* default */], {xrData: __xrData}, null)), document.getElementById('app-root'));
+    __store = Object(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["a" /* initializeStore */])();
+    __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1_react_redux__["a" /* Provider */], {store: __store},
+                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__AppComponent_js__["a" /* default */], {version: __xrData.version, xpiratezVersion: __xrData.xpiratezVersion}, null)), document.getElementById('app-root'));
 })();
 
 
@@ -40883,7 +40855,7 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     render() {
         var pageHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
-                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ' xresearch v', this.props.xrData.version)),
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ` xresearch v${this.props.version} (XPiratez v${this.props.xpiratezVersion})`)),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3', style: {paddingTop: '15px'} },
                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
         var containerHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__["a" /* default */], {}, null);
@@ -40921,7 +40893,9 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_redux__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SharedSetup__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__SharedSetup__ = __webpack_require__(6);
+
 
 
 
@@ -40932,11 +40906,11 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
 var dupeTopics = [];
 const TIMEOUT_LENGTH_MS = 100;
-var buildElements = (data) => {
+var buildElementsFromAllResearchData = () => {
     var addedTopics = {};
     dupeTopics = [];
     var elements = [];
-    var researchData = data.researchData;
+    var researchData = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["a" /* allResearchData */])();
     __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(researchData, function(topic, idx) {
         if(addedTopics[topic.id]) {
             dupeTopics.push(topic.id);
@@ -41134,11 +41108,11 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
     componentDidMount() {
         var self = this;
-        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
         setTimeout(() => {
             self.cyQuery = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
                 headless: true,
-                elements: buildElements(this.props.xrData),
+                elements: buildElementsFromAllResearchData(),
                 layout: concentricTotalLayout,
                 style: cyStyle
             });
@@ -41157,7 +41131,7 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 self.cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-                self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+                self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
             }, TIMEOUT_LENGTH_MS);
             window.__cyQuery = self.cyQuery;
         }, TIMEOUT_LENGTH_MS);
@@ -41177,10 +41151,10 @@ const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, cate
                cy.$(`#${id}`).remove());
     }
 };
-const showSelectedNodeInGraph = (targetId, self, xrData) => {
+const showSelectedNodeInGraph = (targetId, self) => {
     var newNodes = [];
     var selectedLayout = {};
-    self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+    self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
     if(targetId === null) {
         //show all topics
         newNodes = window.__cyQuery.elements();
@@ -41194,7 +41168,7 @@ const showSelectedNodeInGraph = (targetId, self, xrData) => {
         // don't apply filtering when viewing the full graph
         window.__cy.add(newNodes);
         if(targetId != null) {
-            var targetNode = xrData.researchData[xrData.keysIndexMap[targetId]];
+            var targetNode = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["b" /* researchById */])(targetId);
 
             // filter based on visible categories
             __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>
@@ -41204,7 +41178,7 @@ const showSelectedNodeInGraph = (targetId, self, xrData) => {
         var newLayout = window.__cy.layout(selectedLayout);
         newLayout.run();
         window.__cy.reset();
-        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
     }, TIMEOUT_LENGTH_MS);
 };
 
@@ -41213,15 +41187,13 @@ const mapStateToProps = (state, ownProps) => {
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
     } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
     }
-    return {
-        xrData: state.xrData
-    };
+    return {};
 };
 
 const mapDispatchToProps = (dispatch, state) => {
@@ -41230,10 +41202,10 @@ const mapDispatchToProps = (dispatch, state) => {
             var targetId = e.target.id();
             previousGraphFilteringCateogories = state.graphFilteringCategories;
             if(previousSelectedNodeId !== targetId) {
-                dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].nodeSelection(targetId));
-                dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
+                dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].nodeSelection(targetId));
+                dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
             } else {
-                showSelectedNodeInGraph(targetId, {props: {dispatch}}, state.xrData);
+                showSelectedNodeInGraph(targetId, {props: {dispatch}});
             }
         },
         dispatch
@@ -74861,7 +74833,7 @@ var RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__ = __webpack_require__(87);
 
 
 
@@ -74886,12 +74858,13 @@ class NodeSummaryComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Componen
 
 const ALL_TOPICS = 'All Topics';
 const mapStateToProps = (state) => {
+    var targetNode = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* researchById */])(state.selectedNodeId);
     var label = state.selectedNodeId != null ?
-        Object(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["c" /* getLabelFromXrData */])(state.xrData, state.selectedNodeId)
+        targetNode.label
         : ALL_TOPICS;
     var suffix = '';
     if(state.selectedNodeId != null) {
-        var topic = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
+        var topic = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* researchById */])(state.selectedNodeId);
         if(topic == undefined) {
             suffix = '';
         } else {
@@ -74899,7 +74872,6 @@ const mapStateToProps = (state) => {
         }
     }
     return {
-        xrData: state.xrData,
         label,
         suffix,
         graphUpdating: state.graphUpdating,
@@ -74955,6 +74927,43 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (ErrorDisplayComponent);
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = researchById;
+/* unused harmony export getLabelFromXrData */
+/* harmony export (immutable) */ __webpack_exports__["a"] = allResearchData;
+const getXrData = () => {
+    return __xrData;
+};
+
+function researchById(targetId) {
+    var xrData = getXrData();
+    return xrData.researchData[xrData.keysIndexMap[targetId]];
+};
+
+function getLabelFromXrData(id) {
+    var xrData = getXrData();
+    var keyIdx = xrData.keysIndexMap[id];
+    var topic = researchById(id);
+    if(keyIdx == undefined) {
+        // FIXME: the key is probably coming from vanilla
+        return id;
+    }
+    else if(topic.label == undefined) {
+        return id;
+    } else {
+        return topic.label;
+    }
+};
+
+function allResearchData() {
+    return getXrData().researchData;
+}
 
 
 /***/ })

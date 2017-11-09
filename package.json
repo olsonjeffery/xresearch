@@ -1,6 +1,7 @@
 {
     "name": "xresearch",
     "version": "0.0.2",
+    "xpiratezVersion": "099H2",
     "description": "tool to parse and provide visualization for the xpiratez research tree",
     "main": "app.js",
     "scripts": {

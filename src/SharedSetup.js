@@ -7,7 +7,6 @@ xrActions.SIDEBAR_MODE_SPLASH = 'SIDEBAR_MODE_SPLASH';
 xrActions.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
 xrActions.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
 
-xrActions.SET_XR_DATA = 'SET_XR_DATA';
 xrActions.SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
 xrActions.SIDEBAR_MODE_CHANGE = 'SIDEBAR_MODE_CHANGE';
 xrActions.NODE_SELECTION = 'NODE_SELECTION';
@@ -39,12 +38,6 @@ xrActions.nodeSelection = (id) => {
         selectedNodeId: id
     };
 };
-xrActions.setXrData = (xrData) => {
-    return {
-        type: xrActions.SET_XR_DATA,
-        xrData
-    };
-};
 xrActions.searchTextChange = (searchText) => {
     return {
         type: xrActions.SEARCH_TEXT_CHANGE,
@@ -59,14 +52,6 @@ xrActions.sidebarModeChange = (sidebarMode) => {
 };
 
 // reducers
-var xrData = (state = {}, action) => {
-    switch(action.type) {
-    case xrActions.SET_XR_DATA:
-        return action.xrData;
-    default:
-        return state;
-    }
-};
 var searchText = (state = 'Enter topic to search', action) => {
     switch(action.type) {
     case xrActions.SEARCH_TEXT_CHANGE:
@@ -122,7 +107,7 @@ var graphFilteringCategories = (state = {dependencies: true, dependedUponBy: tru
     }
 };
 
-var rootReducer = combineReducers({xrData, searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
+var rootReducer = combineReducers({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
 const initializeStoreImpl = () => {
     return createStore(rootReducer);
 };

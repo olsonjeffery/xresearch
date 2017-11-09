@@ -4,15 +4,16 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
+import {researchById, allResearchData} from './XrDataQueries.js';
 import {xrActions} from './SharedSetup';
 
 var dupeTopics = [];
 const TIMEOUT_LENGTH_MS = 100;
-var buildElements = (data) => {
+var buildElementsFromAllResearchData = () => {
     var addedTopics = {};
     dupeTopics = [];
     var elements = [];
-    var researchData = data.researchData;
+    var researchData = allResearchData();
     _.each(researchData, function(topic, idx) {
         if(addedTopics[topic.id]) {
             dupeTopics.push(topic.id);
@@ -214,7 +215,7 @@ class GraphComponent extends Component {
         setTimeout(() => {
             self.cyQuery = cytoscape({
                 headless: true,
-                elements: buildElements(this.props.xrData),
+                elements: buildElementsFromAllResearchData(),
                 layout: concentricTotalLayout,
                 style: cyStyle
             });
@@ -253,7 +254,7 @@ const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, cate
                cy.$(`#${id}`).remove());
     }
 };
-const showSelectedNodeInGraph = (targetId, self, xrData) => {
+const showSelectedNodeInGraph = (targetId, self) => {
     var newNodes = [];
     var selectedLayout = {};
     self.props.dispatch(xrActions.graphUpdatingChange(true));
@@ -270,7 +271,7 @@ const showSelectedNodeInGraph = (targetId, self, xrData) => {
         // don't apply filtering when viewing the full graph
         window.__cy.add(newNodes);
         if(targetId != null) {
-            var targetNode = xrData.researchData[xrData.keysIndexMap[targetId]];
+            var targetNode = researchById(targetId);
 
             // filter based on visible categories
             _.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>
@@ -289,15 +290,13 @@ const mapStateToProps = (state, ownProps) => {
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
     } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state.xrData);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
     }
-    return {
-        xrData: state.xrData
-    };
+    return {};
 };
 
 const mapDispatchToProps = (dispatch, state) => {
@@ -309,7 +308,7 @@ const mapDispatchToProps = (dispatch, state) => {
                 dispatch(xrActions.nodeSelection(targetId));
                 dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_NODE_DETAILS));
             } else {
-                showSelectedNodeInGraph(targetId, {props: {dispatch}}, state.xrData);
+                showSelectedNodeInGraph(targetId, {props: {dispatch}});
             }
         },
         dispatch

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import lunr from 'lunr';
 
+import {allResearchData, researchById} from './XrDataQueries.js';
 import {xrActions} from './SharedSetup';
 
 class SidebarNodeListCompoent extends Component {
@@ -37,27 +38,16 @@ SidebarNodeListCompoent.propTypes = {
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
-export var getLabelFromXrData = (xrData, id) => {
-    var keyIdx = xrData.keysIndexMap[id];
-    if(keyIdx == undefined) {
-        // FIXME: the key is probably coming from vanilla
-        return id;
-    }
-    else if(xrData.researchData[xrData.keysIndexMap[id]].label == undefined) {
-        return id;
-    } else {
-        return xrData.researchData[xrData.keysIndexMap[id]].label;
-    }
-};
-var buildNodeListFromSearch = (xrData, searchText) => {
+var buildNodeListFromSearch = (searchText) => {
     if(lunrIndex == null) {
         lunrIndex = lunr(function() {
             this.field("name");
 
-            _.each(xrData.researchData, x => {
+            _.each(allResearchData(), x => {
                 var name = x.id;
                 if(x.label != undefined) {
                     name = x.label.toLowerCase();
+                    this.add({id: x.id, name: x.id});
                 }
                 this.add({id: x.id, name});
             });
@@ -67,7 +57,8 @@ var buildNodeListFromSearch = (xrData, searchText) => {
         return [];
     }
     var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
-        return {id: x.ref, name: getLabelFromXrData(xrData, x.ref)};
+        var targetNode = researchById(x.ref);
+        return {id: x.ref, name: targetNode.label};
     });
     if(results.length > 40) {
         return [];
@@ -80,7 +71,7 @@ const resultsMapStateToProps = (state) => {
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
-        nodes = buildNodeListFromSearch(state.xrData, state.searchText);
+        nodes = buildNodeListFromSearch(state.searchText);
     }
     return {active, nodes};
 };
@@ -90,7 +81,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
     var edgeName = ownProps.edgeName;
     var nodes = [];
     if(active) {
-        var matchedNode = state.xrData.researchData[state.xrData.keysIndexMap[state.selectedNodeId]];
+        var matchedNode = researchById(state.selectedNodeId);
         if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
             nodes = [];
         } else {
@@ -103,7 +94,7 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
                 previousEntries[x] = true;
                 return shouldInclude;
             }).map((x) => {
-                return {id: x, name: getLabelFromXrData(state.xrData, x)};
+                return {id: x, name: researchById(x).label};
             });
         }
     }

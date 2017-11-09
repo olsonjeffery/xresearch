@@ -4,38 +4,59 @@ const _ = require('lodash');
 
 
 module.exports.getAllData = () => {
-    var mainRulesetFile = 'Piratez.rul';
-    var langRulesetFile = 'Piratez_lang.rul';
+    let mainRulesetFile = 'Piratez.rul';
+    let langRulesetFile = 'Piratez_lang.rul';
 
     // pull down the ruleset and lang (with str mappings) file from YAML
-    var package = require('./package.json');
-    var ruleset = yaml.safeLoad(fs.readFileSync(mainRulesetFile, 'utf8'));
-    var lang = yaml.safeLoad(fs.readFileSync(langRulesetFile, 'utf8'));
+    let package = require('./package.json');
+    let ruleset = yaml.safeLoad(fs.readFileSync(mainRulesetFile, 'utf8'));
+    let lang = yaml.safeLoad(fs.readFileSync(langRulesetFile, 'utf8'));
 
     // pull out the research doc
-    var research = _.filter(ruleset.research, (i) => { return !i.delete && i.name !== 'STR_UNAVAILABLE'; });
+    let research = _.filter(ruleset.research, (i) => { return !i.delete && i.name !== 'STR_UNAVAILABLE'; });
     //lang.extraStrings[0].strings[research[0].name]
 
-    var addedKeys = {};
+    // running tally of added entries
+    let addedKeys = {};
 
-    // "inverse" relationships that need to be mapped
-    var dependedUponBy = {};
-    var unlockedBy = {};
-    var giveOneFree = {};
-    var requiredBy = {};
+    // reverse-relationships that need to be mapped
+    let dependedUponBy = {};
+    let unlockedBy = {};
+    let giveOneFree = {};
+    let requiredBy = {};
 
-    var createOrUpdateItemInObject = (obj, key, item) => {
+    // help to add entry in reverse-relationships collections
+    let createOrUpdateItemInObject = (obj, key, item) => {
         if(!obj[key]) {
             obj[key] = [];
         }
         obj[key].push(item);
     };
 
-    var researchData = _.map(research, (item) => {
+    // STR_ key map of entries in items (key: type)
+    let itemKeys = [];
+    let itemsByKey = _.chain(ruleset.items).filter(x=>x.type !== undefined).reduce((memo, item) => {
+        memo[item.type] = item;
+        itemKeys.push(item.type);
+        return item;
+    }, {});
+
+    // STR_ key map of entries in manufacture (key: name)
+    let manufactureByKey = _.chain(ruleset.manufacture).filter(x=>x.name !== undefined).reduce((memo, item) => {
+        memo[item.name] = item;
+        return item;
+    }, {}).value();
+
+    // pass through YAML research one time to build up list,
+    // mapping reverse-relationships as we go
+    let researchData = _.reduce(research, (memo, item) => {
         addedKeys[item.name] = true;
-        var output = {
+        let label = lang.extraStrings[0].strings[item.name] == undefined ?
+            item.name
+            : lang.extraStrings[0].strings[item.name];
+        let output = {
             id: item.name,
-            label: lang.extraStrings[0].strings[item.name],
+            label: label,
             points: item.points ? item.points : 0,
             cost: item.cost ? item.cost : 0
         };
@@ -43,8 +64,21 @@ module.exports.getAllData = () => {
             output.dependencies = item.dependencies;
             _.each(item.dependencies, x=>{createOrUpdateItemInObject(dependedUponBy, x, item.name);});
         }
+        // set topic type
         if(typeof(item.needItem) != "undefined") {
-            output.needItem = item.needItem;
+            output.topicKind = "item";
+            if(manufactureByKey[output.id]) {
+                let manufacture = {
+                    id: `${item.name}_M`,
+                    label: `${label} [m]`,
+                    dependencies: [ item.name ]
+                };
+                memo.push(manufacture);
+                createOrUpdateItemInObject(dependedUponBy, manufacture.id, item.name);
+            }
+        } else {
+            // this is a pure research topic
+            output.topicKind = 'idea';
         }
         if(item.getOneFree) {
             output.getOneFree = item.getOneFree;
@@ -58,8 +92,13 @@ module.exports.getAllData = () => {
             output.requires = item.requires;
             _.each(item.requires, x=>{createOrUpdateItemInObject(requiredBy, x, item.name);});
         }
-        return output;
-    });
+        if(itemsByKey[output.id]) {
+            output.itemData = itemsByKey[output.id];
+        }
+        memo.push(output);
+        return memo;
+    }, []);
+    // pass through created structure again through attach fully populated reverse-relationships
     _.each(researchData, (item) => {
         item.dependedUponBy = dependedUponBy[item.id] ? dependedUponBy[item.id] : [];
         item.unlockedBy = unlockedBy[item.id] ? unlockedBy[item.id] : [];
@@ -67,18 +106,21 @@ module.exports.getAllData = () => {
         item.requiredBy = requiredBy[item.id] ? requiredBy[item.id] : [];
     });
 
-    var keysIndexMap = {};
+    // index mapping STR_ id keys to their index entries in researchData
+    let keysIndexMap = {};
     _.each(researchData, (x, idx) => {
         keysIndexMap[x.id] = idx;
     });
 
-    var langInverted = _.chain(addedKeys).keys().reduce((memo, k) => {
-        var val = lang.extraStrings[0].strings[k];
+    // map STR_ id keys to their plain-language names from lang file
+    let langInverted = _.chain(addedKeys).keys().reduce((memo, k) => {
+        let val = lang.extraStrings[0].strings[k];
         memo[val] = k;
         return memo;
     }, {}).value();
 
     return {
+        xpiratezVersion: package.xpiratezVersion,
         version: package.version,
         researchData,
         langKeys: lang.extraStrings[0].strings,

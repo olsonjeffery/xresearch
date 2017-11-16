@@ -3,8 +3,26 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import lunr from 'lunr';
 
-import {allResearchData, researchById} from './XrDataQueries.js';
+import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
 import {xrActions} from './SharedSetup';
+
+class ManufactureSidebarNodeListCompoent extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if(this.props.active) {
+            var headerContent = e('h4', {}, 'Manufacturing Requirements');
+            var entries = this.props.nodes.map((x) => {
+                var content = isTopicInGraphNodes(x.id) ? e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`) : x.name;
+                return e('li', {key: `sidebar-node-${x.id}`}, content, ` x${x.quantity}`);
+            });
+            return e('div', {}, headerContent,
+                     entries.length == 0 ? e('p', {}, 'None') : e('ul', {}, entries));
+        }
+        return null;
+    }
+}
 
 class SidebarNodeListCompoent extends Component {
     constructor(props) {
@@ -16,7 +34,8 @@ class SidebarNodeListCompoent extends Component {
                 e('h4', {}, this.props.title)
                 : e('h4', {}, this.props.titlePrefix, e('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, e('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));
             var entries = this.props.nodes.map((x) => {
-                return e('li', {key: `sidebar-node-${x.id}`}, e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`));
+                var content = isTopicInGraphNodes(x.id) ? e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`) : x.name;
+                return e('li', {key: `sidebar-node-${x.id}`}, content);
             });
             return e('div', {}, headerContent,
                         entries.length == 0 ? e('p', {}, 'None') : e('ul', {}, entries));
@@ -30,7 +49,8 @@ SidebarNodeListCompoent.propTypes = {
     nodes: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired
+            name: PropTypes.string.isRequired,
+            quantity: PropTypes.number
         })
     ),
     onNodeSelection: PropTypes.func.isRequired
@@ -77,28 +97,27 @@ const resultsMapStateToProps = (state) => {
 };
 
 const nodeLinkMapStateToProps = (state, ownProps) => {
-    var active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
     var edgeName = ownProps.edgeName;
     var nodes = [];
-    if(active) {
-        var matchedNode = researchById(state.selectedNodeId);
-        if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
-            nodes = [];
-        } else {
-            var previousEntries = {};
-            nodes = matchedNode[edgeName].filter(x=> {
-                var shouldInclude = true;
-                if(previousEntries[x]) {
-                    shouldInclude = false;
-                }
-                previousEntries[x] = true;
-                return shouldInclude;
-            }).map((x) => {
-                return {id: x, name: researchById(x).label};
-            });
-        }
+    var matchedNode = researchById(state.selectedNodeId);
+    if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
+        nodes = [];
+    } else {
+        var previousEntries = {};
+        nodes = matchedNode[edgeName].filter(x=> {
+            var shouldInclude = true;
+            if(previousEntries[x]) {
+                shouldInclude = false;
+            }
+            previousEntries[x] = true;
+            return shouldInclude;
+        }).map((x) => {
+            var node = researchById(x);
+            var label = node !== undefined ? node.label : x;
+            return {id: x, name: label};
+        });
     }
-    return {active, nodes, edgeName, isChecked: state.graphFilteringCategories[edgeName]};
+    return {active: true, isChecked: state.graphFilteringCategories[edgeName]};
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -115,4 +134,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 export var SearchResultsListComponent =  connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-export var NodeLinkListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export var GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export var ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);

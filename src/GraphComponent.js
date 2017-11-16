@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
-import {researchById, allResearchData} from './XrDataQueries.js';
+import {researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
 import {xrActions} from './SharedSetup';
 
 var dupeTopics = [];
@@ -29,7 +29,7 @@ var buildElementsFromAllResearchData = () => {
                 name: topic.label == undefined ? topic.id : topic.label,
                 weight: idx
             },
-            classes: topic.needItem ? 'idea' : 'item'
+            classes: topic.topicKind
         });
         return true;
     });
@@ -72,6 +72,12 @@ var buildElementsFromAllResearchData = () => {
                 addEdge(dep, topic.id, 'unlocks', idx);
             });
         }
+        if(topic.requiresBuy) {
+            _.each(topic.requiresBuy, function(dep) {
+                // these are events mostly
+                addEdge(dep, topic.id, 'requires', idx);
+            });
+        }
         if(topic.requires) {
             _.each(topic.requires, function(dep) {
                 // these are events mostly
@@ -81,6 +87,11 @@ var buildElementsFromAllResearchData = () => {
         if(topic.getOneFree) {
             _.each(topic.getOneFree, function(dep) {
                 addEdge(dep, topic.id, 'getOneFree', idx);
+            });
+        }
+        if(topic.requiredItems) {
+            _.each(topic.requiredItems, x => {
+                addEdge(x.id, topic.id, 'requires', idx);
             });
         }
     });
@@ -126,6 +137,22 @@ var cyStyle = [
          "mid-target-arrow-color": "#aaa"
      }},
     // node styles
+    {"selector": "node.facility",
+     "style": {
+         "width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+         "height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+         "content": "data(name)",
+         "font-size": "9px",
+         "text-valign": "center",
+         "text-halign": "center",
+         "background-color": "red",
+         "text-outline-color": "#555",
+         "text-outline-width": "1px",
+         "color": "#fff",
+         "overlay-padding": "6px",
+         "z-index": "10",
+         shape: "barrel"
+     }},
     {"selector": "node.idea",
      "style": {
          "width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
@@ -303,6 +330,7 @@ const mapDispatchToProps = (dispatch, state) => {
     return {
         onNodeSelection: (e) => {
             var targetId = e.target.id();
+            if(!isTopicInGraphNodes(targetId)) return;
             previousGraphFilteringCateogories = state.graphFilteringCategories;
             if(previousSelectedNodeId !== targetId) {
                 dispatch(xrActions.nodeSelection(targetId));

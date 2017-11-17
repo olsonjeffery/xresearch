@@ -2,7 +2,8 @@ import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {xrActions} from './SharedSetup.js';
+import {searchTextChange} from './StateManagement.js';
+import Constants from './Constants.js';
 
 class SearchBarComponent extends Component {
     constructor(props) {
@@ -30,12 +31,11 @@ var mapStateToProps = (state) => {
 var mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onChange: (e) => {
-            dispatch(xrActions.searchTextChange(e.currentTarget.value));
-            dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_SEARCH_RESULTS));
+            dispatch(searchTextChange(e.currentTarget.value));
         },
         onClick: (e) => {
-            if(e.currentTarget.value == xrActions.DEFAULT_SEARCHTEXT) {
-                dispatch(xrActions.searchTextChange(''));
+            if(e.currentTarget.value == Constants.DEFAULT_SEARCHTEXT) {
+                dispatch(searchTextChange(''));
             }
         }
     };

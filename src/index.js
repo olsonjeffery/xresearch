@@ -2,7 +2,7 @@ import { createElement as e } from 'react';
 import {Provider} from 'react-redux';
 import ReactDOM from 'react-dom';
 
-import { initializeStore, xrActions } from './SharedSetup.js';
+import { initializeStore } from './StateManagement.js';
 import AppComponent from './AppComponent.js';
 
 (() => {

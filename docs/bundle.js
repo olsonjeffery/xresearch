@@ -424,131 +424,7 @@ module.exports = invariant;
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return xrActions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return initializeStore; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(19);
-
-
-var xrActions = {};
-// sidebar modes
-xrActions.DEFAULT_SEARCHTEXT = 'Enter topic to search';
-xrActions.SIDEBAR_MODE_SPLASH = 'SIDEBAR_MODE_SPLASH';
-xrActions.SIDEBAR_MODE_SEARCH_RESULTS = 'SIDEBAR_MODE_SEARCH_RESULTS';
-xrActions.SIDEBAR_MODE_NODE_DETAILS = 'SIDEBAR_MODE_NODE_DETAILS';
-
-xrActions.SEARCH_TEXT_CHANGE = 'SEARCH_TEXT_CHANGE';
-xrActions.SIDEBAR_MODE_CHANGE = 'SIDEBAR_MODE_CHANGE';
-xrActions.NODE_SELECTION = 'NODE_SELECTION';
-xrActions.GRAPH_UPDATING_CHANGE = 'GRAPH_UPDATING_CHANGE';
-xrActions.GRAPH_FILTERING_CATEGORY_CHANGE = 'GRAPH_FILTERING_CATEGORY_CHANGE';
-xrActions.RESET_GRAPH_FILTERING_CATEGORIES = 'RESET_GRAPH_FILTERING_CATEGORIES';
-// action dispatchers
-xrActions.resetGraphFilteringCategories = () => {
-    return {
-        type: xrActions.GRAPH_FILTERING_CATEGORY_CHANGE
-    };
-};
-xrActions.graphFilteringCategoryChange = (changedCategory, newValue) => {
-    return {
-        type: xrActions.GRAPH_FILTERING_CATEGORY_CHANGE,
-        changedCategory,
-        newValue
-    };
-};
-xrActions.graphUpdatingChange = (graphUpdating) => {
-    return {
-        type: xrActions.GRAPH_UPDATING_CHANGE,
-        graphUpdating
-    };
-};
-xrActions.nodeSelection = (id) => {
-    return {
-        type: xrActions.NODE_SELECTION,
-        selectedNodeId: id
-    };
-};
-xrActions.searchTextChange = (searchText) => {
-    return {
-        type: xrActions.SEARCH_TEXT_CHANGE,
-        searchText
-    };
-};
-xrActions.sidebarModeChange = (sidebarMode) => {
-    return {
-        type: xrActions.SIDEBAR_MODE_CHANGE,
-        sidebarMode
-    };
-};
-
-// reducers
-var searchText = (state = 'Enter topic to search', action) => {
-    switch(action.type) {
-    case xrActions.SEARCH_TEXT_CHANGE:
-        return action.searchText;
-    default:
-        return state;
-    }
-};
-var sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
-    switch(action.type) {
-    case xrActions.SIDEBAR_MODE_CHANGE:
-        return action.sidebarMode;
-    default:
-        return state;
-    }
-};
-var selectedNodeId = (state = null, action) => {
-    switch(action.type) {
-    case xrActions.NODE_SELECTION:
-        return action.selectedNodeId;
-    default:
-        return state;
-    }
-};
-
-var graphUpdating = (state = true, action) => {
-    switch(action.type) {
-    case xrActions.GRAPH_UPDATING_CHANGE:
-        return action.graphUpdating;
-    default:
-        return state;
-    }
-};
-
-var graphFilteringCategories = (state = {dependencies: true, dependedUponBy: true, unlocks: true, unlockedBy: true, getOneFree: true, giveOneFree: true}, action) => {
-    switch(action.type) {
-    case xrActions.GRAPH_FILTERING_CATEGORY_CHANGE:
-        var newState = {};
-        Object.assign(newState, state);
-        newState[action.changedCategory] = action.newValue;
-        return newState;
-    case xrActions.RESET_GRAPH_FILTERING_CATEGORIES:
-        return {
-            dependencies: true,
-            dependedUponBy: true,
-            unlocks: true,
-            unlockedBy: true,
-            giveOneFree: true,
-            getOneFree: true
-        };
-    default:
-        return state;
-    }
-};
-
-var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
-const initializeStoreImpl = () => {
-    return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
-};
-
-var initializeStore = initializeStoreImpl;
-
-
-/***/ }),
+/* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2191,7 +2067,9 @@ exports.clearImmediate = clearImmediate;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lunr__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lunr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lunr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__SharedSetup__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Constants_js__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__StateManagement_js__ = __webpack_require__(89);
+
 
 
 
@@ -2281,7 +2159,7 @@ var buildNodeListFromSearch = (searchText) => {
 };
 
 const resultsMapStateToProps = (state) => {
-    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_SEARCH_RESULTS;
+    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].SIDEBAR_MODE_SEARCH_RESULTS;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
@@ -2311,18 +2189,18 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
             return {id: x, name: label};
         });
     }
+
     return {active: true, isChecked: state.graphFilteringCategories[edgeName]};
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onNodeSelection: (e) => {
-            dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].nodeSelection(e.currentTarget.getAttribute("data-id")));
-            dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["d" /* nodeSelection */])(e.currentTarget.getAttribute("data-id")));
         },
         onFilterToggle: (e) => {
             var newValue = e.target.checked;
-            dispatch(__WEBPACK_IMPORTED_MODULE_5__SharedSetup__["b" /* xrActions */].graphFilteringCategoryChange(ownProps.edgeName, newValue));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["a" /* graphFilteringCategoryChange */])(ownProps.edgeName, newValue));
         }
     };
 };
@@ -2343,7 +2221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__StateManagement_js__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__AppComponent_js__ = __webpack_require__(75);
 
 
@@ -2353,7 +2231,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 (() => {
-    __store = Object(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["a" /* initializeStore */])();
+    __store = Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["c" /* initializeStore */])();
     __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1_react_redux__["a" /* Provider */], {store: __store},
                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__AppComponent_js__["a" /* default */], {version: __xrData.version, xpiratezVersion: __xrData.xpiratezVersion}, null)), document.getElementById('app-root'));
 })();
@@ -23854,7 +23732,7 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__SharedSetup__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__StateManagement_js__ = __webpack_require__(89);
 
 
 
@@ -24095,7 +23973,7 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
     componentDidMount() {
         var self = this;
-        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+        self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["b" /* graphUpdatingChange */])(true));
         setTimeout(() => {
             self.cyQuery = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
                 headless: true,
@@ -24118,7 +23996,7 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 self.cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-                self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+                self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["b" /* graphUpdatingChange */])(false));
             }, TIMEOUT_LENGTH_MS);
             window.__cyQuery = self.cyQuery;
         }, TIMEOUT_LENGTH_MS);
@@ -24138,10 +24016,10 @@ const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, cate
                cy.$(`#${id}`).remove());
     }
 };
-const showSelectedNodeInGraph = (targetId, self) => {
+const showSelectedNodeInGraph = (targetId, self, state) => {
     var newNodes = [];
     var selectedLayout = {};
-    self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(true));
+    self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["b" /* graphUpdatingChange */])(true));
     if(targetId === null) {
         //show all topics
         newNodes = window.__cyQuery.elements();
@@ -24155,17 +24033,18 @@ const showSelectedNodeInGraph = (targetId, self) => {
         // don't apply filtering when viewing the full graph
         window.__cy.add(newNodes);
         if(targetId != null) {
+            var filterableCategories = Reflect.ownKeys(state.graphFilteringCategories);
             var targetNode = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["c" /* researchById */])(targetId);
 
             // filter based on visible categories
-            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(filterableCategories, category =>
                    applyGraphFilteringCategories(window.__cy, targetNode, previousGraphFilteringCateogories, category));
         }
 
         var newLayout = window.__cy.layout(selectedLayout);
         newLayout.run();
         window.__cy.reset();
-        self.props.dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].graphUpdatingChange(false));
+        self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["b" /* graphUpdatingChange */])(false));
     }, TIMEOUT_LENGTH_MS);
 };
 
@@ -24174,11 +24053,11 @@ const mapStateToProps = (state, ownProps) => {
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     }
     return {};
 };
@@ -24190,10 +24069,9 @@ const mapDispatchToProps = (dispatch, state) => {
             if(!Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["b" /* isTopicInGraphNodes */])(targetId)) return;
             previousGraphFilteringCateogories = state.graphFilteringCategories;
             if(previousSelectedNodeId !== targetId) {
-                dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].nodeSelection(targetId));
-                dispatch(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_6__SharedSetup__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS));
+                dispatch(Object(__WEBPACK_IMPORTED_MODULE_6__StateManagement_js__["d" /* nodeSelection */])(targetId));
             } else {
-                showSelectedNodeInGraph(targetId, {props: {dispatch}});
+                showSelectedNodeInGraph(targetId, {props: {dispatch}}, state);
             }
         },
         dispatch
@@ -71785,7 +71663,9 @@ module.exports = debounce;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__StateManagement_js__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Constants_js__ = __webpack_require__(88);
+
 
 
 
@@ -71818,12 +71698,11 @@ var mapStateToProps = (state) => {
 var mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onChange: (e) => {
-            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].searchTextChange(e.currentTarget.value));
-            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_SEARCH_RESULTS));
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["e" /* searchTextChange */])(e.currentTarget.value));
         },
         onClick: (e) => {
-            if(e.currentTarget.value == __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].DEFAULT_SEARCHTEXT) {
-                dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].searchTextChange(''));
+            if(e.currentTarget.value == __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].DEFAULT_SEARCHTEXT) {
+                dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["e" /* searchTextChange */])(''));
             }
         }
     };
@@ -74831,7 +74710,7 @@ lunr.QueryParser.parseBoost = function (parser) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Constants_js__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__ = __webpack_require__(16);
 
@@ -74883,19 +74762,24 @@ class RightNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_
                 children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* ManufactureGraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems')}, null));
             }
             if(topic.dependedUponBy && topic.dependedUponBy.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'dependedUponBy'), titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: ' away)', highlightColor: '#1a1'}, null));
+                let edgeName = 'dependedUponBy';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: ' away)', highlightColor: '#1a1'}, null));
             }
             if(topic.unlocks && topic.unlocks.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'unlocks'), titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: ' away)', highlightColor: '#11a'}, null));
+                let edgeName = 'unlocks';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: ' away)', highlightColor: '#11a'}, null));
             }
             if(topic.getOneFree && topic.getOneFree.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'getOneFree'), titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: ' away)', highlightColor: '#a11'}, null));
+                let edgeName = 'getOneFree';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: ' away)', highlightColor: '#a11'}, null));
             }
             if(topic.requiredBy && topic.requiredBy.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredBy'), titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requiredBy';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredToManufacture'), titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requiredToManufacture';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -74908,7 +74792,7 @@ RightNodeDetailsPresentationComponent.propTypes = {
 };
 
 const rightMapStateToProps = (state) => {
-    let active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
     // map dependencies
     return {
         active,
@@ -74922,19 +74806,24 @@ class LeftNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_r
             let topic = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["c" /* researchById */])(this.props.targetId);
             let children = [];
             if(topic.dependencies && topic.dependencies.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'dependencies'), titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: ' towards)', highlightColor: '#1a1'}, null));
+                let edgeName = 'dependencies';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: ' towards)', highlightColor: '#1a1'}, null));
             }
             if(topic.unlockedBy && topic.unlockedBy.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'unlockedBy'), titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: ' towards)', highlightColor: '#11a'}, null));
+                let edgeName = 'unlockedBy';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: ' towards)', highlightColor: '#11a'}, null));
             }
             if(topic.giveOneFree && topic.giveOneFree.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'giveOneFree'), titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: ' towards)', highlightColor: '#a11'}, null));
+                let edgeName = 'giveOneFree';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: ' towards)', highlightColor: '#a11'}, null));
             }
             if(topic.requires && topic.requires.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requires'), titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requires';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
             }
             if(topic.requiresBuy && topic.requiresBuy.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiresBuy'), titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requiresBuy';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -74947,7 +74836,7 @@ LeftNodeDetailsPresentationComponent.propTypes = {
 };
 
 const leftMapStateToProps = (state) => {
-    let active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
     // map dependencies
     return {
         targetId: state.selectedNodeId,
@@ -74973,7 +74862,7 @@ let RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__StateManagement_js__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__ = __webpack_require__(16);
 
 
@@ -75052,9 +74941,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, state) => {
     return {
         onShowAllTopics: () => {
-            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].nodeSelection(null));
-            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].sidebarModeChange(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].SIDEBAR_MODE_SPLASH));
-            dispatch(__WEBPACK_IMPORTED_MODULE_3__SharedSetup_js__["b" /* xrActions */].resetGraphFilteringCategories());
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["d" /* nodeSelection */])(null));
         }
     };
 };
@@ -75097,6 +74984,146 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (ErrorDisplayComponent);
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// sidebar modes
+const constants ={
+    DEFAULT_SEARCHTEXT: 'Enter topic to search',
+    SIDEBAR_MODE_SPLASH: 'SIDEBAR_MODE_SPLASH',
+    SIDEBAR_MODE_SEARCH_RESULTS: 'SIDEBAR_MODE_SEARCH_RESULTS',
+    SIDEBAR_MODE_NODE_DETAILS: 'SIDEBAR_MODE_NODE_DETAILS',
+
+    SEARCH_TEXT_CHANGE: 'SEARCH_TEXT_CHANGE',
+    NODE_SELECTION: 'NODE_SELECTION',
+    GRAPH_UPDATING_CHANGE: 'GRAPH_UPDATING_CHANGE',
+    GRAPH_FILTERING_CATEGORY_CHANGE: 'GRAPH_FILTERING_CATEGORY_CHANGE'
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (constants);
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = graphFilteringCategoryChange;
+/* harmony export (immutable) */ __webpack_exports__["b"] = graphUpdatingChange;
+/* harmony export (immutable) */ __webpack_exports__["d"] = nodeSelection;
+/* harmony export (immutable) */ __webpack_exports__["e"] = searchTextChange;
+/* harmony export (immutable) */ __webpack_exports__["c"] = initializeStore;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constants_js__ = __webpack_require__(88);
+
+
+
+// action dispatchers
+function graphFilteringCategoryChange(changedCategory, newValue) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_FILTERING_CATEGORY_CHANGE,
+        changedCategory,
+        newValue
+    };
+};
+function graphUpdatingChange(graphUpdating) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_UPDATING_CHANGE,
+        graphUpdating
+    };
+};
+function nodeSelection(id) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION,
+        selectedNodeId: id
+    };
+};
+function searchTextChange(searchText) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE,
+        searchText
+    };
+};
+
+// reducers
+const searchText = (state = 'Enter topic to search', action) => {
+    switch(action.type) {
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
+        return action.searchText;
+    default:
+        return state;
+    }
+};
+const sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
+    switch(action.type) {
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
+        return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_SEARCH_RESULTS;
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+        if(action.selectedNodeId == null) {
+            return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_SPLASH;
+        } else {
+            return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
+        }
+    default:
+        return state;
+    }
+};
+const selectedNodeId = (state = null, action) => {
+    switch(action.type) {
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+        return action.selectedNodeId;
+    default:
+        return state;
+    }
+};
+
+const graphUpdating = (state = true, action) => {
+    switch(action.type) {
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_UPDATING_CHANGE:
+        return action.graphUpdating;
+    default:
+        return state;
+    }
+};
+
+const graphFilteringCategories = (state = {dependencies: true, dependedUponBy: true, unlocks: true, unlockedBy: true, getOneFree: true, giveOneFree: true, requires: true, requiredBy: true, requiredToManufacture: true, requiresBuy: true}, action) => {
+    switch(action.type) {
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_FILTERING_CATEGORY_CHANGE:
+        var newState = {};
+        Object.assign(newState, state);
+        newState[action.changedCategory] = action.newValue;
+        return newState;
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+        switch(action.selectedNodeId) {
+        case null:
+            return {
+                requires: true,
+                requiredBy: true,
+                requiredToManufacture: true,
+                requiresBuy: true,
+                dependencies: true,
+                dependedUponBy: true,
+                unlocks: true,
+                unlockedBy: true,
+                giveOneFree: true,
+                getOneFree: true
+            };
+        default:
+            return state;
+        }
+    default:
+        return state;
+    }
+};
+
+const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
+function initializeStore() {
+    return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
+};
 
 
 /***/ })

@@ -1,7 +1,7 @@
 import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {xrActions} from './SharedSetup.js';
+import Constants from './Constants.js';
 import {UnlocksResultsListComponent, GetOneFreeResultsListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent}  from './NodeListComponents.js';
 
 import {researchById} from './XrDataQueries.js';
@@ -47,19 +47,24 @@ class RightNodeDetailsPresentationComponent extends Component {
                 children.push(e(ManufactureGraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems')}, null));
             }
             if(topic.dependedUponBy && topic.dependedUponBy.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'dependedUponBy'), titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: ' away)', highlightColor: '#1a1'}, null));
+                let edgeName = 'dependedUponBy';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: ' away)', highlightColor: '#1a1'}, null));
             }
             if(topic.unlocks && topic.unlocks.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'unlocks'), titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: ' away)', highlightColor: '#11a'}, null));
+                let edgeName = 'unlocks';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: ' away)', highlightColor: '#11a'}, null));
             }
             if(topic.getOneFree && topic.getOneFree.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'getOneFree'), titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: ' away)', highlightColor: '#a11'}, null));
+                let edgeName = 'getOneFree';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: ' away)', highlightColor: '#a11'}, null));
             }
             if(topic.requiredBy && topic.requiredBy.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredBy'), titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requiredBy';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredToManufacture'), titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requiredToManufacture';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
             }
             return e('div', {}, ...children);
         }
@@ -72,7 +77,7 @@ RightNodeDetailsPresentationComponent.propTypes = {
 };
 
 const rightMapStateToProps = (state) => {
-    let active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.sidebarMode == Constants.SIDEBAR_MODE_NODE_DETAILS;
     // map dependencies
     return {
         active,
@@ -86,19 +91,24 @@ class LeftNodeDetailsPresentationComponent extends Component {
             let topic = researchById(this.props.targetId);
             let children = [];
             if(topic.dependencies && topic.dependencies.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'dependencies'), titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: ' towards)', highlightColor: '#1a1'}, null));
+                let edgeName = 'dependencies';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: ' towards)', highlightColor: '#1a1'}, null));
             }
             if(topic.unlockedBy && topic.unlockedBy.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'unlockedBy'), titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: ' towards)', highlightColor: '#11a'}, null));
+                let edgeName = 'unlockedBy';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: ' towards)', highlightColor: '#11a'}, null));
             }
             if(topic.giveOneFree && topic.giveOneFree.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'giveOneFree'), titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: ' towards)', highlightColor: '#a11'}, null));
+                let edgeName = 'giveOneFree';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: ' towards)', highlightColor: '#a11'}, null));
             }
             if(topic.requires && topic.requires.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requires'), titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requires';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
             }
             if(topic.requiresBuy && topic.requiresBuy.length > 0) {
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiresBuy'), titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
+                let edgeName = 'requiresBuy';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
             }
             return e('div', {}, ...children);
         }
@@ -111,7 +121,7 @@ LeftNodeDetailsPresentationComponent.propTypes = {
 };
 
 const leftMapStateToProps = (state) => {
-    let active = state.sidebarMode == xrActions.SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.sidebarMode == Constants.SIDEBAR_MODE_NODE_DETAILS;
     // map dependencies
     return {
         targetId: state.selectedNodeId,

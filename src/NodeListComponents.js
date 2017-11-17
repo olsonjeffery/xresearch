@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import lunr from 'lunr';
 
 import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
-import {xrActions} from './SharedSetup';
+import Constants from './Constants.js';
+import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js';
 
 class ManufactureSidebarNodeListCompoent extends Component {
     constructor(props) {
@@ -87,7 +88,7 @@ var buildNodeListFromSearch = (searchText) => {
 };
 
 const resultsMapStateToProps = (state) => {
-    var active = state.sidebarMode == xrActions.SIDEBAR_MODE_SEARCH_RESULTS;
+    var active = state.sidebarMode == Constants.SIDEBAR_MODE_SEARCH_RESULTS;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
@@ -117,18 +118,18 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
             return {id: x, name: label};
         });
     }
+
     return {active: true, isChecked: state.graphFilteringCategories[edgeName]};
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onNodeSelection: (e) => {
-            dispatch(xrActions.nodeSelection(e.currentTarget.getAttribute("data-id")));
-            dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_NODE_DETAILS));
+            dispatch(nodeSelection(e.currentTarget.getAttribute("data-id")));
         },
         onFilterToggle: (e) => {
             var newValue = e.target.checked;
-            dispatch(xrActions.graphFilteringCategoryChange(ownProps.edgeName, newValue));
+            dispatch(graphFilteringCategoryChange(ownProps.edgeName, newValue));
         }
     };
 };

@@ -5,7 +5,7 @@ This web application is released into the public domain with no license, copyrig
 
 For better or worse, this app was developed and tested in Chrome, so use that if you want it to run w/ relatively little hassle.
 
-This application was conceived-of and developed-by Jeffery Olson for the sake of exploring the in-game research-tree data (which is already explorable via an in-game "tech viewer") and as an opportunity to develop with tools like React, cytoscape.js, etc.
+This application was conceived-of and developed-by Jeffery Olson for the sake of exploring XPiratez's in-game research-tree data (which is already explorable via an in-game "tech viewer") and as an opportunity to develop with tools like React, cytoscape.js, etc.
 
 ** Dependencies
 - [[https://openxcom.org/forum/index.php?topic=3626.0][XPiratez]], of course, without whom we wouldn't have the glorious data to explore
@@ -39,7 +39,14 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** TODO CHANGELOG
-- PENDING [0/20]
+- PENDING [0/22]
+  - [ ] FEATURE: "significant nodes" summaries in show-all/initial display ::
+    - [ ] when multiple nodes are displayed or during show-all-topics, show a special summary instead
+    - [ ] top-10 most-linked
+    - [ ] top-10 most needed to manufacturing
+    - [ ] top-10 effort-value-sell ratio, possible algo:
+      - [ ] compute an "effort value" for each item (sum of child-component "effort value" + buildTime*(cost or 1, whichever is greater)
+      - [ ] compute EVS ratio by doing costSell/ev
   - [ ] FEATURE: integrate requiresBaseFunc/provideBaseFunc ::
     - [ ] shows up in manufacture
     - [ ] shows up in facilities
@@ -79,9 +86,14 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - [ ] add `edgeHighlight: string` to state
     - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
     - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
-  - [ ] FEATURE: search/sidebar refactor show research results as an overlay in search input ::
-    - [ ] suppress brown dropdown behavior (autoComplete attribute in react)
-    - [ ] remove "sidebar mode" logic in redux state
+  - [ ] FEATURE: add craft data
+  - [ ] REFACTOR: remove "sidebar mode" logic in redux state ::
+    - [ ] sidebar/aside dispaly is driven off of selected node instead of sidebar-mode hint
+    - [ ] sidebar display types:
+      - [ ] manufacturable node
+      - [ ] pure idea/research node
+      - [ ] craft node
+      - [ ] show-all-topics/multi-node display (show "best of"/significant nodes)
   - [ ] FEATURE: increase neighorhood depth from 1 to 2 ::
   - [ ] FEATURE: router support in URL ::
     - [ ] all routes represent redux actions
@@ -94,10 +106,10 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.0.3 [10/12]
-  - [ ] REFACTOR: all "multi-dispatch" instances in event handlers -> go into single actions ::
-  - [ ] REFACTOR: split SharedSetup.js into Constants, Actions and Reducers modules ::
-    - [ ] move inverseRelationship into Constants? 
+- VERSION 0.0.3 [13/13]
+  - [X] REFACTOR: all "multi-dispatch" instances in event handlers -> go into single actions :: 
+  - [X] REFACTOR: split SharedSetup.js into Constants & StateMgmt modules ::
+  - [X] BUG: fix broken graph filtering checkboxes by restoring edgeName in node list :: 
   - [X] FEATURE: add facilities to graphNodes ::
     - [X] 'facilities' under the root
     - [X] a new node type

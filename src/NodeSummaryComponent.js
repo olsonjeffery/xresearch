@@ -1,7 +1,7 @@
 import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {xrActions} from './SharedSetup.js';
+import {nodeSelection} from './StateManagement.js';
 import {researchById} from './XrDataQueries.js';
 
 class NodeSummaryComponent extends Component {
@@ -75,9 +75,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, state) => {
     return {
         onShowAllTopics: () => {
-            dispatch(xrActions.nodeSelection(null));
-            dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_SPLASH));
-            dispatch(xrActions.resetGraphFilteringCategories());
+            dispatch(nodeSelection(null));
         }
     };
 };

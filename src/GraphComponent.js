@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 
 import {researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
-import {xrActions} from './SharedSetup';
+import {nodeSelection, graphUpdatingChange} from './StateManagement.js';
 
 var dupeTopics = [];
 const TIMEOUT_LENGTH_MS = 100;
@@ -238,7 +238,7 @@ class GraphComponent extends Component {
 
     componentDidMount() {
         var self = this;
-        self.props.dispatch(xrActions.graphUpdatingChange(true));
+        self.props.dispatch(graphUpdatingChange(true));
         setTimeout(() => {
             self.cyQuery = cytoscape({
                 headless: true,
@@ -261,7 +261,7 @@ class GraphComponent extends Component {
                 self.cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-                self.props.dispatch(xrActions.graphUpdatingChange(false));
+                self.props.dispatch(graphUpdatingChange(false));
             }, TIMEOUT_LENGTH_MS);
             window.__cyQuery = self.cyQuery;
         }, TIMEOUT_LENGTH_MS);
@@ -281,10 +281,10 @@ const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, cate
                cy.$(`#${id}`).remove());
     }
 };
-const showSelectedNodeInGraph = (targetId, self) => {
+const showSelectedNodeInGraph = (targetId, self, state) => {
     var newNodes = [];
     var selectedLayout = {};
-    self.props.dispatch(xrActions.graphUpdatingChange(true));
+    self.props.dispatch(graphUpdatingChange(true));
     if(targetId === null) {
         //show all topics
         newNodes = window.__cyQuery.elements();
@@ -298,17 +298,18 @@ const showSelectedNodeInGraph = (targetId, self) => {
         // don't apply filtering when viewing the full graph
         window.__cy.add(newNodes);
         if(targetId != null) {
+            var filterableCategories = Reflect.ownKeys(state.graphFilteringCategories);
             var targetNode = researchById(targetId);
 
             // filter based on visible categories
-            _.each(['dependencies', 'dependedUponBy', 'unlocks', 'unlockedBy', 'giveOneFree', 'getOneFree'], category =>
+            _.each(filterableCategories, category =>
                    applyGraphFilteringCategories(window.__cy, targetNode, previousGraphFilteringCateogories, category));
         }
 
         var newLayout = window.__cy.layout(selectedLayout);
         newLayout.run();
         window.__cy.reset();
-        self.props.dispatch(xrActions.graphUpdatingChange(false));
+        self.props.dispatch(graphUpdatingChange(false));
     }, TIMEOUT_LENGTH_MS);
 };
 
@@ -317,11 +318,11 @@ const mapStateToProps = (state, ownProps) => {
     if(state.selectedNodeId !== previousSelectedNodeId) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     } else if(state.selectedNodeId !== null && JSON.stringify(previousGraphFilteringCateogories) !== JSON.stringify(state.graphFilteringCategories)) {
         previousSelectedNodeId = state.selectedNodeId;
         previousGraphFilteringCateogories = state.graphFilteringCategories;
-        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps);
+        showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     }
     return {};
 };
@@ -333,10 +334,9 @@ const mapDispatchToProps = (dispatch, state) => {
             if(!isTopicInGraphNodes(targetId)) return;
             previousGraphFilteringCateogories = state.graphFilteringCategories;
             if(previousSelectedNodeId !== targetId) {
-                dispatch(xrActions.nodeSelection(targetId));
-                dispatch(xrActions.sidebarModeChange(xrActions.SIDEBAR_MODE_NODE_DETAILS));
+                dispatch(nodeSelection(targetId));
             } else {
-                showSelectedNodeInGraph(targetId, {props: {dispatch}});
+                showSelectedNodeInGraph(targetId, {props: {dispatch}}, state);
             }
         },
         dispatch

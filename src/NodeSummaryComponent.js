@@ -13,12 +13,15 @@ class NodeSummaryComponent extends Component {
             : '';
         var label = this.props.targetId === null || this.props.label === this.props.targetId ? this.props.label
             : `${this.props.label} (${this.props.targetId})`;
+        return null;
+        /*
         return e('div', {className: 'row'},
-                 e('div', {className: 'col-2'}, graphUpdatingMessage),
-                 e('div', {className: 'col-8'}, e('h3', { style: {textAlign: 'center'}}, `${label} ${this.props.suffix}`)),
-                 e('div', {className: 'col-2'}, this.props.showClearSelected === false ?
+                 e('div', {className: 'col-xs-2'}, graphUpdatingMessage),
+                 e('div', {className: 'col-xs-8'}, e('h3', { style: {textAlign: 'center'}}, `${label} ${this.props.suffix}`)),
+                 e('div', {className: 'col-xs-2'}, this.props.showClearSelected === false ?
                    null
-                   : e('a', {onClick: this.props.onShowAllTopics, style: {margin: '22px', float: 'right'}, href:'#'}, `Show All Topics`, e('i', { className: 'fa fa-times'}, null))));
+                   : null));
+                   */
     }
 }
 

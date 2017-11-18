@@ -23671,12 +23671,10 @@ module.exports = performance || {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GraphComponent__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__ = __webpack_require__(87);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__ = __webpack_require__(90);
 
 
 
@@ -23691,27 +23689,24 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     componentDidMount() {
     }
     render() {
-        var pageHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-9'},
-                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', null, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye'}, null), ` xresearch v${this.props.version} (XPiratez v${this.props.xpiratezVersion})`)),
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3', style: {paddingTop: '15px'} },
-                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
-        var containerHeaderRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeSummaryComponent_js__["a" /* default */], {}, null);
+        var pageNav = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__["a" /* default */], {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
+
         var containerRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-6'},
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-3'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-6'},
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)),
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'},
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeListComponents_js__["c" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-3'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__["c" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-2'}),
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-8'},
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-xs-2'}),
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-xs-8'},
                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
                                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
-                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, null));
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__["a" /* default */], null, pageHeaderRow, containerHeaderRow, containerRow, pageFooterRow);
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-2'}, null));
+        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, containerRow, pageFooterRow);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'fluid-container'}, pageNav, app);
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (AppComponent);
@@ -24003,7 +23998,7 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     }
 
     render() {
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{height: '500px'}},
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {id: this.containerId}, null));
     }
 }
@@ -71678,37 +71673,32 @@ class SearchBarComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"
     }
 
     render() {
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
-                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {className: 'search-icon'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-search'}, null)),
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {id: 'search', type: 'text', value: this.props.searchText, onChange: (e) => this.props.onChange(e), onClick: (e) => this.props.onClick(e)}));
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('form', {className: 'navbar-form navbar-right'},
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'input-group'},
+                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {className: 'input-group-addon'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-search'}, null)),
+                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {id: 'search', className: 'form-control col-lg-8', type: 'text', placeholder: this.props.searchText, onChange: (e) => this.props.onChange(e)})));
+                }
     }
-}
 
-SearchBarComponent.propTypes = {
-    onChange: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired,
-    onClick: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired,
-    searchText: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired
-};
-
-var mapStateToProps = (state) => {
-    return {
-        searchText: state.searchText
+    SearchBarComponent.propTypes = {
+        onChange: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired,
+        searchText: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired
     };
-};
-var mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        onChange: (e) => {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["e" /* searchTextChange */])(e.currentTarget.value));
-        },
-        onClick: (e) => {
-            if(e.currentTarget.value == __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].DEFAULT_SEARCHTEXT) {
-                dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["e" /* searchTextChange */])(''));
+
+    var mapStateToProps = (state) => {
+        return {
+            searchText: state.searchText
+        };
+    };
+    var mapDispatchToProps = (dispatch, ownProps) => {
+        return {
+            onChange: (e) => {
+                dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["e" /* searchTextChange */])(e.currentTarget.value));
             }
-        }
+        };
     };
-};
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(SearchBarComponent));
+    /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(SearchBarComponent));
 
 
 /***/ }),
@@ -74853,102 +74843,7 @@ let RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b"
 
 
 /***/ }),
-/* 86 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__StateManagement_js__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__ = __webpack_require__(16);
-
-
-
-
-
-
-class NodeSummaryComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
-    render() {
-        var graphUpdatingMessage = this.props.graphUpdating ?
-            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {float: 'left', margin: '22px'}},
-              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-refresh fa-spin fa-2x fa-fw'}, null),
-              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {className:'sr-only'}, 'Graph Updating...'))
-            : '';
-        var label = this.props.targetId === null || this.props.label === this.props.targetId ? this.props.label
-            : `${this.props.label} (${this.props.targetId})`;
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, graphUpdatingMessage),
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-8'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h3', { style: {textAlign: 'center'}}, `${label} ${this.props.suffix}`)),
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-2'}, this.props.showClearSelected === false ?
-                   null
-                   : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {onClick: this.props.onShowAllTopics, style: {margin: '22px', float: 'right'}, href:'#'}, `Show All Topics`, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', { className: 'fa fa-times'}, null))));
-    }
-}
-
-const parseBuildTime = (totalTimeHours) => {
-    var days = totalTimeHours > 24 ? Math.floor(totalTimeHours / 24) : 0;
-    var hours = totalTimeHours > 24 ? totalTimeHours % 24 : totalTimeHours;
-    if(days === 0 && hours === 0) {
-        return '0hr';
-    } else if (days === 0) {
-        return `${hours}hrs`;
-    } else {
-        if(hours === 0) {
-            return `${days}d`;
-        } else {
-            return `${days}d${hours}hr`;
-        }
-    }
-
-};
-const ALL_TOPICS = 'All Topics';
-const mapStateToProps = (state) => {
-    var targetNode = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["c" /* researchById */])(state.selectedNodeId);
-    var label = state.selectedNodeId != null ?
-        targetNode.label
-        : ALL_TOPICS;
-    var suffix = '';
-    if(state.selectedNodeId != null) {
-        var topic = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["c" /* researchById */])(state.selectedNodeId);
-        var costResearch = topic.costResearch ? ` Research (Base): ${ topic.costResearch }pts.` : '';
-        var costManufacture = topic.costManufacture ? ` Manufacture: $${ topic.costManufacture }` : '';
-        var costBuy = topic.costBuy ? ` Buy: $${ topic.costBuy }` : '';
-        var costSell = topic.costSell ? ` Sell: $${ topic.costSell }` : '';
-        var costBuild = topic.costBuild ? ` Build: $${topic.costBuild}` : '';
-        var pointsAwarded = topic.points ? ` Points: ${ topic.points }` : '';
-        var manufactureTime = topic.timeTotalManufacture ? ` Manufacture Time: ${parseBuildTime(topic.timeTotalManufacture)}` : ``;
-        var buildTime = topic.timeBuild ? ` Build Time: ${parseBuildTime(topic.timeBuild)}` : '';
-        if(topic == undefined) {
-            suffix = '';
-        } else {
-            let allCosts = `(Cost:${costResearch}${costManufacture}${costBuy}${costSell}${pointsAwarded}${costBuild})`;
-            allCosts = allCosts === '(Cost:)' ? '' : allCosts;
-            suffix = `${allCosts}${buildTime}${manufactureTime}`;
-        }
-    }
-    return {
-        targetId: state.selectedNodeId,
-        label,
-        suffix,
-        graphUpdating: state.graphUpdating,
-        showClearSelected: label !== ALL_TOPICS
-    };
-};
-
-const mapDispatchToProps = (dispatch, state) => {
-    return {
-        onShowAllTopics: () => {
-            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["d" /* nodeSelection */])(null));
-        }
-    };
-};
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(NodeSummaryComponent));
-
-
-/***/ }),
+/* 86 */,
 /* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -74969,13 +74864,13 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
         if(this.state.hasError) {
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingTop: '15px'}},
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-12'}, ' ')
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-12'}, ' ')
                       ),
                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingTop: '15px'}},
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'}, ' '),
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-6'},
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-3'}, ' '),
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-6'},
                          Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{padding: '10px', border: '2px dashed #F0386B', color: '#F0386B', textAlign: 'center'}}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-exclamation-triangle fa-5x', style:{color: '#f0386b'}}, null), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), 'There was an error in xresearch. Component stack trace:', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {textAlign: 'left'}}, this.state.componentStack))),
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-3'}, ' ')
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-3'}, ' ')
                       )
                     );
         }
@@ -74993,7 +74888,7 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
 "use strict";
 // sidebar modes
 const constants ={
-    DEFAULT_SEARCHTEXT: 'Enter topic to search',
+    DEFAULT_SEARCHTEXT: 'Search by topic...',
     SIDEBAR_MODE_SPLASH: 'SIDEBAR_MODE_SPLASH',
     SIDEBAR_MODE_SEARCH_RESULTS: 'SIDEBAR_MODE_SEARCH_RESULTS',
     SIDEBAR_MODE_NODE_DETAILS: 'SIDEBAR_MODE_NODE_DETAILS',
@@ -75050,7 +74945,7 @@ function searchTextChange(searchText) {
 };
 
 // reducers
-const searchText = (state = 'Enter topic to search', action) => {
+const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
     case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
         return action.searchText;
@@ -75124,6 +75019,81 @@ const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineRed
 function initializeStore() {
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
 };
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__StateManagement_js__ = __webpack_require__(89);
+
+
+
+
+
+
+class PageNavComponentImpl extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        var eyeOrSpinner = this.props.graphUpdating ?
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-refresh fa-spin fa-fw'}, null)
+            : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-eye fa-fw'}, null);
+        var showAllButton = this.props.showNodeDetails ?
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('button', {type: 'button', className: 'btn btn-default navbar-btn', onClick: this.props.onShowAllTopics, href:'#', style:{marginLeft:'4px'}}, `Show All `, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', { className: 'fa fa-times'}, null))
+            : '';
+        var nodeChevron = this.props.showNodeDetails ?
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-right fa-fw'}, null)
+            : '';
+        var navbarTitle = this.props.showNodeDetails ?
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {className: 'navbar-brand'},
+              nodeChevron, this.props.nodeLabel)
+            : '';
+        var navbarBrand =
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'navbar-header'},
+              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: "/", className: 'navbar-brand'}, eyeOrSpinner, ` xresearch v${this.props.version} (XPiratez v${this.props.xpiratezVersion})`),
+              navbarTitle);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('nav', {className: 'navbar navbar-default navbar-fixed-top'},
+          Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'container-fluid'},
+            navbarBrand,
+            showAllButton,
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)
+           ));
+    }
+}
+
+const mapStateToProps = (state, ownProps) => {
+    var showNodeDetails = false;
+    var nodeLabel = '';
+    if(state.selectedNodeId != null) {
+        var node = Object(__WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__["c" /* researchById */])(state.selectedNodeId);
+        nodeLabel = node.label === node.id ? node.label
+            : `${node.label} (${node.id})`;
+        showNodeDetails = true;
+    }
+    return {
+        showNodeDetails,
+        nodeLabel,
+        graphUpdating: state.graphUpdating
+    };
+};
+
+const mapDispatchToProps = (dispatch, state, ownProps) => {
+    return {
+        onShowAllTopics: () => {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_4__StateManagement_js__["d" /* nodeSelection */])(null));
+        }
+    };
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(PageNavComponentImpl));
 
 
 /***/ })

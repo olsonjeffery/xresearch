@@ -11,34 +11,29 @@ class SearchBarComponent extends Component {
     }
 
     render() {
-        return e('div', {},
-                    e('span', {className: 'search-icon'}, e('i', {className: 'fa fa-search'}, null)),
-                 e('input', {id: 'search', type: 'text', value: this.props.searchText, onChange: (e) => this.props.onChange(e), onClick: (e) => this.props.onClick(e)}));
+        return e('form', {className: 'navbar-form navbar-right'},
+                 e('div', {className: 'input-group'},
+                   e('span', {className: 'input-group-addon'}, e('i', {className: 'fa fa-search'}, null)),
+                   e('input', {id: 'search', className: 'form-control col-lg-8', type: 'text', placeholder: this.props.searchText, onChange: (e) => this.props.onChange(e)})));
+                }
     }
-}
 
-SearchBarComponent.propTypes = {
-    onChange: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
-    searchText: PropTypes.string.isRequired
-};
-
-var mapStateToProps = (state) => {
-    return {
-        searchText: state.searchText
+    SearchBarComponent.propTypes = {
+        onChange: PropTypes.func.isRequired,
+        searchText: PropTypes.string.isRequired
     };
-};
-var mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        onChange: (e) => {
-            dispatch(searchTextChange(e.currentTarget.value));
-        },
-        onClick: (e) => {
-            if(e.currentTarget.value == Constants.DEFAULT_SEARCHTEXT) {
-                dispatch(searchTextChange(''));
+
+    var mapStateToProps = (state) => {
+        return {
+            searchText: state.searchText
+        };
+    };
+    var mapDispatchToProps = (dispatch, ownProps) => {
+        return {
+            onChange: (e) => {
+                dispatch(searchTextChange(e.currentTarget.value));
             }
-        }
+        };
     };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBarComponent);
+    export default connect(mapStateToProps, mapDispatchToProps)(SearchBarComponent);

@@ -29,7 +29,7 @@ export function searchTextChange(searchText) {
 };
 
 // reducers
-const searchText = (state = 'Enter topic to search', action) => {
+const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
     case Constants.SEARCH_TEXT_CHANGE:
         return action.searchText;

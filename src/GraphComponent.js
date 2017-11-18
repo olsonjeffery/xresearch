@@ -268,7 +268,7 @@ class GraphComponent extends Component {
     }
 
     render() {
-        return e('div', {},
+        return e('div', {style:{height: '500px'}},
                  e('div', {id: this.containerId}, null));
     }
 }

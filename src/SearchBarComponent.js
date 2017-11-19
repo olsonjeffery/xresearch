@@ -11,10 +11,10 @@ class SearchBarComponent extends Component {
     }
 
     render() {
-        return e('form', {className: 'navbar-form navbar-right'},
-                 e('div', {className: 'input-group'},
+        return e('form', {className: 'form-inline my-2 ml-auto'},
+                 e('div', {className: 'input-group mr-sm-2'},
                    e('span', {className: 'input-group-addon'}, e('i', {className: 'fa fa-search'}, null)),
-                   e('input', {id: 'search', className: 'form-control col-lg-8', type: 'text', placeholder: this.props.searchText, onChange: (e) => this.props.onChange(e)})));
+                   e('input', {id: 'search', className: 'form-control form-control-sm mr-sm-2', type: 'text', placeholder: this.props.searchText, onChange: (e) => this.props.onChange(e)})));
                 }
     }
 

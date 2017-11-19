@@ -12,26 +12,23 @@ class PageNavComponentImpl extends Component {
         var eyeOrSpinner = this.props.graphUpdating ?
             e('i', {className: 'fa fa-refresh fa-spin fa-fw'}, null)
             : e('i', {className: 'fa fa-eye fa-fw'}, null);
+        var navbarPageTitle =
+            e('a', {href: "/", className: ''}, eyeOrSpinner, ` xresearch v${this.props.version} (XPiratez v${this.props.xpiratezVersion})`);
+        var navbarSelectedTitle = this.props.showNodeDetails ?
+            e('a', {className: ''},
+              e('i', {className: 'fa fa-chevron-right fa-fw'}, null), this.props.nodeLabel)
+            : '';
         var showAllButton = this.props.showNodeDetails ?
-            e('button', {type: 'button', className: 'btn btn-default navbar-btn', onClick: this.props.onShowAllTopics, href:'#', style:{marginLeft:'4px'}}, `Show All `, e('i', { className: 'fa fa-times'}, null))
+            e('a', {href:'#', className: '', onClick: this.props.onShowAllTopics}, e('i', { className: 'fa fa-times fa-fw'}, null))
             : '';
-        var nodeChevron = this.props.showNodeDetails ?
-            e('i', {className: 'fa fa-chevron-right fa-fw'}, null)
-            : '';
-        var navbarTitle = this.props.showNodeDetails ?
-            e('a', {className: 'navbar-brand'},
-              nodeChevron, this.props.nodeLabel)
-            : '';
-        var navbarBrand =
-            e('div', {className: 'navbar-header'},
-              e('a', {href: "/", className: 'navbar-brand'}, eyeOrSpinner, ` xresearch v${this.props.version} (XPiratez v${this.props.xpiratezVersion})`),
-              navbarTitle);
-        return e('nav', {className: 'navbar navbar-default navbar-fixed-top'},
-          e('div', {className: 'container-fluid'},
-            navbarBrand,
-            showAllButton,
-            e(SearchBarComponent, {searchText: 'Enter topic name...'}, null)
-           ));
+        return e('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary fixed-top'},
+                 e('div', {className: 'navbar-brand'},
+                   navbarPageTitle,
+                   navbarSelectedTitle,
+                   showAllButton),
+                 e('button', {type:'button', className:'navbar-toggler collapsed', "data-target":"#navbarResponsive", "data-toggle":"collapse", "aria-controls":"navbarResponsive", "aria-expanded":"false", "aria-label":"Toggle navigation"}, e('span', {className: 'navbar-toggler-icon'})),
+                 e('div', {id: "navbarResponsive", className:'navbar-collapse collapse'},
+                   e(SearchBarComponent, {searchText: 'Enter topic name...'}, null)));
     }
 }
 

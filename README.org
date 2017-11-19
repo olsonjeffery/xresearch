@@ -39,7 +39,11 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** TODO CHANGELOG
-- PENDING [0/15]
+- PENDING [0/16]
+  - [ ] FEATURE: "recent nodes" list via localStorage ::
+    - [ ] add redux store listener to catch all nodeSelection actions
+    - [ ] maintain running list of ten-most-recent nodes visited
+    - [ ] maintain master list of all nodes visited & total visits (maybe build a dykstra map off of that for significant node display?)
   - [ ] FEATURE: "significant nodes" summaries in show-all/initial display ::
     - [ ] when multiple nodes are displayed or during show-all-topics, show a special summary instead
     - [ ] top-10 most-linked
@@ -77,7 +81,14 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 - VERSION 0.1.0
   - [-] REFACTOR: switch CSS grid/styling to bootstrap ::
     - [ ] rework node list display to use tables, instead of ul, and share more formatting code
+      - [ ] preserve click behavior when aprop
+      - [ ] use slate theme colors instead of default red, green, blue & gray
     - [ ] put cost, points, etc into a new left-nav summary box
+    - [ ] graph work
+      - [ ] put border on graph component w/ drop shadow
+      - [ ] make background a darker gray
+      - [ ] integrate slate theme colors into graph component for node/edge colors
+      - [ ] graph has 100% width and height of viewport - 50px or something..
     - [X] push selected node title into nav bar as a breadcrumb
     - [X] have show-all-topics as button to the right of selected node title
     - [X] make "xresearch vblah" be a link to root route
@@ -87,6 +98,8 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - try to keep existing sidebar & graph layouts
   - [ ] FEATURE: UX overhaul ::
     - [ ] create some mockups
+      - [ ] existing UX layout w/ left/right asides and center graph
+      - [ ] half/half layout with graph on right and left/right navs on other side side-by-side
     - what moves out of the summary/header and into the sidebars?
     - collapsable sidebars
     - item count in sidebar tables

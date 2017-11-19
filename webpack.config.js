@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/index.js',
@@ -8,5 +9,13 @@ module.exports = {
     },
     devtool: 'source-map',
     watch: true,
-    stats: 'verbose'
+    stats: 'verbose',
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            Popper: ['popper.js', 'default']
+        })
+    ]
 };

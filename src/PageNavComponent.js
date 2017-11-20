@@ -21,7 +21,7 @@ class PageNavComponentImpl extends Component {
         var showAllButton = this.props.showNodeDetails ?
             e('a', {href:'#', className: '', onClick: this.props.onShowAllTopics}, e('i', { className: 'fa fa-times fa-fw'}, null))
             : '';
-        return e('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary fixed-top'},
+        return e('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary'},
                  e('div', {className: 'navbar-brand'},
                    navbarPageTitle,
                    navbarSelectedTitle,

@@ -7,19 +7,31 @@ import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQuerie
 import Constants from './Constants.js';
 import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js';
 
+const genericAsideTableBuilder = (thElems, trElems) => {
+    return e('table', {style: {marginBottom: '30px'},className: 'table-dark table-sm table table-striped table-hover table-border'},
+             e('thead', {className: 'thead-dark'},
+               e('tr', {}, ...thElems)),
+             e('tbody',{},
+               ...trElems));
+};
+
+const genericSidebarClickableRow = (data, onClick) => {
+    var cellConfig = isTopicInGraphNodes(data.id) ? {onClick, "data-id": data.id} : {};
+    return e('tr', {key: `sidebar-node-${data.id}`},
+             e('td', cellConfig, data.content));
+};
+
 class ManufactureSidebarNodeListCompoent extends Component {
     constructor(props) {
         super(props);
     }
     render() {
         if(this.props.active) {
-            var headerContent = e('h4', {}, 'Manufacturing Requirements');
+            var headerContent = [e('th', {}, 'Manufacturing Requirements')];
             var entries = this.props.nodes.map((x) => {
-                var content = isTopicInGraphNodes(x.id) ? e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`) : x.name;
-                return e('li', {key: `sidebar-node-${x.id}`}, content, ` x${x.quantity}`);
+                return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
-            return e('div', {}, headerContent,
-                     entries.length == 0 ? e('p', {}, 'None') : e('ul', {}, entries));
+            return genericAsideTableBuilder(headerContent, entries);
         }
         return null;
     }
@@ -32,14 +44,12 @@ class SidebarNodeListCompoent extends Component {
     render() {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
-                e('h4', {}, this.props.title)
-                : e('h4', {}, this.props.titlePrefix, e('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, e('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));
+                [e('th', {}, this.props.title)]
+                : [e('th', {style:{color:this.props.highlightColor}}, this.props.titlePrefix,this.props.titleSuffix, e('input', {style:{className:'ml-auto'},type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}))];
             var entries = this.props.nodes.map((x) => {
-                var content = isTopicInGraphNodes(x.id) ? e('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`) : x.name;
-                return e('li', {key: `sidebar-node-${x.id}`}, content);
+                return genericSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
-            return e('div', {}, headerContent,
-                        entries.length == 0 ? e('p', {}, 'None') : e('ul', {}, entries));
+            return genericAsideTableBuilder(headerContent, entries);
         }
         return null;
     }
@@ -87,7 +97,7 @@ var buildNodeListFromSearch = (searchText) => {
     return results;
 };
 
-const resultsMapStateToProps = (state) => {
+const searchResultsMapStateToProps = (state) => {
     var active = state.sidebarMode == Constants.SIDEBAR_MODE_SEARCH_RESULTS;
     var nodes = [];
     if(active) {
@@ -134,6 +144,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-export var SearchResultsListComponent =  connect(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export var SearchResultsListComponent =  connect(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export var GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export var ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);

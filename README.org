@@ -80,15 +80,15 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
 - VERSION 0.1.0
   - [-] REFACTOR: switch CSS grid/styling to bootstrap ::
-    - [ ] rework node list display to use tables, instead of ul, and share more formatting code
-      - [ ] preserve click behavior when aprop
-      - [ ] use slate theme colors instead of default red, green, blue & gray
     - [ ] put cost, points, etc into a new left-nav summary box
     - [ ] graph work
       - [ ] put border on graph component w/ drop shadow
       - [ ] make background a darker gray
       - [ ] integrate slate theme colors into graph component for node/edge colors
       - [ ] graph has 100% width and height of viewport - 50px or something..
+    - [X] rework node list display to use tables, instead of ul, and share more formatting code
+      - [X] preserve click behavior when aprop
+      - [X] use slate theme colors instead of default red, green, blue & gray
     - [X] push selected node title into nav bar as a breadcrumb
     - [X] have show-all-topics as button to the right of selected node title
     - [X] make "xresearch vblah" be a link to root route
@@ -109,6 +109,7 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - [ ] refactor+test full text init/search
     - [ ] refactor+test
   - [ ] FEATURE: add 'X' icon on right side of search bar to clear text ::
+  - [ ] REFACTOR: move lunr into own module from NodeListComponent.js ::
   - [ ] REFACTOR: remove "sidebar mode" logic in redux state ::
     - [ ] sidebar/aside dispaly is driven off of selected node instead of sidebar-mode hint
     - [ ] sidebar display types:
@@ -122,7 +123,6 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
-  - [ ] REFACTOR: move lunr into own module from NodeListComponent.js ::
 - VERSION 0.0.3 [13/13]
   - [X] REFACTOR: all "multi-dispatch" instances in event handlers -> go into single actions :: 
   - [X] REFACTOR: split SharedSetup.js into Constants & StateMgmt modules ::

@@ -15,7 +15,7 @@ class AppComponent extends Component {
         var pageNav = e(PageNavComponent, {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
 
         // THIS NEEDS WORK
-        var containerRow = e('div', {className: 'row'},
+        var contentRow = e('div', {className: 'row'},
                              e('div', {className: 'col-md-3'},
                                e(LeftDetailsComponent, {}, null)),
                              e('div', {className: 'col-md-6'},
@@ -29,8 +29,8 @@ class AppComponent extends Component {
                                  e('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
                                    e('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', e('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
                               e('div', {className: 'col-md-2'}, null));
-        var app = e(ErrorDisplayComponent, null, containerRow, pageFooterRow);
-        return e('div', {}, pageNav, e('div', {className: 'fluid-container'}, app));
+        var app = e(ErrorDisplayComponent, null, contentRow, pageFooterRow);
+        return e('div', {}, pageNav, e('div', {style: {paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
     }
 }
 export default AppComponent;

@@ -774,7 +774,13 @@ const constants ={
     SEARCH_TEXT_CHANGE: 'SEARCH_TEXT_CHANGE',
     NODE_SELECTION: 'NODE_SELECTION',
     GRAPH_UPDATING_CHANGE: 'GRAPH_UPDATING_CHANGE',
-    GRAPH_FILTERING_CATEGORY_CHANGE: 'GRAPH_FILTERING_CATEGORY_CHANGE'
+    GRAPH_FILTERING_CATEGORY_CHANGE: 'GRAPH_FILTERING_CATEGORY_CHANGE',
+
+    COLOR_RED: '#ee5f5b',
+    COLOR_GREEN: '#62c462',
+    COLOR_BLUE:'#5bc0de',
+    COLOR_ORANGE: '#f89406',
+    COLOR_GRAY_LIGHT: '#e9ecef'
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (constants);
@@ -19309,19 +19315,31 @@ exports.clearImmediate = clearImmediate;
 
 
 
+const genericAsideTableBuilder = (thElems, trElems) => {
+    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('table', {style: {marginBottom: '30px'},className: 'table-dark table-sm table table-striped table-hover table-border'},
+             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('thead', {className: 'thead-dark'},
+               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, ...thElems)),
+             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tbody',{},
+               ...trElems));
+};
+
+const genericSidebarClickableRow = (data, onClick) => {
+    var cellConfig = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* isTopicInGraphNodes */])(data.id) ? {onClick, "data-id": data.id} : {};
+    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {key: `sidebar-node-${data.id}`},
+             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', cellConfig, data.content));
+};
+
 class ManufactureSidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
     }
     render() {
         if(this.props.active) {
-            var headerContent = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, 'Manufacturing Requirements');
+            var headerContent = [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {}, 'Manufacturing Requirements')];
             var entries = this.props.nodes.map((x) => {
-                var content = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* isTopicInGraphNodes */])(x.id) ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`) : x.name;
-                return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('li', {key: `sidebar-node-${x.id}`}, content, ` x${x.quantity}`);
+                return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
-            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, headerContent,
-                     entries.length == 0 ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('p', {}, 'None') : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('ul', {}, entries));
+            return genericAsideTableBuilder(headerContent, entries);
         }
         return null;
     }
@@ -19334,14 +19352,12 @@ class SidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compo
     render() {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
-                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.title)
-                : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('h4', {}, this.props.titlePrefix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style:{color:this.props.highlightColor}}, this.props.titleColored), this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}));
+                [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {}, this.props.title)]
+                : [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {style:{color:this.props.highlightColor}}, this.props.titlePrefix,this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {style:{className:'ml-auto'},type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}))];
             var entries = this.props.nodes.map((x) => {
-                var content = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["b" /* isTopicInGraphNodes */])(x.id) ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: '#', "data-id": x.id, onClick: this.props.onNodeSelection}, `${x.name}`) : x.name;
-                return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('li', {key: `sidebar-node-${x.id}`}, content);
+                return genericSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
-            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, headerContent,
-                        entries.length == 0 ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('p', {}, 'None') : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('ul', {}, entries));
+            return genericAsideTableBuilder(headerContent, entries);
         }
         return null;
     }
@@ -19389,7 +19405,7 @@ var buildNodeListFromSearch = (searchText) => {
     return results;
 };
 
-const resultsMapStateToProps = (state) => {
+const searchResultsMapStateToProps = (state) => {
     var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].SIDEBAR_MODE_SEARCH_RESULTS;
     var nodes = [];
     if(active) {
@@ -19436,7 +19452,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-var SearchResultsListComponent =  Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(resultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+var SearchResultsListComponent =  Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 var GraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 var ManufactureGraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
 
@@ -40923,7 +40939,7 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         var pageNav = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__["a" /* default */], {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
 
         // THIS NEEDS WORK
-        var containerRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+        var contentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3'},
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-6'},
@@ -40937,8 +40953,8 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
                                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-2'}, null));
-        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, containerRow, pageFooterRow);
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, pageNav, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'fluid-container'}, app));
+        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, contentRow, pageFooterRow);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, pageNav, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (AppComponent);
@@ -74840,23 +74856,23 @@ class RightNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_
             }
             if(topic.dependedUponBy && topic.dependedUponBy.length > 0) {
                 let edgeName = 'dependedUponBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: ' away)', highlightColor: '#1a1'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GREEN}, null));
             }
             if(topic.unlocks && topic.unlocks.length > 0) {
                 let edgeName = 'unlocks';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: ' away)', highlightColor: '#11a'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_BLUE}, null));
             }
             if(topic.getOneFree && topic.getOneFree.length > 0) {
                 let edgeName = 'getOneFree';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: ' away)', highlightColor: '#a11'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_RED}, null));
             }
             if(topic.requiredBy && topic.requiredBy.length > 0) {
                 let edgeName = 'requiredBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
                 let edgeName = 'requiredToManufacture';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: ' away)', highlightColor: '#aaa'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -74884,23 +74900,23 @@ class LeftNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_r
             let children = [];
             if(topic.dependencies && topic.dependencies.length > 0) {
                 let edgeName = 'dependencies';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: ' towards)', highlightColor: '#1a1'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GREEN}, null));
             }
             if(topic.unlockedBy && topic.unlockedBy.length > 0) {
                 let edgeName = 'unlockedBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: ' towards)', highlightColor: '#11a'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_BLUE}, null));
             }
             if(topic.giveOneFree && topic.giveOneFree.length > 0) {
                 let edgeName = 'giveOneFree';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: ' towards)', highlightColor: '#a11'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_RED}, null));
             }
             if(topic.requires && topic.requires.length > 0) {
                 let edgeName = 'requires';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
             }
             if(topic.requiresBuy && topic.requiresBuy.length > 0) {
                 let edgeName = 'requiresBuy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: ' towards)', highlightColor: '#aaa'}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -74948,15 +74964,15 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
     }
     render() {
         if(this.state.hasError) {
-            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {},
+            return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'container'},
                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingTop: '15px'}},
                        Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-12'}, ' ')
                       ),
                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingTop: '15px'}},
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-3'}, ' '),
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-6'},
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-2'}, ' '),
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-8'},
                          Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{padding: '10px', border: '2px dashed #F0386B', color: '#F0386B', textAlign: 'center'}}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-exclamation-triangle fa-5x', style:{color: '#f0386b'}}, null), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), 'There was an error in xresearch. Component stack trace:', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('br'), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {textAlign: 'left'}}, this.state.componentStack))),
-                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-3'}, ' ')
+                       Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-xs-2'}, ' ')
                       )
                     );
         }
@@ -75001,7 +75017,7 @@ class PageNavComponentImpl extends __WEBPACK_IMPORTED_MODULE_0_react__["Componen
         var showAllButton = this.props.showNodeDetails ?
             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href:'#', className: '', onClick: this.props.onShowAllTopics}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', { className: 'fa fa-times fa-fw'}, null))
             : '';
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary fixed-top'},
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary'},
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'navbar-brand'},
                    navbarPageTitle,
                    navbarSelectedTitle,

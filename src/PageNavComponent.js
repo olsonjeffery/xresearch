@@ -21,7 +21,7 @@ class PageNavComponentImpl extends Component {
         var showAllButton = this.props.showNodeDetails ?
             e('a', {href:'#', className: '', onClick: this.props.onShowAllTopics}, e('i', { className: 'fa fa-times fa-fw'}, null))
             : '';
-        return e('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary'},
+        return e('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary', style: {backgroundImage: 'linear-gradient(#484e55, #3A3F44 60%, #313539)',boxShadow: '0 0.125em 0.125em black'}},
                  e('div', {className: 'navbar-brand'},
                    navbarPageTitle,
                    navbarSelectedTitle,
@@ -37,8 +37,7 @@ const mapStateToProps = (state, ownProps) => {
     var nodeLabel = '';
     if(state.selectedNodeId != null) {
         var node = researchById(state.selectedNodeId);
-        nodeLabel = node.label === node.id ? node.label
-            : `${node.label} (${node.id})`;
+        nodeLabel = node.label;
         showNodeDetails = true;
     }
     return {

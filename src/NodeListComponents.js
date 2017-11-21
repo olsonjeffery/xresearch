@@ -6,9 +6,13 @@ import lunr from 'lunr';
 import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
 import Constants from './Constants.js';
 import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js';
+import {parseBuildTime} from './Utility.js';
 
-const genericAsideTableBuilder = (thElems, trElems) => {
-    return e('table', {style: {marginBottom: '30px'},className: 'table-dark table-sm table table-striped table-hover table-border'},
+const genericAsideTableBuilder = (thElems, trElemsInput) => {
+    var trElems = trElemsInput.length > 0 ?
+        trElemsInput
+        : [genericSidebarClickableRow({id: "-1", content: "None"}, null)];
+    return e('table', {style: {marginBottom: '30px'},className: 'table-dark xr-shadow table-sm table table-striped table-hover table-border'},
              e('thead', {className: 'thead-dark'},
                e('tr', {}, ...thElems)),
              e('tbody',{},
@@ -16,9 +20,13 @@ const genericAsideTableBuilder = (thElems, trElems) => {
 };
 
 const genericSidebarClickableRow = (data, onClick) => {
-    var cellConfig = isTopicInGraphNodes(data.id) ? {onClick, "data-id": data.id} : {};
+    var cellConfig = isTopicInGraphNodes(data.id) && onClick != null ? {onClick, "data-id": data.id} : {};
     return e('tr', {key: `sidebar-node-${data.id}`},
-             e('td', cellConfig, data.content));
+             e('td', cellConfig, e('a', {href:'#'}, data.content)));
+};
+
+const genericSidebarPlainTextRow = (text) => {
+    return e('tr', {}, e('td', {}, text));
 };
 
 class ManufactureSidebarNodeListCompoent extends Component {
@@ -45,7 +53,7 @@ class SidebarNodeListCompoent extends Component {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
                 [e('th', {}, this.props.title)]
-                : [e('th', {style:{color:this.props.highlightColor}}, this.props.titlePrefix,this.props.titleSuffix, e('input', {style:{className:'ml-auto'},type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}))];
+                : [e('th', {style:{color:this.props.highlightColor}}, this.props.titlePrefix,this.props.titleSuffix, e('input', {className:'mr-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}))];
             var entries = this.props.nodes.map((x) => {
                 return genericSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
@@ -66,6 +74,43 @@ SidebarNodeListCompoent.propTypes = {
     ),
     onNodeSelection: PropTypes.func.isRequired
 };
+
+class NodeTriviaListViewComponent extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if(this.props.active) {
+            var headerContent = [e('th', {}, 'Information')];
+            var trElems = [`Ruleset Key: ${this.props.selectedNodeId}`];
+
+            var topic = researchById(this.props.selectedNodeId);
+            if(topic === undefined || topic == null) {
+                trElems.push('No further info: Topic not in ruleset data');
+            } else {
+                if(topic.costResearch) trElems.push(` Research (Base): ${ topic.costResearch }pts.`);
+                if(topic.costManufacture) trElems.push(` Manufacture: $${ topic.costManufacture }`);
+                if(topic.costBuy) trElems.push(`Buy: $${ topic.costBuy }`);
+                if(topic.costSell) trElems.push(` Sell: $${ topic.costSell }`);
+                if(topic.costBuild) trElems.push(` Build: $${topic.costBuild}`);
+                if(topic.points) trElems.push(`Score Points: ${ topic.points }`);
+                if(topic.timeTotalManufacture) trElems.push(` Manufacture Time: ${parseBuildTime(topic.timeTotalManufacture)}`);
+                if(topic.timeBuild) trElems.push(` Build Time: ${parseBuildTime(topic.timeBuild)}`);
+            }
+
+            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)));
+        }
+        return null;
+    }
+}
+
+var nodeTriviaMapStateToProps = (state, ownProps) => {
+    var active = state.selectedNodeId !== null;
+    var selectedNodeId = state.selectedNodeId;
+    return {active, selectedNodeId};
+};
+
+var nodeTriviaMapDispatchToProps = () => {};
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
@@ -147,3 +192,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export var SearchResultsListComponent =  connect(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export var GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export var ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
+export var NodeTriviaListComponent = connect(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);

@@ -39,7 +39,18 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** TODO CHANGELOG
-- PENDING [0/16]
+- PENDING [0/18]
+  - [ ] FEATURE: add graph legend ::
+  - [ ] FEATURE: UX overhaul ::
+    - [ ] create some mockups
+      - [ ] existing UX layout w/ left/right asides and center graph
+      - [ ] half/half layout with graph on right and left/right navs on other side side-by-side
+    - what moves out of the summary/header and into the sidebars?
+    - collapsable sidebars
+    - item count in sidebar tables
+    - graph location vis-a-vis node details display
+  - [ ] FEATURE: show manufacturing outputs, not just manufacturing inputs
+    - more useful for rob/slavery
   - [ ] FEATURE: "recent nodes" list via localStorage ::
     - [ ] add redux store listener to catch all nodeSelection actions
     - [ ] maintain running list of ten-most-recent nodes visited
@@ -61,15 +72,17 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: no more "show all topics" :: default is three initial research topics
   - [ ] FEATURE: crunch data on nodes and pull down a list of "most connected topics" ::
     - [ ] show list as part of "show all topics" display
-  - [ ] FEATURE: hovering on node list entry highlights matching edge in cytoscape ::
-    - [ ] add edge id (FOO->BAR) to link entries
-    - [ ] on hover-enter, find matching entity via __cy.$() and change its style
-    - [ ] on hover-exit, find again and change style back
-  - [ ] FEATURE: hovering on node list title highlights all matching edge-styles in ctyoscape ::
-    - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
-    - [ ] add `edgeHighlight: string` to state
-    - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
-    - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
+  - [ ] FEATURE: hover polish ::
+    - [ ] hovering over node list <td> triggers :hover that sets color to match its header coloring
+    - [ ] hovering on node list entry highlights matching edge in cytoscape
+      - [ ] add edge id (FOO->BAR) to link entries
+      - [ ] on hover-enter, find matching entity via __cy.$() and change its style
+      - [ ] on hover-exit, find again and change style back
+    - [ ] hovering on node list title highlights all matching edge-styles in ctyoscape
+      - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
+      - [ ] add `edgeHighlight: string` to state
+      - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
+      - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
   - [ ] FEATURE: add craft data
   - [ ] FEATURE: increase neighorhood depth from 1 to 2 ::
   - [ ] FEATURE: router support in URL ::
@@ -78,37 +91,19 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.1.0
-  - [-] REFACTOR: switch CSS grid/styling to bootstrap ::
-    - [ ] put cost, points, etc into a new left-nav summary box
-    - [ ] graph work
-      - [ ] put border on graph component w/ drop shadow
-      - [ ] make background a darker gray
-      - [ ] integrate slate theme colors into graph component for node/edge colors
-      - [ ] graph has 100% width and height of viewport - 50px or something..
-    - [X] rework node list display to use tables, instead of ul, and share more formatting code
-      - [X] preserve click behavior when aprop
-      - [X] use slate theme colors instead of default red, green, blue & gray
-    - [X] push selected node title into nav bar as a breadcrumb
-    - [X] have show-all-topics as button to the right of selected node title
-    - [X] make "xresearch vblah" be a link to root route
-    - [X] replace xresearch eye with spinner when loading
-    - [X] integrate customized "slate" theme from bs 3.3.7 (need .js files)
-    - [X] use "input addon" to hold magnifying-glass symbol for search
-    - try to keep existing sidebar & graph layouts
-  - [ ] FEATURE: UX overhaul ::
-    - [ ] create some mockups
-      - [ ] existing UX layout w/ left/right asides and center graph
-      - [ ] half/half layout with graph on right and left/right navs on other side side-by-side
-    - what moves out of the summary/header and into the sidebars?
-    - collapsable sidebars
-    - item count in sidebar tables
-    - graph location vis-a-vis node details display
+- VERSION 0.1.0 [1/9]
+  - [ ] FEATURE: implement scrollbar-overflow for large viewport ::
+  - [ ] FEATURE: Mobile UX ::
+    - [ ] use viewport detection stuff to fork between two different layout arrangements
+      - [ ] mobile: three rows, top row is just search results, 2nd row is graph, 3rd row is left, then right details
+      - [ ] desktop: existing setup
+    - [ ] graph has 100% width and height of viewport - 50px or something..
   - [ ] introduce unit testing framework ::
     - [ ] stand up infrastructure
     - [ ] refactor+test full text init/search
     - [ ] refactor+test
   - [ ] FEATURE: add 'X' icon on right side of search bar to clear text ::
+  - [ ] FEATURE: use COLOR_ORANGE to manufacturing edges ::
   - [ ] REFACTOR: move lunr into own module from NodeListComponent.js ::
   - [ ] REFACTOR: remove "sidebar mode" logic in redux state ::
     - [ ] sidebar/aside dispaly is driven off of selected node instead of sidebar-mode hint
@@ -123,6 +118,23 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+  - [X] REFACTOR: switch CSS grid/styling to bootstrap ::
+    - [X] put drop shadow on tables 
+    - [X] retire node summary; put cost, points, etc into a new left-nav summary box
+    - [X] graph work
+      - [X] put border on graph component w/ drop shadow
+      - [X] make background a darker gray
+      - [X] integrate slate theme colors into graph component for node/edge colors
+    - [X] rework node list display to use tables, instead of ul, and share more formatting code
+      - [X] preserve click behavior when aprop
+      - [X] use slate theme colors instead of default red, green, blue & gray
+    - [X] push selected node title into nav bar as a breadcrumb
+    - [X] have show-all-topics as button to the right of selected node title
+    - [X] make "xresearch vblah" be a link to root route
+    - [X] replace xresearch eye with spinner when loading
+    - [X] integrate customized "slate" theme from bs 3.3.7 (need .js files)
+    - [X] use "input addon" to hold magnifying-glass symbol for search
+    - try to keep existing sidebar & graph layouts
 - VERSION 0.0.3 [13/13]
   - [X] REFACTOR: all "multi-dispatch" instances in event handlers -> go into single actions :: 
   - [X] REFACTOR: split SharedSetup.js into Constants & StateMgmt modules ::

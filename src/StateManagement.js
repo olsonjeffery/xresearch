@@ -2,6 +2,12 @@ import {combineReducers, createStore } from 'redux';
 import Constants from './Constants.js';
 
 // action dispatchers
+export function actionViewportChange(newViewportSize) {
+    return {
+        type: Constants.VIEWPORT_CHANGE,
+        newViewportSize
+    };
+}
 export function graphFilteringCategoryChange(changedCategory, newValue) {
     return {
         type: Constants.GRAPH_FILTERING_CATEGORY_CHANGE,
@@ -99,7 +105,16 @@ const graphFilteringCategories = (state = {dependencies: true, dependedUponBy: t
     }
 };
 
-const rootReducer = combineReducers({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories});
+const viewportSize = (state = {width: 1, height: 1}, action) => {
+    switch(action.type) {
+    case Constants.VIEWPORT_CHANGE:
+        return action.newViewportSize;
+    default:
+        return state;
+    }
+};
+
+const rootReducer = combineReducers({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
 export function initializeStore() {
     return createStore(rootReducer);
 };

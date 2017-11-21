@@ -2,7 +2,7 @@ import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Constants from './Constants.js';
-import {UnlocksResultsListComponent, GetOneFreeResultsListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent}  from './NodeListComponents.js';
+import {NodeTriviaListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent}  from './NodeListComponents.js';
 
 import {researchById} from './XrDataQueries.js';
 
@@ -90,6 +90,7 @@ class LeftNodeDetailsPresentationComponent extends Component {
         if(this.props.active) {
             let topic = researchById(this.props.targetId);
             let children = [];
+            children.push(e(NodeTriviaListComponent, {}, null));
             if(topic.dependencies && topic.dependencies.length > 0) {
                 let edgeName = 'dependencies';
                 children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: Constants.COLOR_GREEN}, null));

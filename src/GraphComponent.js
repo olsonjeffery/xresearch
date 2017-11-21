@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
+import Constants from './Constants.js';
 import {researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
 import {nodeSelection, graphUpdatingChange} from './StateManagement.js';
 
@@ -103,38 +104,38 @@ var cyStyle = [
     {"selector": ".dep",
      "style": {
          "width": "1px",
-         "line-color": "#1a1",
+         "line-color": Constants.COLOR_GREEN,
          "mid-target-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-target-arrow-shape": "triangle",
-         "mid-target-arrow-color": "#1a1"
+         "mid-target-arrow-color": Constants.COLOR_GREEN
      }},
     {"selector": ".unlocks",
      "style": {
          "width": "1px",
-         "line-color": "#11a",
+         "line-color": Constants.COLOR_BLUE,
          "mid-source-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
-         "mid-source-arrow-color": "#11a"
+         "mid-source-arrow-color": Constants.COLOR_BLUE
      }},
     {"selector": ".getOneFree",
      "style": {
          "width": "1px",
-         "line-color": "#a11",
+         "line-color": Constants.COLOR_RED,
          "mid-source-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
-         "mid-source-arrow-color": "#a11"
+         "mid-source-arrow-color": Constants.COLOR_RED
      }},
     {"selector": ".requires",
      "style": {
          "width": "1px",
-         "line-color": "#aaa",
+         "line-color": Constants.COLOR_GRAY_LIGHT,
          "mid-target-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-target-arrow-shape": "triangle",
-         "mid-target-arrow-color": "#aaa"
+         "mid-target-arrow-color": Constants.COLOR_GRAY_LIGHT
      }},
     // node styles
     {"selector": "node.facility",
@@ -145,8 +146,8 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": "red",
-         "text-outline-color": "#555",
+         "background-color": Constants.COLOR_RED,
+         "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
          "overlay-padding": "6px",
@@ -161,8 +162,8 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": "green",
-         "text-outline-color": "#555",
+         "background-color": Constants.COLOR_BLUE,
+         "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
          "overlay-padding": "6px",
@@ -177,8 +178,8 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": "blue",
-         "text-outline-color": "#555",
+         "background-color": Constants.COLOR_GREEN,
+         "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
          "overlay-padding": "6px",
@@ -193,8 +194,8 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": "#ccc",
-         "text-outline-color": "#555",
+         "background-color": Constants.COLOR_GRAY_LIGHT,
+         "text-outline-color": "#000",
          "text-outline-width": "1px",
          "color": "#fff",
          "overlay-padding": "6px",
@@ -268,8 +269,8 @@ class GraphComponent extends Component {
     }
 
     render() {
-        return e('div', {style:{height: '500px'}},
-                 e('div', {id: this.containerId}, null));
+        return e('div', {style:{backgroundColor: Constants.COLOR_GRAY_DARK}, className: 'xr-shadow'},
+                 e('div', {id: this.containerId, style:{width: '100%',height: `${this.props.viewportHeight - Constants.VIEWPORT_OFFSET}px`}}, null));
     }
 }
 
@@ -324,7 +325,7 @@ const mapStateToProps = (state, ownProps) => {
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     }
-    return {};
+    return {viewportHeight: state.viewportSize.height};
 };
 
 const mapDispatchToProps = (dispatch, state) => {

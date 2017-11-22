@@ -19479,7 +19479,7 @@ var nodeTriviaMapStateToProps = (state, ownProps) => {
     return {active, selectedNodeId};
 };
 
-var nodeTriviaMapDispatchToProps = () => {};
+var nodeTriviaMapDispatchToProps = () => {return{};};
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;
@@ -41002,6 +41002,10 @@ module.exports = performance || {};
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_redux__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Constants_js__ = __webpack_require__(8);
+
+
 
 
 
@@ -41013,16 +41017,36 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
     }
-    render() {
-        var pageNav = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__["a" /* default */], {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
-
-        // THIS NEEDS WORK
+    getPageNav() {
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__["a" /* default */], {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
+    }
+    renderMobile() {
+        var leftContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
+                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)));
+        var graphContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
+                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)));
+        var srContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__["d" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null)));
+        var rightContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
+                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
+        var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
+                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-12'},
+                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
+                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')));
+        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, srContentRow, graphContentRow, leftContentRow, rightContentRow, pageFooterRow);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, this.getPageNav(), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {paddingTop:'1em', paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
+    }
+    renderFull() {
         var contentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingBottom:'1em'}},
-                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: '100%',overflowY:'scroll'}},
+                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_7__Constants_js__["a" /* default */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-6'},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)),
-                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: '100%',overflowY:'scroll'}},
+                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_7__Constants_js__["a" /* default */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__["d" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
@@ -41032,10 +41056,25 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-2'}, null));
         var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, contentRow, pageFooterRow);
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, pageNav, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {paddingTop:'1em', paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, this.getPageNav(), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {paddingTop:'1em', paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
+    }
+    render() {
+        // THIS NEEDS WORK
+        if(this.props.isMobile) {
+            return this.renderMobile();
+        } else {
+            return this.renderFull();
+        }
     }
 }
-/* harmony default export */ __webpack_exports__["a"] = (AppComponent);
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        height: state.viewportSize.height,
+        isMobile: state.viewportSize.width < 576
+    };
+};
+/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_6_react_redux__["b" /* connect */])(mapStateToProps, () => {return {};})(AppComponent));
 
 
 /***/ }),

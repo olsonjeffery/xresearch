@@ -91,13 +91,7 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.1.0 [1/9]
-  - [ ] FEATURE: implement scrollbar-overflow for large viewport ::
-  - [ ] FEATURE: Mobile UX ::
-    - [ ] use viewport detection stuff to fork between two different layout arrangements
-      - [ ] mobile: three rows, top row is just search results, 2nd row is graph, 3rd row is left, then right details
-      - [ ] desktop: existing setup
-    - [ ] graph has 100% width and height of viewport - 50px or something..
+- VERSION 0.1.0 [3/9]
   - [ ] introduce unit testing framework ::
     - [ ] stand up infrastructure
     - [ ] refactor+test full text init/search
@@ -118,6 +112,12 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+  - [X] FEATURE: Mobile UX ::
+    - [X] use viewport detection stuff to fork between two different layout arrangements
+      - [X] mobile: three rows, top row is just search results, 2nd row is graph, 3rd row is left, then right details
+      - [X] desktop: existing setup
+    - [X] graph has 100% width and height of viewport - 50px or something..
+  - [X] FEATURE: implement scrollbar-overflow for large viewport ::
   - [X] REFACTOR: switch CSS grid/styling to bootstrap ::
     - [X] put drop shadow on tables 
     - [X] retire node summary; put cost, points, etc into a new left-nav summary box

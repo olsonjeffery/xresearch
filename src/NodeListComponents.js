@@ -110,7 +110,7 @@ var nodeTriviaMapStateToProps = (state, ownProps) => {
     return {active, selectedNodeId};
 };
 
-var nodeTriviaMapDispatchToProps = () => {};
+var nodeTriviaMapDispatchToProps = () => {return{};};
 
 // FIXME this search stuff should be factored into its own module
 var lunrIndex = null;

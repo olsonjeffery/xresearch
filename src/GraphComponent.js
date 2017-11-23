@@ -92,7 +92,7 @@ var buildElementsFromAllResearchData = () => {
         }
         if(topic.requiredItems) {
             _.each(topic.requiredItems, x => {
-                addEdge(x.id, topic.id, 'requires', idx);
+                addEdge(x.id, topic.id, 'manufacture', idx);
             });
         }
     });
@@ -127,6 +127,15 @@ var cyStyle = [
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
          "mid-source-arrow-color": Constants.COLOR_RED
+     }},
+    {"selector": ".manufacture",
+     "style": {
+         "width": "1px",
+         "line-color": Constants.COLOR_ORANGE,
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": Constants.COLOR_ORANGE
      }},
     {"selector": ".requires",
      "style": {

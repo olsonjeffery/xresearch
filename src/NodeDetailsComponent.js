@@ -64,7 +64,7 @@ class RightNodeDetailsPresentationComponent extends Component {
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
                 let edgeName = 'requiredToManufacture';
-                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: Constants.COLOR_GRAY_LIGHT}, null));
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: Constants.COLOR_ORANGE}, null));
             }
             return e('div', {}, ...children);
         }
@@ -77,7 +77,7 @@ RightNodeDetailsPresentationComponent.propTypes = {
 };
 
 const rightMapStateToProps = (state) => {
-    let active = state.sidebarMode == Constants.SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.selectedNodeId != null;
     // map dependencies
     return {
         active,
@@ -122,7 +122,7 @@ LeftNodeDetailsPresentationComponent.propTypes = {
 };
 
 const leftMapStateToProps = (state) => {
-    let active = state.sidebarMode == Constants.SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.selectedNodeId != null;
     // map dependencies
     return {
         targetId: state.selectedNodeId,

@@ -535,20 +535,8 @@ const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
     case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
         return action.searchText;
-    default:
-        return state;
-    }
-};
-const sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
-    switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
-        return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_SEARCH_RESULTS;
     case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
-        if(action.selectedNodeId == null) {
-            return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_SPLASH;
-        } else {
-            return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
-        }
+        return '';
     default:
         return state;
     }
@@ -610,7 +598,7 @@ const viewportSize = (state = {width: 1, height: 1}, action) => {
     }
 };
 
-const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
+const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
 function initializeStore() {
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
 };
@@ -19337,11 +19325,11 @@ exports.clearImmediate = clearImmediate;
 
 
 
-const genericAsideTableBuilder = (thElems, trElemsInput) => {
+const genericAsideTableBuilder = (thElems, trElemsInput, showHover = true) => {
     var trElems = trElemsInput.length > 0 ?
         trElemsInput
         : [genericSidebarClickableRow({id: "-1", content: "None"}, null)];
-    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('table', {style: {marginBottom: '30px'},className: 'table-dark xr-shadow table-sm table table-striped table-hover table-border'},
+    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('table', {style: {marginBottom: '30px'},className: `table-dark xr-shadow table-sm table table-striped ${ showHover ? 'table-hover' : ''} table-border`},
              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('thead', {className: 'thead-dark'},
                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, ...thElems)),
              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tbody',{},
@@ -19364,7 +19352,7 @@ class ManufactureSidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_rea
     }
     render() {
         if(this.props.active) {
-            var headerContent = [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {}, 'Manufacturing Requirements')];
+            var headerContent = [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {style: {color:__WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].COLOR_ORANGE}}, 'Manufacturing Requirements')];
             var entries = this.props.nodes.map((x) => {
                 return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
@@ -19427,7 +19415,7 @@ class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["C
                 if(topic.timeBuild) trElems.push(` Build Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeBuild)}`);
             }
 
-            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)));
+            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)), false);
         }
         return null;
     }
@@ -19441,8 +19429,9 @@ var nodeTriviaMapStateToProps = (state, ownProps) => {
 
 var nodeTriviaMapDispatchToProps = () => {return{};};
 
+let previousSearchText = null;
 const searchResultsMapStateToProps = (state) => {
-    var active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].SIDEBAR_MODE_SEARCH_RESULTS;
+    var active =  state.searchText != __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].DEFAULT_SEARCHTEXT && state.searchText != '' && state.searchText != previousSearchText;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
@@ -41157,7 +41146,7 @@ var buildElementsFromAllResearchData = () => {
         }
         if(topic.requiredItems) {
             __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.requiredItems, x => {
-                addEdge(x.id, topic.id, 'requires', idx);
+                addEdge(x.id, topic.id, 'manufacture', idx);
             });
         }
     });
@@ -41192,6 +41181,15 @@ var cyStyle = [
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
          "mid-source-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_RED
+     }},
+    {"selector": ".manufacture",
+     "style": {
+         "width": "1px",
+         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_ORANGE,
+         "mid-target-arrow-fill": 'filled',
+         "arrow-scale": 1,
+         "mid-target-arrow-shape": "triangle",
+         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_ORANGE
      }},
     {"selector": ".requires",
      "style": {
@@ -74985,7 +74983,7 @@ class RightNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
                 let edgeName = 'requiredToManufacture';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_ORANGE}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -74998,7 +74996,7 @@ RightNodeDetailsPresentationComponent.propTypes = {
 };
 
 const rightMapStateToProps = (state) => {
-    let active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.selectedNodeId != null;
     // map dependencies
     return {
         active,
@@ -75043,7 +75041,7 @@ LeftNodeDetailsPresentationComponent.propTypes = {
 };
 
 const leftMapStateToProps = (state) => {
-    let active = state.sidebarMode == __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
+    let active = state.selectedNodeId != null;
     // map dependencies
     return {
         targetId: state.selectedNodeId,

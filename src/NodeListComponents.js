@@ -8,11 +8,11 @@ import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js'
 import {parseBuildTime} from './Utility.js';
 import {topicsBySearchText} from './PassiveServices.js';
 
-const genericAsideTableBuilder = (thElems, trElemsInput) => {
+const genericAsideTableBuilder = (thElems, trElemsInput, showHover = true) => {
     var trElems = trElemsInput.length > 0 ?
         trElemsInput
         : [genericSidebarClickableRow({id: "-1", content: "None"}, null)];
-    return e('table', {style: {marginBottom: '30px'},className: 'table-dark xr-shadow table-sm table table-striped table-hover table-border'},
+    return e('table', {style: {marginBottom: '30px'},className: `table-dark xr-shadow table-sm table table-striped ${ showHover ? 'table-hover' : ''} table-border`},
              e('thead', {className: 'thead-dark'},
                e('tr', {}, ...thElems)),
              e('tbody',{},
@@ -35,7 +35,7 @@ class ManufactureSidebarNodeListCompoent extends Component {
     }
     render() {
         if(this.props.active) {
-            var headerContent = [e('th', {}, 'Manufacturing Requirements')];
+            var headerContent = [e('th', {style: {color:Constants.COLOR_ORANGE}}, 'Manufacturing Requirements')];
             var entries = this.props.nodes.map((x) => {
                 return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
@@ -98,7 +98,7 @@ class NodeTriviaListViewComponent extends Component {
                 if(topic.timeBuild) trElems.push(` Build Time: ${parseBuildTime(topic.timeBuild)}`);
             }
 
-            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)));
+            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)), false);
         }
         return null;
     }
@@ -112,8 +112,9 @@ var nodeTriviaMapStateToProps = (state, ownProps) => {
 
 var nodeTriviaMapDispatchToProps = () => {return{};};
 
+let previousSearchText = null;
 const searchResultsMapStateToProps = (state) => {
-    var active = state.sidebarMode == Constants.SIDEBAR_MODE_SEARCH_RESULTS;
+    var active =  state.searchText != Constants.DEFAULT_SEARCHTEXT && state.searchText != '' && state.searchText != previousSearchText;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)

@@ -39,20 +39,8 @@ const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
     case Constants.SEARCH_TEXT_CHANGE:
         return action.searchText;
-    default:
-        return state;
-    }
-};
-const sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
-    switch(action.type) {
-    case Constants.SEARCH_TEXT_CHANGE:
-        return Constants.SIDEBAR_MODE_SEARCH_RESULTS;
     case Constants.NODE_SELECTION:
-        if(action.selectedNodeId == null) {
-            return Constants.SIDEBAR_MODE_SPLASH;
-        } else {
-            return Constants.SIDEBAR_MODE_NODE_DETAILS;
-        }
+        return '';
     default:
         return state;
     }
@@ -114,7 +102,7 @@ const viewportSize = (state = {width: 1, height: 1}, action) => {
     }
 };
 
-const rootReducer = combineReducers({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
+const rootReducer = combineReducers({searchText, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
 export function initializeStore() {
     return createStore(rootReducer);
 };

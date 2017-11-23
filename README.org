@@ -92,22 +92,15 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.1.0 [0/0]
-- [-] FEATURE: add 'X' icon on right side of search bar to clear text ::
-  - [ ] FEATURE: use COLOR_ORANGE to manufacturing edges ::
-  - [ ] REFACTOR: remove "sidebar mode" logic in redux state ::
-    - [ ] sidebar/aside dispaly is driven off of selected node instead of sidebar-mode hint
-    - [ ] sidebar display types:
-      - [ ] manufacturable node
-      - [ ] pure idea/research node
-      - [ ] craft node
-      - [ ] show-all-topics/multi-node display (show "best of"/significant nodes)
+- VERSION 0.1.0 [7/8]
   - [ ] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR) ::
     - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
     - [ ] restructure of vanilla data import/structuring
       - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+  - [X] REFACTOR: remove "sidebar mode" logic in redux state ::
+  - [X] FEATURE: use COLOR_ORANGE for manufacturing edges ::
   - [X] introduce unit testing framework ::
     - [X] server-side testing
       - [X] parser can handle ruleset

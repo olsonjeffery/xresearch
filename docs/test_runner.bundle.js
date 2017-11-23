@@ -370,20 +370,8 @@ const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
     case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
         return action.searchText;
-    default:
-        return state;
-    }
-};
-const sidebarMode = (state = 'SIDEBAR_MODE_SPLASH', action) => {
-    switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
-        return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_SEARCH_RESULTS;
     case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
-        if(action.selectedNodeId == null) {
-            return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_SPLASH;
-        } else {
-            return __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SIDEBAR_MODE_NODE_DETAILS;
-        }
+        return '';
     default:
         return state;
     }
@@ -445,7 +433,7 @@ const viewportSize = (state = {width: 1, height: 1}, action) => {
     }
 };
 
-const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, sidebarMode, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
+const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* combineReducers */])({searchText, selectedNodeId, graphUpdating, graphFilteringCategories, viewportSize});
 function initializeStore() {
     return Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(rootReducer);
 };

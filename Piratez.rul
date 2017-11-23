@@ -926,6 +926,7 @@ items:
   - type: STR_GAT_LASCANNON
     size: 2.4
     costSell: 950000
+    listOrder: 760
     transferTime: 48
     listOrder: 630
   - type: STR_RAILGUN
@@ -38959,6 +38960,7 @@ armors:
       health:
         stunNormalized: -0.165
     psiDefence:
+      flatHundred: 0.8
       psiStrength: 1.0
       psiSkill: 0.0
       moraleCurrent: 0.33
@@ -41746,6 +41748,7 @@ armors:
       reactions: 0.3
       melee: 0.05
     meleeDodgeBackPenalty: 0.5
+    meleeDodgeBackPenalty: 0.5
     recovery:
       energy:
         flatHundred: 0.12
@@ -43743,6 +43746,10 @@ armors:
       reactions: 0.1
       melee: 0.3
     meleeDodgeBackPenalty: 0.5
+    psiDefence:
+      psiStrength: 1.0
+      psiSkill: 0.2
+      bravery: 0.2
     recovery:
       energy:
         flatHundred: 0.12
@@ -44942,6 +44949,7 @@ armors:
   - type: STR_FLASH_BANG_ARMOR_UC
     spriteSheet: FLASHBANG.PCK
     spriteInv: MAN_513
+    spriteFaceGroup: 6
     spriteFaceGroup: 6
     spriteFaceColor: [97, 97, 97, 97, 95, 161, 161, 163]
     customArmorPreviewIndex: 87

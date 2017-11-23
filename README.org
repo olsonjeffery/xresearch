@@ -93,10 +93,9 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
 - VERSION 0.1.0 [7/8]
-  - [ ] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR) ::
-    - [ ] PARSER: add non-YAML topics (e.g. STR_ALIEN_TERROR) to researchData, mapping their inverse relationships
-    - [ ] restructure of vanilla data import/structuring
-      - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
+  - [-] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR) ::
+    - [X] make parse not complain w/ loading of unmodified YAML 
+    - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
   - [X] REFACTOR: remove "sidebar mode" logic in redux state ::

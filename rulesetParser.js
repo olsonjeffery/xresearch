@@ -184,27 +184,31 @@ const addFacilitiesToGraphNodes = (ruleset, inputGraphNodes, reverseRels, lang) 
     return { graphNodes, reverseRels };
 };
 
+const yamlLoad = (filePath) => {
+    return yaml.safeLoad(fs.readFileSync(filePath, 'utf8'), {json: true});
+};
+
 module.exports.getAllData = () => {
     let mainRulesetFile = 'Piratez.rul';
     let langRulesetFile = 'Piratez_lang.rul';
 
     // pull down the ruleset and lang (with str mappings) file from YAML
     let package = require('./package.json');
-    let ruleset = yaml.safeLoad(fs.readFileSync(mainRulesetFile, 'utf8'));
-    let lang = yaml.safeLoad(fs.readFileSync(langRulesetFile, 'utf8'));
+    let xpRuleset = yamlLoad(mainRulesetFile);
+    let xpLang = yamlLoad(langRulesetFile);
 
     // STR_ key map of entries in items (key: type)
-    let itemsByKey = _.chain(ruleset.items).filter(x=>x.type !== undefined).reduce((memo, item) => {
+    let itemsByKey = _.chain(xpRuleset.items).filter(x=>x.type !== undefined).reduce((memo, item) => {
         memo[item.type] = item;
         return memo;
     }, {}).value();
 
     // pass through YAML research one time to build up list,
     // mapping reverse-relationships as we go
-    let researchGN = initializeGraphNodesFromResearchContent(ruleset, lang);
-    let itemGN = addItemsToGraphNodes(ruleset, researchGN.graphNodes, researchGN.reverseRels, lang);
-    let manGN = addManufactureToGraphNodes(ruleset, itemGN.graphNodes, itemGN.reverseRels, lang);
-    let facilitiesGN = addFacilitiesToGraphNodes(ruleset, manGN.graphNodes, manGN.reverseRels, lang);
+    let researchGN = initializeGraphNodesFromResearchContent(xpRuleset, xpLang);
+    let itemGN = addItemsToGraphNodes(xpRuleset, researchGN.graphNodes, researchGN.reverseRels, xpLang);
+    let manGN = addManufactureToGraphNodes(xpRuleset, itemGN.graphNodes, itemGN.reverseRels, xpLang);
+    let facilitiesGN = addFacilitiesToGraphNodes(xpRuleset, manGN.graphNodes, manGN.reverseRels, xpLang);
     remapAllReverseRelationships(facilitiesGN.graphNodes, facilitiesGN.reverseRels);
     let {graphNodes} = facilitiesGN;
 

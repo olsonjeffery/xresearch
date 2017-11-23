@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-let parser = require('../ruleset-parser.js');
+let parser = require('../rulesetParser.js');
 
 const STR_NO_AGGRESSION = 'STR_NO_AGGRESSION';
 const STR_MORTAR = 'STR_MORTAR';

@@ -265,6 +265,7 @@
       STR_DAMAGED_RETURNING_TO_BASE: DAMAGED - RETREATING TO HIDEOUT
       STR_LOW_FUEL_RETURNING_TO_BASE: LOW FUEL - RETURNING TO HIDEOUT
       STR_TAILING_UFO: SHADOWING ENEMY
+      STR_PATROLLING: ANCHORED
       STR_INTERCEPTING_UFO: INTERCEPTING SHIPPING-{0}
       STR_RETURNING_TO_BASE: RETURNING TO HIDEOUT
       STR_RANK_NONE: Auxilia
@@ -615,6 +616,7 @@
       STR_SHOW_QUICK_SEARCH: "Show Quick Search window"
       STR_SHOW_ALL_COMMENDATIONS: "Show All Condemnations"
       STR_REMOVE_WOUNDED_FROM_TRAINING: "Remove wounded Hands from training"
+      STR_TOGGLE_QUICK_SEARCH: "Toggle Quick Search Window"
       STR_TOGGLE_NIGHT_VISION: "Toggle Night Display"
       STR_HOLD_NIGHT_VISION: "Show Night Display"
       STR_AUTO_ASSIGN_PILOTS: "Auto-Assign Pilots"
@@ -965,6 +967,9 @@
       STR_AVATAR_NAME_96: "#96 Wolf"
 #Oharty's Stuff
       STR_NO_LOS_PENALTY: "No Line of Sight! Accuracy halved!"
+      STR_WHITERABBIT_CORPSE: "Dead Rabbit"
+      STR_WHITERABBIT_CLOCK: "Pocket Watch"
+      STR_WHITERABBIT_UFOPEDIA: "{NEWLINE}White rabbits are extradimensional beings, which can be channeled into our world through black cylindrical objects. When we treat them well, they may help us with their incredible time manipulation abilities. Be careful! When attacked, the white rabbits flee into their home dimension by opening a rift portal, which destroys anything in their vicinity.{NEWLINE}NV: 12. DV: 30."
 #Clownagen't Stuff
       STR_WHITERABBIT: "White Rabbit"
       STR_WHITERABBIT_CORPSE: "Dead Rabbit"
@@ -1266,6 +1271,7 @@
       STR_LOC_LOKNAR_VILLAGE_DEFENSE_2_BRIEFING: "We have received a word from Jack that one of Lokk'Naar villages is being attacked by Ratmen raiders. We'll be rewarded in apples and cash for beating them back.{NEWLINE}Weather: Warm. Sea: Normal."
       STR_MISSION_CHURCH_CAMP: "!Neophyte Boot Camp!"
       STR_MISSION_CHURCH_CAMP_UFOPEDIA: "Oi, Cap'n! Raiding these temples is fun, but it gets repetitive, no? We figured out, that since we do train our recruits, so the Church has to run their own courses to whip all these Neophytes into some shape as well. And what does it mean for us? Heaps of guns and free target practice! We'll be on a lookout for these Camps from now on, and get back to you when we find one!"
+      STR_LOC_ATRIUM_CHURCH: Church Boot Camp
       STR_ALERT_CHURCH_CAMP: Church Boot Camp
       STR_CHURCH_CAMP_BRIEFING: "{NEWLINE}The Church of Sirius is training a new batch of fanatics in this jungle camp. Let's show them the error of their ways and loot their weapons!{NEWLINE}Weather: Scorching Hot. Sea: Uneven."
       STR_LOC_BEASTMEN_ALTAR: Blood Rituals

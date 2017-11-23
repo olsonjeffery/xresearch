@@ -1,12 +1,12 @@
 import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import lunr from 'lunr';
 
 import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
 import Constants from './Constants.js';
 import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js';
 import {parseBuildTime} from './Utility.js';
+import {topicsBySearchText} from './PassiveServices.js';
 
 const genericAsideTableBuilder = (thElems, trElemsInput) => {
     var trElems = trElemsInput.length > 0 ?
@@ -112,42 +112,12 @@ var nodeTriviaMapStateToProps = (state, ownProps) => {
 
 var nodeTriviaMapDispatchToProps = () => {return{};};
 
-// FIXME this search stuff should be factored into its own module
-var lunrIndex = null;
-var buildNodeListFromSearch = (searchText) => {
-    if(lunrIndex == null) {
-        lunrIndex = lunr(function() {
-            this.field("name");
-
-            _.each(allResearchData(), x => {
-                var name = x.id;
-                if(x.label != undefined) {
-                    name = x.label.toLowerCase();
-                    this.add({id: x.id, name: x.id});
-                }
-                this.add({id: x.id, name});
-            });
-        });
-    }
-    if (searchText == '') {
-        return [];
-    }
-    var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
-        var targetNode = researchById(x.ref);
-        return {id: x.ref, name: targetNode.label};
-    });
-    if(results.length > 40) {
-        return [];
-    }
-    return results;
-};
-
 const searchResultsMapStateToProps = (state) => {
     var active = state.sidebarMode == Constants.SIDEBAR_MODE_SEARCH_RESULTS;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
-        nodes = buildNodeListFromSearch(state.searchText);
+        nodes = topicsBySearchText(state.searchText);
     }
     return {active, nodes};
 };

@@ -201,11 +201,12 @@ module.exports.getAllData = () => {
 
     // pass through YAML research one time to build up list,
     // mapping reverse-relationships as we go
-    let {graphNodes: initialGraphNodes, reverseRels: initialReverseRels } = initializeGraphNodesFromResearchContent(ruleset, lang);
-    let {graphNodes: graphNodesWithItems, reverseRels: reverseRelsWithItems} = addItemsToGraphNodes(ruleset, initialGraphNodes, initialReverseRels, lang);
-    let { graphNodes: graphNodesWithMan, reverseRels: reverseRelsWithMan } = addManufactureToGraphNodes(ruleset, graphNodesWithItems, reverseRelsWithItems, lang);
-    let {graphNodes, reverseRels} = addFacilitiesToGraphNodes(ruleset, graphNodesWithMan, reverseRelsWithMan, lang);
-    remapAllReverseRelationships(graphNodes, reverseRels);
+    let researchGN = initializeGraphNodesFromResearchContent(ruleset, lang);
+    let itemGN = addItemsToGraphNodes(ruleset, researchGN.graphNodes, researchGN.reverseRels, lang);
+    let manGN = addManufactureToGraphNodes(ruleset, itemGN.graphNodes, itemGN.reverseRels, lang);
+    let facilitiesGN = addFacilitiesToGraphNodes(ruleset, manGN.graphNodes, manGN.reverseRels, lang);
+    remapAllReverseRelationships(facilitiesGN.graphNodes, facilitiesGN.reverseRels);
+    let {graphNodes} = facilitiesGN;
 
     return {
         xpiratezVersion: package.xpiratezVersion,

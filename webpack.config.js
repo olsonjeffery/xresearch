@@ -2,9 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        app: './src/index.js',
+        test_runner: './src/index_test.js'
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'docs')
     },
     devtool: 'source-map',

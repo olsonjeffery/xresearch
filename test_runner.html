@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
 
-        <title>XPiratez Research Tree Explorer</title>
-        <meta name="description" content="XPiratez Research Tree Explorer">
+        <title>Test Runner for XPiratez</title>
+        <meta name="description" content="Test Runner for XPiratez">
         <meta name="author" content="...">
 
         <!--[if lt IE 9]>
@@ -22,20 +22,18 @@
          }
         </style>
 
-        <link rel="stylesheet" href="bootstrap/bootstrap.css">
-        <script src="bootstrap/jquery.min.js"></script>
-        <script src="bootstrap/popper.min.js"></script>
-        <script src="bootstrap/bootstrap.min.js"></script>
+        <script src="mocha.js"></script>
+        <link rel="stylesheet" href="mocha.css">
+        <script>mocha.setup('bdd');</script>
         <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     </head>
     <body>
-        <div id="app-root">
+        <div id="mocha">
         </div>
-        <img id="png-anchor"></div>
         <script type="text/javascript">
          var __xrData = <%= allData %>;
          var __store = {};
         </script>
-        <script type="text/javascript" src="app.bundle.js"></script>
+        <script type="text/javascript" src="test_runner.bundle.js"></script>
     </body>
 </html>

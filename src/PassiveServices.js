@@ -1,5 +1,8 @@
+import lunr from 'lunr';
+
 import Constants from "./Constants.js";
 import {actionViewportChange} from "./StateManagement.js";
+import {allResearchData, researchById} from './XrDataQueries.js';
 
 export const getViewportSize = () => {
     return {
@@ -25,4 +28,34 @@ export const initScrollResetOnNodeSelection = (store) => {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
         }
     });
+};
+
+
+var lunrIndex = null;
+export const topicsBySearchText = (searchText) => {
+    if(lunrIndex == null) {
+        lunrIndex = lunr(function() {
+            this.field("name");
+
+            _.each(allResearchData(), x => {
+                var name = x.id;
+                if(x.label != undefined) {
+                    name = x.label.toLowerCase();
+                    this.add({id: x.id, name: x.id});
+                }
+                this.add({id: x.id, name});
+            });
+        });
+    }
+    if (searchText == '') {
+        return [];
+    }
+    var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
+        var targetNode = researchById(x.ref);
+        return {id: x.ref, name: targetNode.label};
+    });
+    if(results.length > 40) {
+        return [];
+    }
+    return results;
 };

@@ -39,7 +39,8 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** TODO CHANGELOG
-- PENDING [0/18]
+- PENDING [0/19]
+  - [ ] REFACTOR: audit/fix & document relationships across rulesetParser, graph and node list display ::
   - [ ] FEATURE: add graph legend ::
   - [ ] FEATURE: UX overhaul ::
     - [ ] create some mockups
@@ -91,14 +92,9 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.1.0 [3/9]
-  - [ ] introduce unit testing framework ::
-    - [ ] stand up infrastructure
-    - [ ] refactor+test full text init/search
-    - [ ] refactor+test
-  - [ ] FEATURE: add 'X' icon on right side of search bar to clear text ::
+- VERSION 0.1.0 [0/0]
+- [-] FEATURE: add 'X' icon on right side of search bar to clear text ::
   - [ ] FEATURE: use COLOR_ORANGE to manufacturing edges ::
-  - [ ] REFACTOR: move lunr into own module from NodeListComponent.js ::
   - [ ] REFACTOR: remove "sidebar mode" logic in redux state ::
     - [ ] sidebar/aside dispaly is driven off of selected node instead of sidebar-mode hint
     - [ ] sidebar display types:
@@ -112,6 +108,18 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
     - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+  - [X] introduce unit testing framework ::
+    - [X] server-side testing
+      - [X] parser can handle ruleset
+      - [X] parser loads manufacturables
+      - [X] parser loads items
+      - [X] facilities
+      - [X] all relationships
+    - [X] browser testing
+      - [X] lunr module
+      - [X] set up /test handler in express and add test_runner.html
+      - [X] xrdataqueries
+  - [X] REFACTOR: move lunr into own module from NodeListComponent.js ::
   - [X] FEATURE: Mobile UX ::
     - [X] use viewport detection stuff to fork between two different layout arrangements
       - [X] mobile: three rows, top row is just search results, 2nd row is graph, 3rd row is left, then right details

@@ -11,6 +11,9 @@ const STR_BOW_NEON = 'STR_BOW_NEON';
 const STR_ELERIUM_115 = 'STR_ELERIUM_115';
 const STR_RAIDER_SCOUT = 'STR_RAIDER_SCOUT';
 const STR_ALIEN_ORIGINS = 'STR_ALIEN_ORIGINS';
+const STR_PERSONAL_ARMOR = 'STR_PERSONAL_ARMOR';
+const STR_ALIEN_RESEARCH = 'STR_ALIEN_RESEARCH';
+const STR_EXPERIMENT_VICTIM = 'STR_EXPERIMENT_VICTIM';
 
 describe('ruleset-parser', () => {
     describe('when running the total parser', () => {
@@ -36,6 +39,11 @@ describe('ruleset-parser', () => {
             it('should have facility data', () => {
                 let topic = output.graphNodes[STR_GYM_ROOM];
                 expect(topic.costBuild).to.be.a('number');
+            });
+
+            it('should have labels set from lang inputs', () => {
+                let topic = output.graphNodes[STR_EXPERIMENT_VICTIM];
+                expect(topic.label).to.be.equal('Experiment Victim');
             });
         });
 
@@ -85,6 +93,12 @@ describe('ruleset-parser', () => {
             it('requiresBuy', () => {
                 let topic = output.graphNodes[STR_MORTAR];
                 expect(topic.requiresBuy.length).to.not.equal(0);
+            });
+        });
+
+        describe('vanilla content integration', () => {
+            it("should remove unwanted vanilla entries", () => {
+                expect(output.graphNodes[STR_PERSONAL_ARMOR]).to.be.equal(undefined);
             });
         });
     });

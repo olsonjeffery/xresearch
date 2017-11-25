@@ -92,12 +92,13 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
     - use org-mode-parser npm package from within ./ruleset-parser.js
   - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
-- VERSION 0.1.0 [7/8]
-  - [-] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR) ::
+- VERSION 0.1.0 [8/8]
+  - [X] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR) ::
     - [X] make parse not complain w/ loading of unmodified YAML 
-    - [ ] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
+    - [X] write script to pull in all vanilla data into repo alongside Piratez.rul, etc
       - vanilla stuff is at standard\xcom1
-    - [ ] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+    - [X] PARSER: Integrate "vanilla language files" in common/en-US.yml , standard/xcom1/Language , etc for more str keys
+      - [X] API to merge n ruleset branches together (eg research, manufacture, etc)
   - [X] REFACTOR: remove "sidebar mode" logic in redux state ::
   - [X] FEATURE: use COLOR_ORANGE for manufacturing edges ::
   - [X] introduce unit testing framework ::

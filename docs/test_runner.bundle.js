@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 91);
+/******/ 	return __webpack_require__(__webpack_require__.s = 106);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -255,11 +255,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 2 */
 /***/ (function(module, exports) {
 
 var g;
@@ -286,7 +282,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 7 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -317,7 +313,78 @@ const constants ={
 
 
 /***/ }),
-/* 8 */
+/* 4 */
+/***/ (function(module, exports) {
+
+/*!
+ * Chai - flag utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .flag(object, key, [value])
+ *
+ * Get or set a flag value on an object. If a
+ * value is provided it will be set, else it will
+ * return the currently set value or `undefined` if
+ * the value is not set.
+ *
+ *     utils.flag(this, 'foo', 'bar'); // setter
+ *     utils.flag(this, 'foo'); // getter, returns `bar`
+ *
+ * @param {Object} object constructed Assertion
+ * @param {String} key
+ * @param {Mixed} value (optional)
+ * @namespace Utils
+ * @name flag
+ * @api private
+ */
+
+module.exports = function flag(obj, key, value) {
+  var flags = obj.__flags || (obj.__flags = Object.create(null));
+  if (arguments.length === 3) {
+    flags[key] = value;
+  } else {
+    return flags[key];
+  }
+};
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["c"] = researchById;
+/* harmony export (immutable) */ __webpack_exports__["a"] = allResearchData;
+/* harmony export (immutable) */ __webpack_exports__["b"] = isTopicInGraphNodes;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
+
+
+const getXrData = () => {
+    return __xrData;
+};
+
+function researchById(targetId) {
+    var xrData = getXrData();
+    return xrData.graphNodes[targetId];
+};
+
+function allResearchData() {
+    var xrData = getXrData();
+    return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(Reflect.ownKeys(xrData.graphNodes), key => xrData.graphNodes[key]);
+};
+
+function isTopicInGraphNodes(id) {
+    return getXrData().graphNodes[id] ? true : false;
+}
+
+
+/***/ }),
+/* 6 */,
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -327,8 +394,8 @@ const constants ={
 /* harmony export (immutable) */ __webpack_exports__["e"] = nodeSelection;
 /* harmony export (immutable) */ __webpack_exports__["f"] = searchTextChange;
 /* harmony export (immutable) */ __webpack_exports__["d"] = initializeStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constants_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constants_js__ = __webpack_require__(3);
 
 
 
@@ -440,41 +507,605 @@ function initializeStore() {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = researchById;
-/* harmony export (immutable) */ __webpack_exports__["a"] = allResearchData;
-/* harmony export (immutable) */ __webpack_exports__["b"] = isTopicInGraphNodes;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
+/*!
+ * chai
+ * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
 
+var used = [];
 
-const getXrData = () => {
-    return __xrData;
+/*!
+ * Chai version
+ */
+
+exports.version = '4.1.2';
+
+/*!
+ * Assertion Error
+ */
+
+exports.AssertionError = __webpack_require__(61);
+
+/*!
+ * Utils for plugins (not exported)
+ */
+
+var util = __webpack_require__(109);
+
+/**
+ * # .use(function)
+ *
+ * Provides a way to extend the internals of Chai.
+ *
+ * @param {Function}
+ * @returns {this} for chaining
+ * @api public
+ */
+
+exports.use = function (fn) {
+  if (!~used.indexOf(fn)) {
+    fn(exports, util);
+    used.push(fn);
+  }
+
+  return exports;
 };
 
-function researchById(targetId) {
-    var xrData = getXrData();
-    return xrData.graphNodes[targetId];
-};
+/*!
+ * Utility Functions
+ */
 
-function allResearchData() {
-    var xrData = getXrData();
-    return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(Reflect.ownKeys(xrData.graphNodes), key => xrData.graphNodes[key]);
-};
+exports.util = util;
 
-function isTopicInGraphNodes(id) {
-    return getXrData().graphNodes[id] ? true : false;
-}
+/*!
+ * Configuration
+ */
+
+var config = __webpack_require__(12);
+exports.config = config;
+
+/*!
+ * Primary `Assertion` prototype
+ */
+
+var assertion = __webpack_require__(126);
+exports.use(assertion);
+
+/*!
+ * Core Assertions
+ */
+
+var core = __webpack_require__(127);
+exports.use(core);
+
+/*!
+ * Expect interface
+ */
+
+var expect = __webpack_require__(128);
+exports.use(expect);
+
+/*!
+ * Should interface
+ */
+
+var should = __webpack_require__(129);
+exports.use(should);
+
+/*!
+ * Assert interface
+ */
+
+var assert = __webpack_require__(130);
+exports.use(assert);
 
 
 /***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */,
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = {
+
+  /**
+   * ### config.includeStack
+   *
+   * User configurable property, influences whether stack trace
+   * is included in Assertion error message. Default of false
+   * suppresses stack trace in the error message.
+   *
+   *     chai.config.includeStack = true;  // enable stack on error
+   *
+   * @param {Boolean}
+   * @api public
+   */
+
+  includeStack: false,
+
+  /**
+   * ### config.showDiff
+   *
+   * User configurable property, influences whether or not
+   * the `showDiff` flag should be included in the thrown
+   * AssertionErrors. `false` will always be `false`; `true`
+   * will be true when the assertion has requested a diff
+   * be shown.
+   *
+   * @param {Boolean}
+   * @api public
+   */
+
+  showDiff: true,
+
+  /**
+   * ### config.truncateThreshold
+   *
+   * User configurable property, sets length threshold for actual and
+   * expected values in assertion errors. If this threshold is exceeded, for
+   * example for large data structures, the value is replaced with something
+   * like `[ Array(3) ]` or `{ Object (prop1, prop2) }`.
+   *
+   * Set it to zero if you want to disable truncating altogether.
+   *
+   * This is especially userful when doing assertions on arrays: having this
+   * set to a reasonable large value makes the failure messages readily
+   * inspectable.
+   *
+   *     chai.config.truncateThreshold = 0;  // disable truncating
+   *
+   * @param {Number}
+   * @api public
+   */
+
+  truncateThreshold: 40,
+
+  /**
+   * ### config.useProxy
+   *
+   * User configurable property, defines if chai will use a Proxy to throw
+   * an error when a non-existent property is read, which protects users
+   * from typos when using property-based assertions.
+   *
+   * Set it to false if you want to disable this feature.
+   *
+   *     chai.config.useProxy = false;  // disable use of Proxy
+   *
+   * This feature is automatically disabled regardless of this config value
+   * in environments that don't support proxies.
+   *
+   * @param {Boolean}
+   * @api public
+   */
+
+  useProxy: true,
+
+  /**
+   * ### config.proxyExcludedKeys
+   *
+   * User configurable property, defines which properties should be ignored
+   * instead of throwing an error if they do not exist on the assertion.
+   * This is only applied if the environment Chai is running in supports proxies and
+   * if the `useProxy` configuration setting is enabled.
+   * By default, `then` and `inspect` will not throw an error if they do not exist on the
+   * assertion object because the `.inspect` property is read by `util.inspect` (for example, when
+   * using `console.log` on the assertion object) and `.then` is necessary for promise type-checking.
+   *
+   *     // By default these keys will not throw an error if they do not exist on the assertion object
+   *     chai.config.proxyExcludedKeys = ['then', 'inspect'];
+   *
+   * @param {Array}
+   * @api public
+   */
+
+  proxyExcludedKeys: ['then', 'inspect', 'toJSON']
+};
+
+
+/***/ }),
 /* 13 */
+/***/ (function(module, exports) {
+
+/*!
+ * Chai - transferFlags utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .transferFlags(assertion, object, includeAll = true)
+ *
+ * Transfer all the flags for `assertion` to `object`. If
+ * `includeAll` is set to `false`, then the base Chai
+ * assertion flags (namely `object`, `ssfi`, `lockSsfi`,
+ * and `message`) will not be transferred.
+ *
+ *
+ *     var newAssertion = new Assertion();
+ *     utils.transferFlags(assertion, newAssertion);
+ *
+ *     var anotherAsseriton = new Assertion(myObj);
+ *     utils.transferFlags(assertion, anotherAssertion, false);
+ *
+ * @param {Assertion} assertion the assertion to transfer the flags from
+ * @param {Object} object the object to transfer the flags to; usually a new assertion
+ * @param {Boolean} includeAll
+ * @namespace Utils
+ * @name transferFlags
+ * @api private
+ */
+
+module.exports = function transferFlags(assertion, object, includeAll) {
+  var flags = assertion.__flags || (assertion.__flags = Object.create(null));
+
+  if (!object.__flags) {
+    object.__flags = Object.create(null);
+  }
+
+  includeAll = arguments.length === 3 ? includeAll : true;
+
+  for (var flag in flags) {
+    if (includeAll ||
+        (flag !== 'object' && flag !== 'ssfi' && flag !== 'lockSsfi' && flag != 'message')) {
+      object.__flags[flag] = flags[flag];
+    }
+  }
+};
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(40);
+
+
+
+
+/** `Object#toString` result references. */
+var objectTag = '[object Object]';
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype,
+    objectProto = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Used to infer the `Object` constructor. */
+var objectCtorString = funcToString.call(Object);
+
+/**
+ * Checks if `value` is a plain object, that is, an object created by the
+ * `Object` constructor or one with a `[[Prototype]]` of `null`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.8.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ * }
+ *
+ * _.isPlainObject(new Foo);
+ * // => false
+ *
+ * _.isPlainObject([1, 2, 3]);
+ * // => false
+ *
+ * _.isPlainObject({ 'x': 0, 'y': 0 });
+ * // => true
+ *
+ * _.isPlainObject(Object.create(null));
+ * // => true
+ */
+function isPlainObject(value) {
+  if (!Object(__WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__["a" /* default */])(value) || Object(__WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__["a" /* default */])(value) != objectTag) {
+    return false;
+  }
+  var proto = Object(__WEBPACK_IMPORTED_MODULE_1__getPrototype_js__["a" /* default */])(value);
+  if (proto === null) {
+    return true;
+  }
+  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+    funcToString.call(Ctor) == objectCtorString;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (isPlainObject);
+
+
+/***/ }),
+/* 15 */,
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
+/* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
+
+
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var ActionTypes = {
+  INIT: '@@redux/INIT'
+
+  /**
+   * Creates a Redux store that holds the state tree.
+   * The only way to change the data in the store is to call `dispatch()` on it.
+   *
+   * There should only be a single store in your app. To specify how different
+   * parts of the state tree respond to actions, you may combine several reducers
+   * into a single reducer function by using `combineReducers`.
+   *
+   * @param {Function} reducer A function that returns the next state tree, given
+   * the current state tree and the action to handle.
+   *
+   * @param {any} [preloadedState] The initial state. You may optionally specify it
+   * to hydrate the state from the server in universal apps, or to restore a
+   * previously serialized user session.
+   * If you use `combineReducers` to produce the root reducer function, this must be
+   * an object with the same shape as `combineReducers` keys.
+   *
+   * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+   * to enhance the store with third-party capabilities such as middleware,
+   * time travel, persistence, etc. The only store enhancer that ships with Redux
+   * is `applyMiddleware()`.
+   *
+   * @returns {Store} A Redux store that lets you read the state, dispatch actions
+   * and subscribe to changes.
+   */
+};function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+  function getState() {
+    return currentState;
+  }
+
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected listener to be a function.');
+    }
+
+    var isSubscribed = true;
+
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      isSubscribed = false;
+
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+  function dispatch(action) {
+    if (!Object(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({ type: ActionTypes.INIT });
+  }
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object') {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return { unsubscribe: unsubscribe };
+      }
+    }, _ref[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = function () {
+      return this;
+    }, _ref;
+  }
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+  dispatch({ type: ActionTypes.INIT });
+
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = observable, _ref2;
+}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(34);
+
+
+/** Built-in value references. */
+var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
+
+/* harmony default export */ __webpack_exports__["a"] = (Symbol);
+
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -502,7 +1133,112 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 14 */
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = compose;
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+
+function compose() {
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(undefined, arguments));
+    };
+  });
+}
+
+/***/ }),
+/* 21 */,
+/* 22 */,
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(19);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
+/* unused harmony reexport applyMiddleware */
+/* unused harmony reexport compose */
+
+
+
+
+
+
+
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
+function isCrushed() {}
+
+if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  Object(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17591,491 +18327,718 @@ module.exports = function(module) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(13)(module)))
-
-/***/ }),
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(55);
-
-
-
-
-/** `Object#toString` result references. */
-var objectTag = '[object Object]';
-
-/** Used for built-in method references. */
-var funcProto = Function.prototype,
-    objectProto = Object.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var funcToString = funcProto.toString;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/** Used to infer the `Object` constructor. */
-var objectCtorString = funcToString.call(Object);
-
-/**
- * Checks if `value` is a plain object, that is, an object created by the
- * `Object` constructor or one with a `[[Prototype]]` of `null`.
- *
- * @static
- * @memberOf _
- * @since 0.8.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- * }
- *
- * _.isPlainObject(new Foo);
- * // => false
- *
- * _.isPlainObject([1, 2, 3]);
- * // => false
- *
- * _.isPlainObject({ 'x': 0, 'y': 0 });
- * // => true
- *
- * _.isPlainObject(Object.create(null));
- * // => true
- */
-function isPlainObject(value) {
-  if (!Object(__WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__["a" /* default */])(value) || Object(__WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__["a" /* default */])(value) != objectTag) {
-    return false;
-  }
-  var proto = Object(__WEBPACK_IMPORTED_MODULE_1__getPrototype_js__["a" /* default */])(value);
-  if (proto === null) {
-    return true;
-  }
-  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
-    funcToString.call(Ctor) == objectCtorString;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (isPlainObject);
-
-
-/***/ }),
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(25);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
-/* unused harmony reexport applyMiddleware */
-/* unused harmony reexport compose */
-
-
-
-
-
-
-
-/*
-* This is a dummy function to check if the function name has been altered by minification.
-* If the function has been minified and NODE_ENV !== 'production', warn the user.
-*/
-function isCrushed() {}
-
-if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
-  Object(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
-}
-
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
-/* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
-
-
-
-/**
- * These are private action types reserved by Redux.
- * For any unknown actions, you must return the current state.
- * If the current state is undefined, you must return the initial state.
- * Do not reference these action types directly in your code.
- */
-var ActionTypes = {
-  INIT: '@@redux/INIT'
-
-  /**
-   * Creates a Redux store that holds the state tree.
-   * The only way to change the data in the store is to call `dispatch()` on it.
-   *
-   * There should only be a single store in your app. To specify how different
-   * parts of the state tree respond to actions, you may combine several reducers
-   * into a single reducer function by using `combineReducers`.
-   *
-   * @param {Function} reducer A function that returns the next state tree, given
-   * the current state tree and the action to handle.
-   *
-   * @param {any} [preloadedState] The initial state. You may optionally specify it
-   * to hydrate the state from the server in universal apps, or to restore a
-   * previously serialized user session.
-   * If you use `combineReducers` to produce the root reducer function, this must be
-   * an object with the same shape as `combineReducers` keys.
-   *
-   * @param {Function} [enhancer] The store enhancer. You may optionally specify it
-   * to enhance the store with third-party capabilities such as middleware,
-   * time travel, persistence, etc. The only store enhancer that ships with Redux
-   * is `applyMiddleware()`.
-   *
-   * @returns {Store} A Redux store that lets you read the state, dispatch actions
-   * and subscribe to changes.
-   */
-};function createStore(reducer, preloadedState, enhancer) {
-  var _ref2;
-
-  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState;
-    preloadedState = undefined;
-  }
-
-  if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
-      throw new Error('Expected the enhancer to be a function.');
-    }
-
-    return enhancer(createStore)(reducer, preloadedState);
-  }
-
-  if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function.');
-  }
-
-  var currentReducer = reducer;
-  var currentState = preloadedState;
-  var currentListeners = [];
-  var nextListeners = currentListeners;
-  var isDispatching = false;
-
-  function ensureCanMutateNextListeners() {
-    if (nextListeners === currentListeners) {
-      nextListeners = currentListeners.slice();
-    }
-  }
-
-  /**
-   * Reads the state tree managed by the store.
-   *
-   * @returns {any} The current state tree of your application.
-   */
-  function getState() {
-    return currentState;
-  }
-
-  /**
-   * Adds a change listener. It will be called any time an action is dispatched,
-   * and some part of the state tree may potentially have changed. You may then
-   * call `getState()` to read the current state tree inside the callback.
-   *
-   * You may call `dispatch()` from a change listener, with the following
-   * caveats:
-   *
-   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
-   * If you subscribe or unsubscribe while the listeners are being invoked, this
-   * will not have any effect on the `dispatch()` that is currently in progress.
-   * However, the next `dispatch()` call, whether nested or not, will use a more
-   * recent snapshot of the subscription list.
-   *
-   * 2. The listener should not expect to see all state changes, as the state
-   * might have been updated multiple times during a nested `dispatch()` before
-   * the listener is called. It is, however, guaranteed that all subscribers
-   * registered before the `dispatch()` started will be called with the latest
-   * state by the time it exits.
-   *
-   * @param {Function} listener A callback to be invoked on every dispatch.
-   * @returns {Function} A function to remove this change listener.
-   */
-  function subscribe(listener) {
-    if (typeof listener !== 'function') {
-      throw new Error('Expected listener to be a function.');
-    }
-
-    var isSubscribed = true;
-
-    ensureCanMutateNextListeners();
-    nextListeners.push(listener);
-
-    return function unsubscribe() {
-      if (!isSubscribed) {
-        return;
-      }
-
-      isSubscribed = false;
-
-      ensureCanMutateNextListeners();
-      var index = nextListeners.indexOf(listener);
-      nextListeners.splice(index, 1);
-    };
-  }
-
-  /**
-   * Dispatches an action. It is the only way to trigger a state change.
-   *
-   * The `reducer` function, used to create the store, will be called with the
-   * current state tree and the given `action`. Its return value will
-   * be considered the **next** state of the tree, and the change listeners
-   * will be notified.
-   *
-   * The base implementation only supports plain object actions. If you want to
-   * dispatch a Promise, an Observable, a thunk, or something else, you need to
-   * wrap your store creating function into the corresponding middleware. For
-   * example, see the documentation for the `redux-thunk` package. Even the
-   * middleware will eventually dispatch plain object actions using this method.
-   *
-   * @param {Object} action A plain object representing “what changed”. It is
-   * a good idea to keep actions serializable so you can record and replay user
-   * sessions, or use the time travelling `redux-devtools`. An action must have
-   * a `type` property which may not be `undefined`. It is a good idea to use
-   * string constants for action types.
-   *
-   * @returns {Object} For convenience, the same action object you dispatched.
-   *
-   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
-   * return something else (for example, a Promise you can await).
-   */
-  function dispatch(action) {
-    if (!Object(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(action)) {
-      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
-    }
-
-    if (typeof action.type === 'undefined') {
-      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
-    }
-
-    if (isDispatching) {
-      throw new Error('Reducers may not dispatch actions.');
-    }
-
-    try {
-      isDispatching = true;
-      currentState = currentReducer(currentState, action);
-    } finally {
-      isDispatching = false;
-    }
-
-    var listeners = currentListeners = nextListeners;
-    for (var i = 0; i < listeners.length; i++) {
-      var listener = listeners[i];
-      listener();
-    }
-
-    return action;
-  }
-
-  /**
-   * Replaces the reducer currently used by the store to calculate the state.
-   *
-   * You might need this if your app implements code splitting and you want to
-   * load some of the reducers dynamically. You might also need this if you
-   * implement a hot reloading mechanism for Redux.
-   *
-   * @param {Function} nextReducer The reducer for the store to use instead.
-   * @returns {void}
-   */
-  function replaceReducer(nextReducer) {
-    if (typeof nextReducer !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.');
-    }
-
-    currentReducer = nextReducer;
-    dispatch({ type: ActionTypes.INIT });
-  }
-
-  /**
-   * Interoperability point for observable/reactive libraries.
-   * @returns {observable} A minimal observable of state changes.
-   * For more information, see the observable proposal:
-   * https://github.com/tc39/proposal-observable
-   */
-  function observable() {
-    var _ref;
-
-    var outerSubscribe = subscribe;
-    return _ref = {
-      /**
-       * The minimal observable subscription method.
-       * @param {Object} observer Any object that can be used as an observer.
-       * The observer object should have a `next` method.
-       * @returns {subscription} An object with an `unsubscribe` method that can
-       * be used to unsubscribe the observable from the store, and prevent further
-       * emission of values from the observable.
-       */
-      subscribe: function subscribe(observer) {
-        if (typeof observer !== 'object') {
-          throw new TypeError('Expected the observer to be an object.');
-        }
-
-        function observeState() {
-          if (observer.next) {
-            observer.next(getState());
-          }
-        }
-
-        observeState();
-        var unsubscribe = outerSubscribe(observeState);
-        return { unsubscribe: unsubscribe };
-      }
-    }, _ref[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = function () {
-      return this;
-    }, _ref;
-  }
-
-  // When a store is created, an "INIT" action is dispatched so that every
-  // reducer returns their initial state. This effectively populates
-  // the initial state tree.
-  dispatch({ type: ActionTypes.INIT });
-
-  return _ref2 = {
-    dispatch: dispatch,
-    subscribe: subscribe,
-    getState: getState,
-    replaceReducer: replaceReducer
-  }, _ref2[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = observable, _ref2;
-}
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(49);
-
-
-/** Built-in value references. */
-var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
-
-/* harmony default export */ __webpack_exports__["a"] = (Symbol);
-
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(18)(module)))
 
 /***/ }),
 /* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
-/**
- * Prints a warning in the console if it exists.
- *
- * @param {String} message The warning message.
- * @returns {void}
- */
-function warning(message) {
-  /* eslint-disable no-console */
-  if (typeof console !== 'undefined' && typeof console.error === 'function') {
-    console.error(message);
-  }
-  /* eslint-enable no-console */
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(message);
-    /* eslint-disable no-empty */
-  } catch (e) {}
-  /* eslint-enable no-empty */
-}
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lunr__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lunr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lunr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constants_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__StateManagement_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__ = __webpack_require__(5);
+
+
+
+
+
+
+const getViewportSize = () => {
+    return {
+        width: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+        height: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+    };
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = getViewportSize;
+
+
+const initViewportChangeListener = (store) => {
+    window.addEventListener("resize", () => {
+        var newViewport = getViewportSize();
+        store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_2__StateManagement_js__["a" /* actionViewportChange */])(newViewport));
+    });
+};
+/* harmony export (immutable) */ __webpack_exports__["c"] = initViewportChangeListener;
+
+
+let prevSelectedNodeId = null;
+const initScrollResetOnNodeSelection = (store) => {
+    store.subscribe(() => {
+        var state = store.getState();
+        var newSelectedNodeId = state.selectedNodeId;
+        if(newSelectedNodeId != prevSelectedNodeId) {
+            prevSelectedNodeId = newSelectedNodeId;
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        }
+    });
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = initScrollResetOnNodeSelection;
+
+
+
+var lunrIndex = null;
+const topicsBySearchText = (searchText) => {
+    if(lunrIndex == null) {
+        lunrIndex = __WEBPACK_IMPORTED_MODULE_0_lunr___default()(function() {
+            this.field("name");
+
+            _.each(Object(__WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__["a" /* allResearchData */])(), x => {
+                var name = x.id;
+                if(x.label != undefined) {
+                    name = x.label.toLowerCase();
+                    this.add({id: x.id, name: x.id});
+                }
+                this.add({id: x.id, name});
+            });
+        });
+    }
+    if (searchText == '') {
+        return [];
+    }
+    var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
+        var targetNode = Object(__WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__["c" /* researchById */])(x.ref);
+        return {id: x.ref, name: targetNode.label};
+    });
+    if(results.length > 40) {
+        return [];
+    }
+    return results;
+};
+/* harmony export (immutable) */ __webpack_exports__["d"] = topicsBySearchText;
+
+
 
 /***/ }),
 /* 26 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = compose;
+// This is (almost) directly from Node.js utils
+// https://github.com/joyent/node/blob/f8c335d0caf47f16d31413f89aa28eda3878e3aa/lib/util.js
+
+var getName = __webpack_require__(63);
+var getProperties = __webpack_require__(64);
+var getEnumerableProperties = __webpack_require__(114);
+var config = __webpack_require__(12);
+
+module.exports = inspect;
+
 /**
- * Composes single-argument functions from right to left. The rightmost
- * function can take multiple arguments as it provides the signature for
- * the resulting composite function.
+ * ### .inspect(obj, [showHidden], [depth], [colors])
  *
- * @param {...Function} funcs The functions to compose.
- * @returns {Function} A function obtained by composing the argument functions
- * from right to left. For example, compose(f, g, h) is identical to doing
- * (...args) => f(g(h(...args))).
+ * Echoes the value of a value. Tries to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Boolean} showHidden Flag that shows hidden (not enumerable)
+ *    properties of objects. Default is false.
+ * @param {Number} depth Depth in which to descend in object. Default is 2.
+ * @param {Boolean} colors Flag to turn on ANSI escape codes to color the
+ *    output. Default is false (no coloring).
+ * @namespace Utils
+ * @name inspect
  */
-
-function compose() {
-  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
-    funcs[_key] = arguments[_key];
-  }
-
-  if (funcs.length === 0) {
-    return function (arg) {
-      return arg;
-    };
-  }
-
-  if (funcs.length === 1) {
-    return funcs[0];
-  }
-
-  return funcs.reduce(function (a, b) {
-    return function () {
-      return a(b.apply(undefined, arguments));
-    };
-  });
+function inspect(obj, showHidden, depth, colors) {
+  var ctx = {
+    showHidden: showHidden,
+    seen: [],
+    stylize: function (str) { return str; }
+  };
+  return formatValue(ctx, obj, (typeof depth === 'undefined' ? 2 : depth));
 }
 
+// Returns true if object is a DOM element.
+var isDOMElement = function (object) {
+  if (typeof HTMLElement === 'object') {
+    return object instanceof HTMLElement;
+  } else {
+    return object &&
+      typeof object === 'object' &&
+      'nodeType' in object &&
+      object.nodeType === 1 &&
+      typeof object.nodeName === 'string';
+  }
+};
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (value && typeof value.inspect === 'function' &&
+      // Filter out the util module, it's inspect function is special
+      value.inspect !== exports.inspect &&
+      // Also filter out any prototype objects using the circular check.
+      !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+    if (typeof ret !== 'string') {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+    return ret;
+  }
+
+  // Primitive types cannot have properties
+  var primitive = formatPrimitive(ctx, value);
+  if (primitive) {
+    return primitive;
+  }
+
+  // If this is a DOM element, try to get the outer HTML.
+  if (isDOMElement(value)) {
+    if ('outerHTML' in value) {
+      return value.outerHTML;
+      // This value does not have an outerHTML attribute,
+      //   it could still be an XML element
+    } else {
+      // Attempt to serialize it
+      try {
+        if (document.xmlVersion) {
+          var xmlSerializer = new XMLSerializer();
+          return xmlSerializer.serializeToString(value);
+        } else {
+          // Firefox 11- do not support outerHTML
+          //   It does, however, support innerHTML
+          //   Use the following to render the element
+          var ns = "http://www.w3.org/1999/xhtml";
+          var container = document.createElementNS(ns, '_');
+
+          container.appendChild(value.cloneNode(false));
+          var html = container.innerHTML
+            .replace('><', '>' + value.innerHTML + '<');
+          container.innerHTML = '';
+          return html;
+        }
+      } catch (err) {
+        // This could be a non-native DOM implementation,
+        //   continue with the normal flow:
+        //   printing the element as if it is an object.
+      }
+    }
+  }
+
+  // Look up the keys of the object.
+  var visibleKeys = getEnumerableProperties(value);
+  var keys = ctx.showHidden ? getProperties(value) : visibleKeys;
+
+  var name, nameSuffix;
+
+  // Some type of object without properties can be shortcutted.
+  // In IE, errors have a single `stack` property, or if they are vanilla `Error`,
+  // a `stack` plus `description` property; ignore those for consistency.
+  if (keys.length === 0 || (isError(value) && (
+      (keys.length === 1 && keys[0] === 'stack') ||
+      (keys.length === 2 && keys[0] === 'description' && keys[1] === 'stack')
+     ))) {
+    if (typeof value === 'function') {
+      name = getName(value);
+      nameSuffix = name ? ': ' + name : '';
+      return ctx.stylize('[Function' + nameSuffix + ']', 'special');
+    }
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toUTCString.call(value), 'date');
+    }
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = ''
+    , array = false
+    , typedArray = false
+    , braces = ['{', '}'];
+
+  if (isTypedArray(value)) {
+    typedArray = true;
+    braces = ['[', ']'];
+  }
+
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  }
+
+  // Make functions say that they are functions
+  if (typeof value === 'function') {
+    name = getName(value);
+    nameSuffix = name ? ': ' + name : '';
+    base = ' [Function' + nameSuffix + ']';
+  }
+
+  // Make RegExps say that they are RegExps
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  }
+
+  // Make dates with properties first say the date
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  }
+
+  // Make error with message first say the error
+  if (isError(value)) {
+    return formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else if (typedArray) {
+    return formatTypedArray(value);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+
+  return reduceToSingleString(output, base, braces);
+}
+
+
+function formatPrimitive(ctx, value) {
+  switch (typeof value) {
+    case 'undefined':
+      return ctx.stylize('undefined', 'undefined');
+
+    case 'string':
+      var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+                                               .replace(/'/g, "\\'")
+                                               .replace(/\\"/g, '"') + '\'';
+      return ctx.stylize(simple, 'string');
+
+    case 'number':
+      if (value === 0 && (1/value) === -Infinity) {
+        return ctx.stylize('-0', 'number');
+      }
+      return ctx.stylize('' + value, 'number');
+
+    case 'boolean':
+      return ctx.stylize('' + value, 'boolean');
+
+    case 'symbol':
+      return ctx.stylize(value.toString(), 'symbol');
+  }
+  // For some reason typeof null is "object", so special case here.
+  if (value === null) {
+    return ctx.stylize('null', 'null');
+  }
+}
+
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (Object.prototype.hasOwnProperty.call(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+
+  keys.forEach(function(key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          key, true));
+    }
+  });
+  return output;
+}
+
+function formatTypedArray(value) {
+  var str = '[ ';
+
+  for (var i = 0; i < value.length; ++i) {
+    if (str.length >= config.truncateThreshold - 7) {
+      str += '...';
+      break;
+    }
+    str += value[i] + ', ';
+  }
+  str += ' ]';
+
+  // Removing trailing `, ` if the array was not truncated
+  if (str.indexOf(',  ]') !== -1) {
+    str = str.replace(',  ]', ' ]');
+  }
+
+  return str;
+}
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name;
+  var propDescriptor = Object.getOwnPropertyDescriptor(value, key);
+  var str;
+
+  if (propDescriptor) {
+    if (propDescriptor.get) {
+      if (propDescriptor.set) {
+        str = ctx.stylize('[Getter/Setter]', 'special');
+      } else {
+        str = ctx.stylize('[Getter]', 'special');
+      }
+    } else {
+      if (propDescriptor.set) {
+        str = ctx.stylize('[Setter]', 'special');
+      }
+    }
+  }
+  if (visibleKeys.indexOf(key) < 0) {
+    name = '[' + key + ']';
+  }
+  if (!str) {
+    if (ctx.seen.indexOf(value[key]) < 0) {
+      if (recurseTimes === null) {
+        str = formatValue(ctx, value[key], null);
+      } else {
+        str = formatValue(ctx, value[key], recurseTimes - 1);
+      }
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function(line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function(line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+  if (typeof name === 'undefined') {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+    name = JSON.stringify('' + key);
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'")
+                 .replace(/\\"/g, '"')
+                 .replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function(prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] +
+           (base === '' ? '' : base + '\n ') +
+           ' ' +
+           output.join(',\n  ') +
+           ' ' +
+           braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+}
+
+function isTypedArray(ar) {
+  // Unfortunately there's no way to check if an object is a TypedArray
+  // We have to check if it's one of these types
+  return (typeof ar === 'object' && /\w+Array]$/.test(objectToString(ar)));
+}
+
+function isArray(ar) {
+  return Array.isArray(ar) ||
+         (typeof ar === 'object' && objectToString(ar) === '[object Array]');
+}
+
+function isRegExp(re) {
+  return typeof re === 'object' && objectToString(re) === '[object RegExp]';
+}
+
+function isDate(d) {
+  return typeof d === 'object' && objectToString(d) === '[object Date]';
+}
+
+function isError(e) {
+  return typeof e === 'object' && objectToString(e) === '[object Error]';
+}
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+
 /***/ }),
-/* 27 */,
-/* 28 */,
-/* 29 */,
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = __webpack_require__(12);
+
+/*!
+ * Chai - isProxyEnabled helper
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .isProxyEnabled()
+ *
+ * Helper function to check if Chai's proxy protection feature is enabled. If
+ * proxies are unsupported or disabled via the user's Chai config, then return
+ * false. Otherwise, return true.
+ *
+ * @namespace Utils
+ * @name isProxyEnabled
+ */
+
+module.exports = function isProxyEnabled() {
+  return config.useProxy && 
+    typeof Proxy !== 'undefined' &&
+    typeof Reflect !== 'undefined';
+};
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = __webpack_require__(12);
+
+var fnLengthDesc = Object.getOwnPropertyDescriptor(function () {}, 'length');
+
+/*!
+ * Chai - addLengthGuard utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .addLengthGuard(fn, assertionName, isChainable)
+ *
+ * Define `length` as a getter on the given uninvoked method assertion. The
+ * getter acts as a guard against chaining `length` directly off of an uninvoked
+ * method assertion, which is a problem because it references `function`'s
+ * built-in `length` property instead of Chai's `length` assertion. When the
+ * getter catches the user making this mistake, it throws an error with a
+ * helpful message.
+ *
+ * There are two ways in which this mistake can be made. The first way is by
+ * chaining the `length` assertion directly off of an uninvoked chainable
+ * method. In this case, Chai suggests that the user use `lengthOf` instead. The
+ * second way is by chaining the `length` assertion directly off of an uninvoked
+ * non-chainable method. Non-chainable methods must be invoked prior to
+ * chaining. In this case, Chai suggests that the user consult the docs for the
+ * given assertion.
+ *
+ * If the `length` property of functions is unconfigurable, then return `fn`
+ * without modification.
+ *
+ * Note that in ES6, the function's `length` property is configurable, so once
+ * support for legacy environments is dropped, Chai's `length` property can
+ * replace the built-in function's `length` property, and this length guard will
+ * no longer be necessary. In the mean time, maintaining consistency across all
+ * environments is the priority.
+ *
+ * @param {Function} fn
+ * @param {String} assertionName
+ * @param {Boolean} isChainable
+ * @namespace Utils
+ * @name addLengthGuard
+ */
+
+module.exports = function addLengthGuard (fn, assertionName, isChainable) {
+  if (!fnLengthDesc.configurable) return fn;
+
+  Object.defineProperty(fn, 'length', {
+    get: function () {
+      if (isChainable) {
+        throw Error('Invalid Chai property: ' + assertionName + '.length. Due' +
+          ' to a compatibility issue, "length" cannot directly follow "' +
+          assertionName + '". Use "' + assertionName + '.lengthOf" instead.');
+      }
+
+      throw Error('Invalid Chai property: ' + assertionName + '.length. See' +
+        ' docs for proper usage of "' + assertionName + '".');
+    }
+  });
+
+  return fn;
+};
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = __webpack_require__(12);
+var flag = __webpack_require__(4);
+var getProperties = __webpack_require__(64);
+var isProxyEnabled = __webpack_require__(27);
+
+/*!
+ * Chai - proxify utility
+ * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
+ * MIT Licensed
+ */
+
+/**
+ * ### .proxify(object)
+ *
+ * Return a proxy of given object that throws an error when a non-existent
+ * property is read. By default, the root cause is assumed to be a misspelled
+ * property, and thus an attempt is made to offer a reasonable suggestion from
+ * the list of existing properties. However, if a nonChainableMethodName is
+ * provided, then the root cause is instead a failure to invoke a non-chainable
+ * method prior to reading the non-existent property.
+ * 
+ * If proxies are unsupported or disabled via the user's Chai config, then
+ * return object without modification.
+ *
+ * @param {Object} obj
+ * @param {String} nonChainableMethodName
+ * @namespace Utils
+ * @name proxify
+ */
+
+var builtins = ['__flags', '__methods', '_obj', 'assert'];
+
+module.exports = function proxify(obj, nonChainableMethodName) {
+  if (!isProxyEnabled()) return obj;
+
+  return new Proxy(obj, {
+    get: function proxyGetter(target, property) {
+      // This check is here because we should not throw errors on Symbol properties
+      // such as `Symbol.toStringTag`.
+      // The values for which an error should be thrown can be configured using
+      // the `config.proxyExcludedKeys` setting.
+      if (typeof property === 'string' &&
+          config.proxyExcludedKeys.indexOf(property) === -1 &&
+          !Reflect.has(target, property)) {
+        // Special message for invalid property access of non-chainable methods.
+        if (nonChainableMethodName) {
+          throw Error('Invalid Chai property: ' + nonChainableMethodName + '.' +
+            property + '. See docs for proper usage of "' +
+            nonChainableMethodName + '".');
+        }
+
+        var orderedProperties = getProperties(target).filter(function(property) {
+          return !Object.prototype.hasOwnProperty(property) &&
+            builtins.indexOf(property) === -1;
+        }).sort(function(a, b) {
+          return stringDistance(property, a) - stringDistance(property, b);
+        });
+
+        if (orderedProperties.length &&
+            stringDistance(orderedProperties[0], property) < 4) {
+          // If the property is reasonably close to an existing Chai property,
+          // suggest that property to the user.
+          throw Error('Invalid Chai property: ' + property +
+            '. Did you mean "' + orderedProperties[0] + '"?');
+        } else {
+          throw Error('Invalid Chai property: ' + property);
+        }
+      }
+
+      // Use this proxy getter as the starting point for removing implementation
+      // frames from the stack trace of a failed assertion. For property
+      // assertions, this prevents the proxy getter from showing up in the stack
+      // trace since it's invoked before the property getter. For method and
+      // chainable method assertions, this flag will end up getting changed to
+      // the method wrapper, which is good since this frame will no longer be in
+      // the stack once the method is invoked. Note that Chai builtin assertion
+      // properties such as `__flags` are skipped since this is only meant to
+      // capture the starting point of an assertion. This step is also skipped
+      // if the `lockSsfi` flag is set, thus indicating that this assertion is
+      // being called from within another assertion. In that case, the `ssfi`
+      // flag is already set to the outer assertion's starting point.
+      if (builtins.indexOf(property) === -1 && !flag(target, 'lockSsfi')) {
+        flag(target, 'ssfi', proxyGetter);
+      }
+
+      return Reflect.get(target, property);
+    }
+  });
+};
+
+/**
+ * # stringDistance(strA, strB)
+ * Return the Levenshtein distance between two strings.
+ * @param {string} strA
+ * @param {string} strB
+ * @return {number} the string distance between strA and strB
+ * @api private
+ */
+
+function stringDistance(strA, strB, memo) {
+  if (!memo) {
+    // `memo` is a two-dimensional array containing a cache of distances
+    // memo[i][j] is the distance between strA.slice(0, i) and
+    // strB.slice(0, j).
+    memo = [];
+    for (var i = 0; i <= strA.length; i++) {
+      memo[i] = [];
+    }
+  }
+
+  if (!memo[strA.length] || !memo[strA.length][strB.length]) {
+    if (strA.length === 0 || strB.length === 0) {
+      memo[strA.length][strB.length] = Math.max(strA.length, strB.length);
+    } else {
+      memo[strA.length][strB.length] = Math.min(
+        stringDistance(strA.slice(0, -1), strB, memo) + 1,
+        stringDistance(strA, strB.slice(0, -1), memo) + 1,
+        stringDistance(strA.slice(0, -1), strB.slice(0, -1), memo) +
+          (strA.slice(-1) === strB.slice(-1) ? 0 : 1)
+      );
+    }
+  }
+
+  return memo[strA.length][strB.length];
+}
+
+
+/***/ }),
 /* 30 */,
 /* 31 */,
 /* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(37);
 
 
 
@@ -18107,11 +19070,11 @@ function baseGetTag(value) {
 
 
 /***/ }),
-/* 49 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(35);
 
 
 /** Detect free variable `self`. */
@@ -18124,7 +19087,7 @@ var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || fr
 
 
 /***/ }),
-/* 50 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18133,14 +19096,14 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
-/* 51 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(17);
 
 
 /** Used for built-in method references. */
@@ -18190,7 +19153,7 @@ function getRawTag(value) {
 
 
 /***/ }),
-/* 52 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18219,11 +19182,11 @@ function objectToString(value) {
 
 
 /***/ }),
-/* 53 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(39);
 
 
 /** Built-in value references. */
@@ -18233,7 +19196,7 @@ var getPrototype = Object(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* defau
 
 
 /***/ }),
-/* 54 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18255,7 +19218,7 @@ function overArg(func, transform) {
 
 
 /***/ }),
-/* 55 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18291,14 +19254,14 @@ function isObjectLike(value) {
 
 
 /***/ }),
-/* 56 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(57);
+module.exports = __webpack_require__(42);
 
 
 /***/ }),
-/* 57 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18308,7 +19271,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(58);
+var _ponyfill = __webpack_require__(43);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -18331,10 +19294,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(13)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(18)(module)))
 
 /***/ }),
-/* 58 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18363,14 +19326,14 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 59 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(19);
 
 
 
@@ -18504,7 +19467,7 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 60 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18558,12 +19521,12 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 61 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export default */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(20);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -18614,29 +19577,8 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */
+/* 47 */,
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -21623,1013 +22565,7 @@ lunr.QueryParser.parseBoost = function (parser) {
 
 
 /***/ }),
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lunr__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lunr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lunr__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Constants_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__StateManagement_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__ = __webpack_require__(9);
-
-
-
-
-
-
-const getViewportSize = () => {
-    return {
-        width: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
-        height: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-    };
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = getViewportSize;
-
-
-const initViewportChangeListener = (store) => {
-    window.addEventListener("resize", () => {
-        var newViewport = getViewportSize();
-        store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_2__StateManagement_js__["a" /* actionViewportChange */])(newViewport));
-    });
-};
-/* harmony export (immutable) */ __webpack_exports__["c"] = initViewportChangeListener;
-
-
-let prevSelectedNodeId = null;
-const initScrollResetOnNodeSelection = (store) => {
-    store.subscribe(() => {
-        var state = store.getState();
-        var newSelectedNodeId = state.selectedNodeId;
-        if(newSelectedNodeId != prevSelectedNodeId) {
-            prevSelectedNodeId = newSelectedNodeId;
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-        }
-    });
-};
-/* harmony export (immutable) */ __webpack_exports__["b"] = initScrollResetOnNodeSelection;
-
-
-
-var lunrIndex = null;
-const topicsBySearchText = (searchText) => {
-    if(lunrIndex == null) {
-        lunrIndex = __WEBPACK_IMPORTED_MODULE_0_lunr___default()(function() {
-            this.field("name");
-
-            _.each(Object(__WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__["a" /* allResearchData */])(), x => {
-                var name = x.id;
-                if(x.label != undefined) {
-                    name = x.label.toLowerCase();
-                    this.add({id: x.id, name: x.id});
-                }
-                this.add({id: x.id, name});
-            });
-        });
-    }
-    if (searchText == '') {
-        return [];
-    }
-    var results = lunrIndex.search(`*${searchText.toLowerCase()}*`).map((x)=> {
-        var targetNode = Object(__WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__["c" /* researchById */])(x.ref);
-        return {id: x.ref, name: targetNode.label};
-    });
-    if(results.length > 40) {
-        return [];
-    }
-    return results;
-};
-/* harmony export (immutable) */ __webpack_exports__["d"] = topicsBySearchText;
-
-
-
-/***/ }),
-/* 91 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__XrDataQueries_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BrowserTests_js__ = __webpack_require__(107);
-
-
-
-mocha.run();
-
-
-/***/ }),
-/* 92 */
-/***/ (function(module, exports) {
-
-/*!
- * Chai - flag utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-/**
- * ### .flag(object, key, [value])
- *
- * Get or set a flag value on an object. If a
- * value is provided it will be set, else it will
- * return the currently set value or `undefined` if
- * the value is not set.
- *
- *     utils.flag(this, 'foo', 'bar'); // setter
- *     utils.flag(this, 'foo'); // getter, returns `bar`
- *
- * @param {Object} object constructed Assertion
- * @param {String} key
- * @param {Mixed} value (optional)
- * @namespace Utils
- * @name flag
- * @api private
- */
-
-module.exports = function flag(obj, key, value) {
-  var flags = obj.__flags || (obj.__flags = Object.create(null));
-  if (arguments.length === 3) {
-    flags[key] = value;
-  } else {
-    return flags[key];
-  }
-};
-
-
-/***/ }),
-/* 93 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*!
- * chai
- * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-var used = [];
-
-/*!
- * Chai version
- */
-
-exports.version = '4.1.2';
-
-/*!
- * Assertion Error
- */
-
-exports.AssertionError = __webpack_require__(101);
-
-/*!
- * Utils for plugins (not exported)
- */
-
-var util = __webpack_require__(109);
-
-/**
- * # .use(function)
- *
- * Provides a way to extend the internals of Chai.
- *
- * @param {Function}
- * @returns {this} for chaining
- * @api public
- */
-
-exports.use = function (fn) {
-  if (!~used.indexOf(fn)) {
-    fn(exports, util);
-    used.push(fn);
-  }
-
-  return exports;
-};
-
-/*!
- * Utility Functions
- */
-
-exports.util = util;
-
-/*!
- * Configuration
- */
-
-var config = __webpack_require__(94);
-exports.config = config;
-
-/*!
- * Primary `Assertion` prototype
- */
-
-var assertion = __webpack_require__(126);
-exports.use(assertion);
-
-/*!
- * Core Assertions
- */
-
-var core = __webpack_require__(127);
-exports.use(core);
-
-/*!
- * Expect interface
- */
-
-var expect = __webpack_require__(128);
-exports.use(expect);
-
-/*!
- * Should interface
- */
-
-var should = __webpack_require__(129);
-exports.use(should);
-
-/*!
- * Assert interface
- */
-
-var assert = __webpack_require__(130);
-exports.use(assert);
-
-
-/***/ }),
-/* 94 */
-/***/ (function(module, exports) {
-
-module.exports = {
-
-  /**
-   * ### config.includeStack
-   *
-   * User configurable property, influences whether stack trace
-   * is included in Assertion error message. Default of false
-   * suppresses stack trace in the error message.
-   *
-   *     chai.config.includeStack = true;  // enable stack on error
-   *
-   * @param {Boolean}
-   * @api public
-   */
-
-  includeStack: false,
-
-  /**
-   * ### config.showDiff
-   *
-   * User configurable property, influences whether or not
-   * the `showDiff` flag should be included in the thrown
-   * AssertionErrors. `false` will always be `false`; `true`
-   * will be true when the assertion has requested a diff
-   * be shown.
-   *
-   * @param {Boolean}
-   * @api public
-   */
-
-  showDiff: true,
-
-  /**
-   * ### config.truncateThreshold
-   *
-   * User configurable property, sets length threshold for actual and
-   * expected values in assertion errors. If this threshold is exceeded, for
-   * example for large data structures, the value is replaced with something
-   * like `[ Array(3) ]` or `{ Object (prop1, prop2) }`.
-   *
-   * Set it to zero if you want to disable truncating altogether.
-   *
-   * This is especially userful when doing assertions on arrays: having this
-   * set to a reasonable large value makes the failure messages readily
-   * inspectable.
-   *
-   *     chai.config.truncateThreshold = 0;  // disable truncating
-   *
-   * @param {Number}
-   * @api public
-   */
-
-  truncateThreshold: 40,
-
-  /**
-   * ### config.useProxy
-   *
-   * User configurable property, defines if chai will use a Proxy to throw
-   * an error when a non-existent property is read, which protects users
-   * from typos when using property-based assertions.
-   *
-   * Set it to false if you want to disable this feature.
-   *
-   *     chai.config.useProxy = false;  // disable use of Proxy
-   *
-   * This feature is automatically disabled regardless of this config value
-   * in environments that don't support proxies.
-   *
-   * @param {Boolean}
-   * @api public
-   */
-
-  useProxy: true,
-
-  /**
-   * ### config.proxyExcludedKeys
-   *
-   * User configurable property, defines which properties should be ignored
-   * instead of throwing an error if they do not exist on the assertion.
-   * This is only applied if the environment Chai is running in supports proxies and
-   * if the `useProxy` configuration setting is enabled.
-   * By default, `then` and `inspect` will not throw an error if they do not exist on the
-   * assertion object because the `.inspect` property is read by `util.inspect` (for example, when
-   * using `console.log` on the assertion object) and `.then` is necessary for promise type-checking.
-   *
-   *     // By default these keys will not throw an error if they do not exist on the assertion object
-   *     chai.config.proxyExcludedKeys = ['then', 'inspect'];
-   *
-   * @param {Array}
-   * @api public
-   */
-
-  proxyExcludedKeys: ['then', 'inspect', 'toJSON']
-};
-
-
-/***/ }),
-/* 95 */
-/***/ (function(module, exports) {
-
-/*!
- * Chai - transferFlags utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-/**
- * ### .transferFlags(assertion, object, includeAll = true)
- *
- * Transfer all the flags for `assertion` to `object`. If
- * `includeAll` is set to `false`, then the base Chai
- * assertion flags (namely `object`, `ssfi`, `lockSsfi`,
- * and `message`) will not be transferred.
- *
- *
- *     var newAssertion = new Assertion();
- *     utils.transferFlags(assertion, newAssertion);
- *
- *     var anotherAsseriton = new Assertion(myObj);
- *     utils.transferFlags(assertion, anotherAssertion, false);
- *
- * @param {Assertion} assertion the assertion to transfer the flags from
- * @param {Object} object the object to transfer the flags to; usually a new assertion
- * @param {Boolean} includeAll
- * @namespace Utils
- * @name transferFlags
- * @api private
- */
-
-module.exports = function transferFlags(assertion, object, includeAll) {
-  var flags = assertion.__flags || (assertion.__flags = Object.create(null));
-
-  if (!object.__flags) {
-    object.__flags = Object.create(null);
-  }
-
-  includeAll = arguments.length === 3 ? includeAll : true;
-
-  for (var flag in flags) {
-    if (includeAll ||
-        (flag !== 'object' && flag !== 'ssfi' && flag !== 'lockSsfi' && flag != 'message')) {
-      object.__flags[flag] = flags[flag];
-    }
-  }
-};
-
-
-/***/ }),
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// This is (almost) directly from Node.js utils
-// https://github.com/joyent/node/blob/f8c335d0caf47f16d31413f89aa28eda3878e3aa/lib/util.js
-
-var getName = __webpack_require__(103);
-var getProperties = __webpack_require__(104);
-var getEnumerableProperties = __webpack_require__(114);
-var config = __webpack_require__(94);
-
-module.exports = inspect;
-
-/**
- * ### .inspect(obj, [showHidden], [depth], [colors])
- *
- * Echoes the value of a value. Tries to print the value out
- * in the best way possible given the different types.
- *
- * @param {Object} obj The object to print out.
- * @param {Boolean} showHidden Flag that shows hidden (not enumerable)
- *    properties of objects. Default is false.
- * @param {Number} depth Depth in which to descend in object. Default is 2.
- * @param {Boolean} colors Flag to turn on ANSI escape codes to color the
- *    output. Default is false (no coloring).
- * @namespace Utils
- * @name inspect
- */
-function inspect(obj, showHidden, depth, colors) {
-  var ctx = {
-    showHidden: showHidden,
-    seen: [],
-    stylize: function (str) { return str; }
-  };
-  return formatValue(ctx, obj, (typeof depth === 'undefined' ? 2 : depth));
-}
-
-// Returns true if object is a DOM element.
-var isDOMElement = function (object) {
-  if (typeof HTMLElement === 'object') {
-    return object instanceof HTMLElement;
-  } else {
-    return object &&
-      typeof object === 'object' &&
-      'nodeType' in object &&
-      object.nodeType === 1 &&
-      typeof object.nodeName === 'string';
-  }
-};
-
-function formatValue(ctx, value, recurseTimes) {
-  // Provide a hook for user-specified inspect functions.
-  // Check that value is an object with an inspect function on it
-  if (value && typeof value.inspect === 'function' &&
-      // Filter out the util module, it's inspect function is special
-      value.inspect !== exports.inspect &&
-      // Also filter out any prototype objects using the circular check.
-      !(value.constructor && value.constructor.prototype === value)) {
-    var ret = value.inspect(recurseTimes, ctx);
-    if (typeof ret !== 'string') {
-      ret = formatValue(ctx, ret, recurseTimes);
-    }
-    return ret;
-  }
-
-  // Primitive types cannot have properties
-  var primitive = formatPrimitive(ctx, value);
-  if (primitive) {
-    return primitive;
-  }
-
-  // If this is a DOM element, try to get the outer HTML.
-  if (isDOMElement(value)) {
-    if ('outerHTML' in value) {
-      return value.outerHTML;
-      // This value does not have an outerHTML attribute,
-      //   it could still be an XML element
-    } else {
-      // Attempt to serialize it
-      try {
-        if (document.xmlVersion) {
-          var xmlSerializer = new XMLSerializer();
-          return xmlSerializer.serializeToString(value);
-        } else {
-          // Firefox 11- do not support outerHTML
-          //   It does, however, support innerHTML
-          //   Use the following to render the element
-          var ns = "http://www.w3.org/1999/xhtml";
-          var container = document.createElementNS(ns, '_');
-
-          container.appendChild(value.cloneNode(false));
-          var html = container.innerHTML
-            .replace('><', '>' + value.innerHTML + '<');
-          container.innerHTML = '';
-          return html;
-        }
-      } catch (err) {
-        // This could be a non-native DOM implementation,
-        //   continue with the normal flow:
-        //   printing the element as if it is an object.
-      }
-    }
-  }
-
-  // Look up the keys of the object.
-  var visibleKeys = getEnumerableProperties(value);
-  var keys = ctx.showHidden ? getProperties(value) : visibleKeys;
-
-  var name, nameSuffix;
-
-  // Some type of object without properties can be shortcutted.
-  // In IE, errors have a single `stack` property, or if they are vanilla `Error`,
-  // a `stack` plus `description` property; ignore those for consistency.
-  if (keys.length === 0 || (isError(value) && (
-      (keys.length === 1 && keys[0] === 'stack') ||
-      (keys.length === 2 && keys[0] === 'description' && keys[1] === 'stack')
-     ))) {
-    if (typeof value === 'function') {
-      name = getName(value);
-      nameSuffix = name ? ': ' + name : '';
-      return ctx.stylize('[Function' + nameSuffix + ']', 'special');
-    }
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    }
-    if (isDate(value)) {
-      return ctx.stylize(Date.prototype.toUTCString.call(value), 'date');
-    }
-    if (isError(value)) {
-      return formatError(value);
-    }
-  }
-
-  var base = ''
-    , array = false
-    , typedArray = false
-    , braces = ['{', '}'];
-
-  if (isTypedArray(value)) {
-    typedArray = true;
-    braces = ['[', ']'];
-  }
-
-  // Make Array say that they are Array
-  if (isArray(value)) {
-    array = true;
-    braces = ['[', ']'];
-  }
-
-  // Make functions say that they are functions
-  if (typeof value === 'function') {
-    name = getName(value);
-    nameSuffix = name ? ': ' + name : '';
-    base = ' [Function' + nameSuffix + ']';
-  }
-
-  // Make RegExps say that they are RegExps
-  if (isRegExp(value)) {
-    base = ' ' + RegExp.prototype.toString.call(value);
-  }
-
-  // Make dates with properties first say the date
-  if (isDate(value)) {
-    base = ' ' + Date.prototype.toUTCString.call(value);
-  }
-
-  // Make error with message first say the error
-  if (isError(value)) {
-    return formatError(value);
-  }
-
-  if (keys.length === 0 && (!array || value.length == 0)) {
-    return braces[0] + base + braces[1];
-  }
-
-  if (recurseTimes < 0) {
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    } else {
-      return ctx.stylize('[Object]', 'special');
-    }
-  }
-
-  ctx.seen.push(value);
-
-  var output;
-  if (array) {
-    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
-  } else if (typedArray) {
-    return formatTypedArray(value);
-  } else {
-    output = keys.map(function(key) {
-      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
-    });
-  }
-
-  ctx.seen.pop();
-
-  return reduceToSingleString(output, base, braces);
-}
-
-
-function formatPrimitive(ctx, value) {
-  switch (typeof value) {
-    case 'undefined':
-      return ctx.stylize('undefined', 'undefined');
-
-    case 'string':
-      var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-                                               .replace(/'/g, "\\'")
-                                               .replace(/\\"/g, '"') + '\'';
-      return ctx.stylize(simple, 'string');
-
-    case 'number':
-      if (value === 0 && (1/value) === -Infinity) {
-        return ctx.stylize('-0', 'number');
-      }
-      return ctx.stylize('' + value, 'number');
-
-    case 'boolean':
-      return ctx.stylize('' + value, 'boolean');
-
-    case 'symbol':
-      return ctx.stylize(value.toString(), 'symbol');
-  }
-  // For some reason typeof null is "object", so special case here.
-  if (value === null) {
-    return ctx.stylize('null', 'null');
-  }
-}
-
-
-function formatError(value) {
-  return '[' + Error.prototype.toString.call(value) + ']';
-}
-
-
-function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  for (var i = 0, l = value.length; i < l; ++i) {
-    if (Object.prototype.hasOwnProperty.call(value, String(i))) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          String(i), true));
-    } else {
-      output.push('');
-    }
-  }
-
-  keys.forEach(function(key) {
-    if (!key.match(/^\d+$/)) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          key, true));
-    }
-  });
-  return output;
-}
-
-function formatTypedArray(value) {
-  var str = '[ ';
-
-  for (var i = 0; i < value.length; ++i) {
-    if (str.length >= config.truncateThreshold - 7) {
-      str += '...';
-      break;
-    }
-    str += value[i] + ', ';
-  }
-  str += ' ]';
-
-  // Removing trailing `, ` if the array was not truncated
-  if (str.indexOf(',  ]') !== -1) {
-    str = str.replace(',  ]', ' ]');
-  }
-
-  return str;
-}
-
-function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-  var name;
-  var propDescriptor = Object.getOwnPropertyDescriptor(value, key);
-  var str;
-
-  if (propDescriptor) {
-    if (propDescriptor.get) {
-      if (propDescriptor.set) {
-        str = ctx.stylize('[Getter/Setter]', 'special');
-      } else {
-        str = ctx.stylize('[Getter]', 'special');
-      }
-    } else {
-      if (propDescriptor.set) {
-        str = ctx.stylize('[Setter]', 'special');
-      }
-    }
-  }
-  if (visibleKeys.indexOf(key) < 0) {
-    name = '[' + key + ']';
-  }
-  if (!str) {
-    if (ctx.seen.indexOf(value[key]) < 0) {
-      if (recurseTimes === null) {
-        str = formatValue(ctx, value[key], null);
-      } else {
-        str = formatValue(ctx, value[key], recurseTimes - 1);
-      }
-      if (str.indexOf('\n') > -1) {
-        if (array) {
-          str = str.split('\n').map(function(line) {
-            return '  ' + line;
-          }).join('\n').substr(2);
-        } else {
-          str = '\n' + str.split('\n').map(function(line) {
-            return '   ' + line;
-          }).join('\n');
-        }
-      }
-    } else {
-      str = ctx.stylize('[Circular]', 'special');
-    }
-  }
-  if (typeof name === 'undefined') {
-    if (array && key.match(/^\d+$/)) {
-      return str;
-    }
-    name = JSON.stringify('' + key);
-    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
-      name = ctx.stylize(name, 'name');
-    } else {
-      name = name.replace(/'/g, "\\'")
-                 .replace(/\\"/g, '"')
-                 .replace(/(^"|"$)/g, "'");
-      name = ctx.stylize(name, 'string');
-    }
-  }
-
-  return name + ': ' + str;
-}
-
-
-function reduceToSingleString(output, base, braces) {
-  var numLinesEst = 0;
-  var length = output.reduce(function(prev, cur) {
-    numLinesEst++;
-    if (cur.indexOf('\n') >= 0) numLinesEst++;
-    return prev + cur.length + 1;
-  }, 0);
-
-  if (length > 60) {
-    return braces[0] +
-           (base === '' ? '' : base + '\n ') +
-           ' ' +
-           output.join(',\n  ') +
-           ' ' +
-           braces[1];
-  }
-
-  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
-}
-
-function isTypedArray(ar) {
-  // Unfortunately there's no way to check if an object is a TypedArray
-  // We have to check if it's one of these types
-  return (typeof ar === 'object' && /\w+Array]$/.test(objectToString(ar)));
-}
-
-function isArray(ar) {
-  return Array.isArray(ar) ||
-         (typeof ar === 'object' && objectToString(ar) === '[object Array]');
-}
-
-function isRegExp(re) {
-  return typeof re === 'object' && objectToString(re) === '[object RegExp]';
-}
-
-function isDate(d) {
-  return typeof d === 'object' && objectToString(d) === '[object Date]';
-}
-
-function isError(e) {
-  return typeof e === 'object' && objectToString(e) === '[object Error]';
-}
-
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
-}
-
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var config = __webpack_require__(94);
-
-/*!
- * Chai - isProxyEnabled helper
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-/**
- * ### .isProxyEnabled()
- *
- * Helper function to check if Chai's proxy protection feature is enabled. If
- * proxies are unsupported or disabled via the user's Chai config, then return
- * false. Otherwise, return true.
- *
- * @namespace Utils
- * @name isProxyEnabled
- */
-
-module.exports = function isProxyEnabled() {
-  return config.useProxy && 
-    typeof Proxy !== 'undefined' &&
-    typeof Reflect !== 'undefined';
-};
-
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var config = __webpack_require__(94);
-
-var fnLengthDesc = Object.getOwnPropertyDescriptor(function () {}, 'length');
-
-/*!
- * Chai - addLengthGuard utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-/**
- * ### .addLengthGuard(fn, assertionName, isChainable)
- *
- * Define `length` as a getter on the given uninvoked method assertion. The
- * getter acts as a guard against chaining `length` directly off of an uninvoked
- * method assertion, which is a problem because it references `function`'s
- * built-in `length` property instead of Chai's `length` assertion. When the
- * getter catches the user making this mistake, it throws an error with a
- * helpful message.
- *
- * There are two ways in which this mistake can be made. The first way is by
- * chaining the `length` assertion directly off of an uninvoked chainable
- * method. In this case, Chai suggests that the user use `lengthOf` instead. The
- * second way is by chaining the `length` assertion directly off of an uninvoked
- * non-chainable method. Non-chainable methods must be invoked prior to
- * chaining. In this case, Chai suggests that the user consult the docs for the
- * given assertion.
- *
- * If the `length` property of functions is unconfigurable, then return `fn`
- * without modification.
- *
- * Note that in ES6, the function's `length` property is configurable, so once
- * support for legacy environments is dropped, Chai's `length` property can
- * replace the built-in function's `length` property, and this length guard will
- * no longer be necessary. In the mean time, maintaining consistency across all
- * environments is the priority.
- *
- * @param {Function} fn
- * @param {String} assertionName
- * @param {Boolean} isChainable
- * @namespace Utils
- * @name addLengthGuard
- */
-
-module.exports = function addLengthGuard (fn, assertionName, isChainable) {
-  if (!fnLengthDesc.configurable) return fn;
-
-  Object.defineProperty(fn, 'length', {
-    get: function () {
-      if (isChainable) {
-        throw Error('Invalid Chai property: ' + assertionName + '.length. Due' +
-          ' to a compatibility issue, "length" cannot directly follow "' +
-          assertionName + '". Use "' + assertionName + '.lengthOf" instead.');
-      }
-
-      throw Error('Invalid Chai property: ' + assertionName + '.length. See' +
-        ' docs for proper usage of "' + assertionName + '".');
-    }
-  });
-
-  return fn;
-};
-
-
-/***/ }),
-/* 99 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var config = __webpack_require__(94);
-var flag = __webpack_require__(92);
-var getProperties = __webpack_require__(104);
-var isProxyEnabled = __webpack_require__(97);
-
-/*!
- * Chai - proxify utility
- * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
- * MIT Licensed
- */
-
-/**
- * ### .proxify(object)
- *
- * Return a proxy of given object that throws an error when a non-existent
- * property is read. By default, the root cause is assumed to be a misspelled
- * property, and thus an attempt is made to offer a reasonable suggestion from
- * the list of existing properties. However, if a nonChainableMethodName is
- * provided, then the root cause is instead a failure to invoke a non-chainable
- * method prior to reading the non-existent property.
- * 
- * If proxies are unsupported or disabled via the user's Chai config, then
- * return object without modification.
- *
- * @param {Object} obj
- * @param {String} nonChainableMethodName
- * @namespace Utils
- * @name proxify
- */
-
-var builtins = ['__flags', '__methods', '_obj', 'assert'];
-
-module.exports = function proxify(obj, nonChainableMethodName) {
-  if (!isProxyEnabled()) return obj;
-
-  return new Proxy(obj, {
-    get: function proxyGetter(target, property) {
-      // This check is here because we should not throw errors on Symbol properties
-      // such as `Symbol.toStringTag`.
-      // The values for which an error should be thrown can be configured using
-      // the `config.proxyExcludedKeys` setting.
-      if (typeof property === 'string' &&
-          config.proxyExcludedKeys.indexOf(property) === -1 &&
-          !Reflect.has(target, property)) {
-        // Special message for invalid property access of non-chainable methods.
-        if (nonChainableMethodName) {
-          throw Error('Invalid Chai property: ' + nonChainableMethodName + '.' +
-            property + '. See docs for proper usage of "' +
-            nonChainableMethodName + '".');
-        }
-
-        var orderedProperties = getProperties(target).filter(function(property) {
-          return !Object.prototype.hasOwnProperty(property) &&
-            builtins.indexOf(property) === -1;
-        }).sort(function(a, b) {
-          return stringDistance(property, a) - stringDistance(property, b);
-        });
-
-        if (orderedProperties.length &&
-            stringDistance(orderedProperties[0], property) < 4) {
-          // If the property is reasonably close to an existing Chai property,
-          // suggest that property to the user.
-          throw Error('Invalid Chai property: ' + property +
-            '. Did you mean "' + orderedProperties[0] + '"?');
-        } else {
-          throw Error('Invalid Chai property: ' + property);
-        }
-      }
-
-      // Use this proxy getter as the starting point for removing implementation
-      // frames from the stack trace of a failed assertion. For property
-      // assertions, this prevents the proxy getter from showing up in the stack
-      // trace since it's invoked before the property getter. For method and
-      // chainable method assertions, this flag will end up getting changed to
-      // the method wrapper, which is good since this frame will no longer be in
-      // the stack once the method is invoked. Note that Chai builtin assertion
-      // properties such as `__flags` are skipped since this is only meant to
-      // capture the starting point of an assertion. This step is also skipped
-      // if the `lockSsfi` flag is set, thus indicating that this assertion is
-      // being called from within another assertion. In that case, the `ssfi`
-      // flag is already set to the outer assertion's starting point.
-      if (builtins.indexOf(property) === -1 && !flag(target, 'lockSsfi')) {
-        flag(target, 'ssfi', proxyGetter);
-      }
-
-      return Reflect.get(target, property);
-    }
-  });
-};
-
-/**
- * # stringDistance(strA, strB)
- * Return the Levenshtein distance between two strings.
- * @param {string} strA
- * @param {string} strB
- * @return {number} the string distance between strA and strB
- * @api private
- */
-
-function stringDistance(strA, strB, memo) {
-  if (!memo) {
-    // `memo` is a two-dimensional array containing a cache of distances
-    // memo[i][j] is the distance between strA.slice(0, i) and
-    // strB.slice(0, j).
-    memo = [];
-    for (var i = 0; i <= strA.length; i++) {
-      memo[i] = [];
-    }
-  }
-
-  if (!memo[strA.length] || !memo[strA.length][strB.length]) {
-    if (strA.length === 0 || strB.length === 0) {
-      memo[strA.length][strB.length] = Math.max(strA.length, strB.length);
-    } else {
-      memo[strA.length][strB.length] = Math.min(
-        stringDistance(strA.slice(0, -1), strB, memo) + 1,
-        stringDistance(strA, strB.slice(0, -1), memo) + 1,
-        stringDistance(strA.slice(0, -1), strB.slice(0, -1), memo) +
-          (strA.slice(-1) === strB.slice(-1) ? 0 : 1)
-      );
-    }
-  }
-
-  return memo[strA.length][strB.length];
-}
-
-
-/***/ }),
-/* 100 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {(function (global, factory) {
@@ -23021,10 +22957,21 @@ return typeDetect;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 101 */
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */
 /***/ (function(module, exports) {
 
 /*!
@@ -23146,7 +23093,7 @@ AssertionError.prototype.toJSON = function (stack) {
 
 
 /***/ }),
-/* 102 */
+/* 62 */
 /***/ (function(module, exports) {
 
 /*!
@@ -23172,7 +23119,7 @@ module.exports = function getActual(obj, args) {
 
 
 /***/ }),
-/* 103 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23223,7 +23170,7 @@ module.exports = getFuncName;
 
 
 /***/ }),
-/* 104 */
+/* 64 */
 /***/ (function(module, exports) {
 
 /*!
@@ -23265,7 +23212,7 @@ module.exports = function getProperties(object) {
 
 
 /***/ }),
-/* 105 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -23278,8 +23225,8 @@ module.exports = function getProperties(object) {
  * Module dependancies
  */
 
-var inspect = __webpack_require__(96);
-var config = __webpack_require__(94);
+var inspect = __webpack_require__(26);
+var config = __webpack_require__(12);
 
 /**
  * ### .objDisplay(object)
@@ -23321,7 +23268,7 @@ module.exports = function objDisplay(obj) {
 
 
 /***/ }),
-/* 106 */
+/* 66 */
 /***/ (function(module, exports) {
 
 /*!
@@ -23354,14 +23301,67 @@ module.exports = function getOwnEnumerablePropertySymbols(obj) {
 
 
 /***/ }),
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__XrDataQueries_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BrowserTests_js__ = __webpack_require__(107);
+
+
+
+mocha.run();
+
+
+/***/ }),
 /* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_chai__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_chai___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_chai__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__XrDataQueries_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PassiveServices_js__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__XrDataQueries_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PassiveServices_js__ = __webpack_require__(25);
 
 
 
@@ -23405,7 +23405,7 @@ describe('lunr search', () => {
 /* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(93);
+module.exports = __webpack_require__(11);
 
 
 /***/ }),
@@ -23434,7 +23434,7 @@ exports.test = __webpack_require__(111);
  * type utility
  */
 
-exports.type = __webpack_require__(100);
+exports.type = __webpack_require__(49);
 
 /*!
  * expectTypes utility
@@ -23451,31 +23451,31 @@ exports.getMessage = __webpack_require__(113);
  * actual utility
  */
 
-exports.getActual = __webpack_require__(102);
+exports.getActual = __webpack_require__(62);
 
 /*!
  * Inspect util
  */
 
-exports.inspect = __webpack_require__(96);
+exports.inspect = __webpack_require__(26);
 
 /*!
  * Object Display util
  */
 
-exports.objDisplay = __webpack_require__(105);
+exports.objDisplay = __webpack_require__(65);
 
 /*!
  * Flag utility
  */
 
-exports.flag = __webpack_require__(92);
+exports.flag = __webpack_require__(4);
 
 /*!
  * Flag transferring utility
  */
 
-exports.transferFlags = __webpack_require__(95);
+exports.transferFlags = __webpack_require__(13);
 
 /*!
  * Deep equal utility
@@ -23499,7 +23499,7 @@ exports.hasProperty = pathval.hasProperty;
  * Function name
  */
 
-exports.getName = __webpack_require__(103);
+exports.getName = __webpack_require__(63);
 
 /*!
  * add Property
@@ -23547,7 +23547,7 @@ exports.compareByInspect = __webpack_require__(122);
  * Get own enumerable property symbols method
  */
 
-exports.getOwnEnumerablePropertySymbols = __webpack_require__(106);
+exports.getOwnEnumerablePropertySymbols = __webpack_require__(66);
 
 /*!
  * Get own enumerable properties method
@@ -23565,19 +23565,19 @@ exports.checkError = __webpack_require__(124);
  * Proxify util
  */
 
-exports.proxify = __webpack_require__(99);
+exports.proxify = __webpack_require__(29);
 
 /*!
  * addLengthGuard util
  */
 
-exports.addLengthGuard = __webpack_require__(98);
+exports.addLengthGuard = __webpack_require__(28);
 
 /*!
  * isProxyEnabled helper
  */
 
-exports.isProxyEnabled = __webpack_require__(97);
+exports.isProxyEnabled = __webpack_require__(27);
 
 /*!
  * isNaN method
@@ -23898,7 +23898,7 @@ module.exports = {
  * Module dependancies
  */
 
-var flag = __webpack_require__(92);
+var flag = __webpack_require__(4);
 
 /**
  * ### .test(object, expression)
@@ -23942,9 +23942,9 @@ module.exports = function test(obj, args) {
  * @api public
  */
 
-var AssertionError = __webpack_require__(101);
-var flag = __webpack_require__(92);
-var type = __webpack_require__(100);
+var AssertionError = __webpack_require__(61);
+var flag = __webpack_require__(4);
+var type = __webpack_require__(49);
 
 module.exports = function expectTypes(obj, types) {
   var flagMsg = flag(obj, 'message');
@@ -23989,10 +23989,10 @@ module.exports = function expectTypes(obj, types) {
  * Module dependancies
  */
 
-var flag = __webpack_require__(92)
-  , getActual = __webpack_require__(102)
-  , inspect = __webpack_require__(96)
-  , objDisplay = __webpack_require__(105);
+var flag = __webpack_require__(4)
+  , getActual = __webpack_require__(62)
+  , inspect = __webpack_require__(26)
+  , objDisplay = __webpack_require__(65);
 
 /**
  * ### .getMessage(object, message, negateMessage)
@@ -24077,7 +24077,7 @@ module.exports = function getEnumerableProperties(object) {
  * MIT Licensed
  */
 
-var type = __webpack_require__(100);
+var type = __webpack_require__(49);
 function FakeMap() {
   this._key = 'chai/deep-eql__' + Math.random() + Date.now();
 }
@@ -24536,10 +24536,10 @@ function isPrimitive(value) {
  * MIT Licensed
  */
 
-var chai = __webpack_require__(93);
-var flag = __webpack_require__(92);
-var isProxyEnabled = __webpack_require__(97);
-var transferFlags = __webpack_require__(95);
+var chai = __webpack_require__(11);
+var flag = __webpack_require__(4);
+var isProxyEnabled = __webpack_require__(27);
+var transferFlags = __webpack_require__(13);
 
 /**
  * ### .addProperty(ctx, name, getter)
@@ -24614,11 +24614,11 @@ module.exports = function addProperty(ctx, name, getter) {
  * MIT Licensed
  */
 
-var addLengthGuard = __webpack_require__(98);
-var chai = __webpack_require__(93);
-var flag = __webpack_require__(92);
-var proxify = __webpack_require__(99);
-var transferFlags = __webpack_require__(95);
+var addLengthGuard = __webpack_require__(28);
+var chai = __webpack_require__(11);
+var flag = __webpack_require__(4);
+var proxify = __webpack_require__(29);
+var transferFlags = __webpack_require__(13);
 
 /**
  * ### .addMethod(ctx, name, method)
@@ -24688,10 +24688,10 @@ module.exports = function addMethod(ctx, name, method) {
  * MIT Licensed
  */
 
-var chai = __webpack_require__(93);
-var flag = __webpack_require__(92);
-var isProxyEnabled = __webpack_require__(97);
-var transferFlags = __webpack_require__(95);
+var chai = __webpack_require__(11);
+var flag = __webpack_require__(4);
+var isProxyEnabled = __webpack_require__(27);
+var transferFlags = __webpack_require__(13);
 
 /**
  * ### .overwriteProperty(ctx, name, fn)
@@ -24786,11 +24786,11 @@ module.exports = function overwriteProperty(ctx, name, getter) {
  * MIT Licensed
  */
 
-var addLengthGuard = __webpack_require__(98);
-var chai = __webpack_require__(93);
-var flag = __webpack_require__(92);
-var proxify = __webpack_require__(99);
-var transferFlags = __webpack_require__(95);
+var addLengthGuard = __webpack_require__(28);
+var chai = __webpack_require__(11);
+var flag = __webpack_require__(4);
+var proxify = __webpack_require__(29);
+var transferFlags = __webpack_require__(13);
 
 /**
  * ### .overwriteMethod(ctx, name, fn)
@@ -24888,11 +24888,11 @@ module.exports = function overwriteMethod(ctx, name, method) {
  * Module dependencies
  */
 
-var addLengthGuard = __webpack_require__(98);
-var chai = __webpack_require__(93);
-var flag = __webpack_require__(92);
-var proxify = __webpack_require__(99);
-var transferFlags = __webpack_require__(95);
+var addLengthGuard = __webpack_require__(28);
+var chai = __webpack_require__(11);
+var flag = __webpack_require__(4);
+var proxify = __webpack_require__(29);
+var transferFlags = __webpack_require__(13);
 
 /*!
  * Module variables
@@ -25042,8 +25042,8 @@ module.exports = function addChainableMethod(ctx, name, method, chainingBehavior
  * MIT Licensed
  */
 
-var chai = __webpack_require__(93);
-var transferFlags = __webpack_require__(95);
+var chai = __webpack_require__(11);
+var transferFlags = __webpack_require__(13);
 
 /**
  * ### .overwriteChainableMethod(ctx, name, method, chainingBehavior)
@@ -25121,7 +25121,7 @@ module.exports = function overwriteChainableMethod(ctx, name, method, chainingBe
  * Module dependancies
  */
 
-var inspect = __webpack_require__(96);
+var inspect = __webpack_require__(26);
 
 /**
  * ### .compareByInspect(mixed, mixed)
@@ -25158,7 +25158,7 @@ module.exports = function compareByInspect(a, b) {
  * Module dependancies
  */
 
-var getOwnEnumerablePropertySymbols = __webpack_require__(106);
+var getOwnEnumerablePropertySymbols = __webpack_require__(66);
 
 /**
  * ### .getOwnEnumerableProperties(object)
@@ -25401,7 +25401,7 @@ module.exports = Number.isNaN || isNaN;
  * MIT Licensed
  */
 
-var config = __webpack_require__(94);
+var config = __webpack_require__(12);
 
 module.exports = function (_chai, util) {
   /*!

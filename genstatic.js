@@ -1,4 +1,4 @@
-const parser = require('./ruleset-parser');
+const parser = require('./rulesetParser.js');
 const _ = require('lodash');
 const fs = require('fs');
 

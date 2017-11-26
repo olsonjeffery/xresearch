@@ -22950,10 +22950,11 @@ exports.clearImmediate = clearImmediate;
 
 
 
-const genericAsideTableBuilder = (thElems, trElemsInput, showHover = true) => {
+const buildNodeListTable = (thElems, trElemsInput, showHover = true, isCollapsed = false) => {
     var trElems = trElemsInput.length > 0 ?
         trElemsInput
-        : [genericSidebarClickableRow({id: "-1", content: "None"}, null)];
+        : [({id: "-1", content: "None"}, null)];
+    trElems = isCollapsed ? [] : trElems;
     return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('table', {style: {marginBottom: '30px'},className: `table-dark xr-shadow table-sm table table-striped ${ showHover ? 'table-hover' : ''} table-border`},
              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('thead', {className: 'thead-dark'},
                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, ...thElems)),
@@ -22961,45 +22962,71 @@ const genericAsideTableBuilder = (thElems, trElemsInput, showHover = true) => {
                ...trElems));
 };
 
-const genericSidebarClickableRow = (data, onClick) => {
+const buildCollapsableTableHeader = (content, targetInst, color = null) => {
+    let config = {};
+    if(color != null) {
+        config.style = {color};
+    }
+    const onToggleCollapse = () => {
+        targetInst.setState({isCollapsed: !targetInst.state.isCollapsed});
+    };
+    let chevron = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-circle-down', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
+    if(targetInst.state.isCollapsed) {
+        chevron = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
+    }
+    return [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', config, chevron, ' ', ...content)];
+};
+
+const buildSidebarClickableRow = (data, onClick) => {
     var cellConfig = Object(__WEBPACK_IMPORTED_MODULE_3__XrDataQueries_js__["b" /* isTopicInGraphNodes */])(data.id) && onClick != null ? {onClick, "data-id": data.id} : {};
     return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {key: `sidebar-node-${data.id}`},
              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', cellConfig, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href:'#'}, data.content)));
 };
 
-const genericSidebarPlainTextRow = (text) => {
+const buildSidebarPlaintextRow = (text) => {
     return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', {}, text));
 };
 
-class ManufactureSidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+class CollapsableNodeListComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+    constructor(props) {
+        super(props);
+        this.state = {isCollapsed: false};
+    }
+
+    onToggleCollapse(e) {
+        this.setState({state: !this.state.isCollapsed});
+    }
+}
+
+class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
     }
     render() {
         if(this.props.active) {
-            var headerContent = [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {style: {color:__WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* Constants */].COLOR_ORANGE}}, 'Manufacturing Requirements')];
-            var entries = this.props.nodes.map((x) => {
-                return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
+            var headerContent = buildCollapsableTableHeader(['Manufacturing Requirements'], this, __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* Constants */].COLOR_ORANGE);
+            var rowEntries = this.props.nodes.map((x) => {
+                return buildSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
-            return genericAsideTableBuilder(headerContent, entries);
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
         }
         return null;
     }
 }
 
-class SidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+class SidebarNodeListCompoent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
     }
     render() {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
-                [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {}, this.props.title)]
-                : [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {style:{color:this.props.highlightColor}}, this.props.titlePrefix,this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {className:'mr-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}))];
-            var entries = this.props.nodes.map((x) => {
-                return genericSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
+                buildCollapsableTableHeader([this.props.title], this)
+                : buildCollapsableTableHeader([this.props.titlePrefix,this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked})], this, this.props.highlightColor);
+            var rowEntries = this.props.nodes.map((x) => {
+                return buildSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
-            return genericAsideTableBuilder(headerContent, entries);
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
         }
         return null;
     }
@@ -23028,7 +23055,7 @@ class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["C
                 if(topic.timeBuild) trElems.push(`Build Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeBuild)}`);
             }
 
-            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)), false);
+            return buildNodeListTable(headerContent, trElems.map(x=>buildSidebarPlaintextRow(x)), false, false);
         }
         return null;
     }

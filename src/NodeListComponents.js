@@ -8,10 +8,11 @@ import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js'
 import {parseBuildTime} from './Utility.js';
 import {topicsBySearchText} from './PassiveServices.js';
 
-const genericAsideTableBuilder = (thElems, trElemsInput, showHover = true) => {
+const buildNodeListTable = (thElems, trElemsInput, showHover = true, isCollapsed = false) => {
     var trElems = trElemsInput.length > 0 ?
         trElemsInput
-        : [genericSidebarClickableRow({id: "-1", content: "None"}, null)];
+        : [({id: "-1", content: "None"}, null)];
+    trElems = isCollapsed ? [] : trElems;
     return e('table', {style: {marginBottom: '30px'},className: `table-dark xr-shadow table-sm table table-striped ${ showHover ? 'table-hover' : ''} table-border`},
              e('thead', {className: 'thead-dark'},
                e('tr', {}, ...thElems)),
@@ -19,45 +20,71 @@ const genericAsideTableBuilder = (thElems, trElemsInput, showHover = true) => {
                ...trElems));
 };
 
-const genericSidebarClickableRow = (data, onClick) => {
+const buildCollapsableTableHeader = (content, targetInst, color = null) => {
+    let config = {};
+    if(color != null) {
+        config.style = {color};
+    }
+    const onToggleCollapse = () => {
+        targetInst.setState({isCollapsed: !targetInst.state.isCollapsed});
+    };
+    let chevron = e('i', {className: 'fa fa-chevron-circle-down', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
+    if(targetInst.state.isCollapsed) {
+        chevron = e('i', {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
+    }
+    return [e('th', config, chevron, ' ', ...content)];
+};
+
+const buildSidebarClickableRow = (data, onClick) => {
     var cellConfig = isTopicInGraphNodes(data.id) && onClick != null ? {onClick, "data-id": data.id} : {};
     return e('tr', {key: `sidebar-node-${data.id}`},
              e('td', cellConfig, e('a', {href:'#'}, data.content)));
 };
 
-const genericSidebarPlainTextRow = (text) => {
+const buildSidebarPlaintextRow = (text) => {
     return e('tr', {}, e('td', {}, text));
 };
 
-class ManufactureSidebarNodeListCompoent extends Component {
+class CollapsableNodeListComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {isCollapsed: false};
+    }
+
+    onToggleCollapse(e) {
+        this.setState({state: !this.state.isCollapsed});
+    }
+}
+
+class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
     }
     render() {
         if(this.props.active) {
-            var headerContent = [e('th', {style: {color:Constants.COLOR_ORANGE}}, 'Manufacturing Requirements')];
-            var entries = this.props.nodes.map((x) => {
-                return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
+            var headerContent = buildCollapsableTableHeader(['Manufacturing Requirements'], this, Constants.COLOR_ORANGE);
+            var rowEntries = this.props.nodes.map((x) => {
+                return buildSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
-            return genericAsideTableBuilder(headerContent, entries);
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
         }
         return null;
     }
 }
 
-class SidebarNodeListCompoent extends Component {
+class SidebarNodeListCompoent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
     }
     render() {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
-                [e('th', {}, this.props.title)]
-                : [e('th', {style:{color:this.props.highlightColor}}, this.props.titlePrefix,this.props.titleSuffix, e('input', {className:'mr-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}))];
-            var entries = this.props.nodes.map((x) => {
-                return genericSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
+                buildCollapsableTableHeader([this.props.title], this)
+                : buildCollapsableTableHeader([this.props.titlePrefix,this.props.titleSuffix, e('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked})], this, this.props.highlightColor);
+            var rowEntries = this.props.nodes.map((x) => {
+                return buildSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
-            return genericAsideTableBuilder(headerContent, entries);
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
         }
         return null;
     }
@@ -86,7 +113,7 @@ class NodeTriviaListViewComponent extends Component {
                 if(topic.timeBuild) trElems.push(`Build Time: ${parseBuildTime(topic.timeBuild)}`);
             }
 
-            return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)), false);
+            return buildNodeListTable(headerContent, trElems.map(x=>buildSidebarPlaintextRow(x)), false, false);
         }
         return null;
     }

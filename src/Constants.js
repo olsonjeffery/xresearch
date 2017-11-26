@@ -18,7 +18,12 @@ const constants ={
     COLOR_GRAY_LIGHT: '#e9ecef',
     COLOR_GRAY_DARK: '#141618',
 
-    VIEWPORT_OFFSET: 140
+    VIEWPORT_OFFSET: 140,
+
+    CY_CONTAINER_ID: 'cy-container',
+
+    HREF_XPIRATEZ: 'https://openxcom.org/forum/index.php?topic=3626.0',
+    HREF_XRESEARCH: 'https://github.com/olsonjeffery/xresearch'
 };
 
-export default constants;
+export const Constants = constants;

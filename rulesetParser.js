@@ -1,6 +1,7 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
 const _ = require('lodash');
+const orgParser = require('org-mode-parser');
 
 const getResearchFromXpRuleset = (ruleset) => {
     return _.filter(ruleset.research, (i) => { return i.name !== 'STR_UNAVAILABLE'; });
@@ -266,14 +267,17 @@ const mergeAndKeyLangsets = (langsetArrays) => {
     var output = {};
     _.each(langsetArrays, (langset) => {
         _.each(Reflect.ownKeys(langset), (itemKey) => {
+            var name = 'STR_CORPSE_SYNTH_SPACE_SUIT';
+            if(itemKey == name) {
+                console.log('`Found ${name}: ${langset[name]}`');
+            }
             output[itemKey] = langset[itemKey];
         });
     });
     return output;
 };
 
-module.exports.parseAppDataFrom = parseAppDataFrom;
-module.exports.getAllData = () => {
+const getRulesetPayload = () => {
     let xcom1ResearchFilePath = 'rulesets/xcom1.research.rul';
     let xcom1ItemsFilePath = 'rulesets/xcom1.items.rul';
     let xcom1ManufactureFilePath = 'rulesets/xcom1.manufacture.rul';
@@ -309,12 +313,19 @@ module.exports.getAllData = () => {
         xpRuleset.facilities
     ];
 
-    return parseAppDataFrom({
+    return {
         allLangsets,
         allResearch,
         allManufacture,
         allItems,
         allFacilities,
         package
-    });
+    };
+};
+
+module.exports.getRulesetPayload = getRulesetPayload;
+module.exports.parseAppDataFrom = parseAppDataFrom;
+module.exports.getAllData = () => {
+    var dataPayload = getRulesetPayload();
+    return parseAppDataFrom(dataPayload);
 };

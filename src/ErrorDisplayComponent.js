@@ -1,6 +1,6 @@
 import { createElement as e, Component } from 'react';
 
-class ErrorDisplayComponent extends Component {
+export class ErrorDisplayComponent extends Component {
     constructor(props) {
         super(props);
         this.state = { hasError: false };
@@ -25,5 +25,3 @@ class ErrorDisplayComponent extends Component {
         return this.props.children;
     }
 }
-
-export default ErrorDisplayComponent;

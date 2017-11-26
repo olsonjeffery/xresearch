@@ -320,10 +320,17 @@ const constants ={
     COLOR_GRAY_LIGHT: '#e9ecef',
     COLOR_GRAY_DARK: '#141618',
 
-    VIEWPORT_OFFSET: 140
+    VIEWPORT_OFFSET: 140,
+
+    CY_CONTAINER_ID: 'cy-container',
+
+    HREF_XPIRATEZ: 'https://openxcom.org/forum/index.php?topic=3626.0',
+    HREF_XRESEARCH: 'https://github.com/olsonjeffery/xresearch'
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (constants);
+const Constants = constants;
+/* harmony export (immutable) */ __webpack_exports__["a"] = Constants;
+
 
 
 /***/ }),
@@ -419,32 +426,32 @@ module.exports = emptyFunction;
 // action dispatchers
 function actionViewportChange(newViewportSize) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].VIEWPORT_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].VIEWPORT_CHANGE,
         newViewportSize
     };
 }
 function graphFilteringCategoryChange(changedCategory, newValue) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_FILTERING_CATEGORY_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_FILTERING_CATEGORY_CHANGE,
         changedCategory,
         newValue
     };
 };
 function graphUpdatingChange(graphUpdating) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_UPDATING_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_UPDATING_CHANGE,
         graphUpdating
     };
 };
 function nodeSelection(id) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION,
         selectedNodeId: id
     };
 };
 function searchTextChange(searchText) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].SEARCH_TEXT_CHANGE,
         searchText
     };
 };
@@ -452,9 +459,9 @@ function searchTextChange(searchText) {
 // reducers
 const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].SEARCH_TEXT_CHANGE:
         return action.searchText;
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION:
         return '';
     default:
         return state;
@@ -462,16 +469,16 @@ const searchText = (state = 'Search by topic...', action) => {
 };
 const selectedNodeId = (state = null, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION:
         return action.selectedNodeId;
     default:
         return state;
     }
 };
 
-const graphUpdating = (state = true, action) => {
+const graphUpdating = (state = false, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_UPDATING_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_UPDATING_CHANGE:
         return action.graphUpdating;
     default:
         return state;
@@ -480,12 +487,12 @@ const graphUpdating = (state = true, action) => {
 
 const graphFilteringCategories = (state = {dependencies: true, dependedUponBy: true, unlocks: true, unlockedBy: true, getOneFree: true, giveOneFree: true, requires: true, requiredBy: true, requiredToManufacture: true, requiresBuy: true}, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_FILTERING_CATEGORY_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_FILTERING_CATEGORY_CHANGE:
         var newState = {};
         Object.assign(newState, state);
         newState[action.changedCategory] = action.newValue;
         return newState;
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION:
         switch(action.selectedNodeId) {
         case null:
             return {
@@ -510,7 +517,7 @@ const graphFilteringCategories = (state = {dependencies: true, dependedUponBy: t
 
 const viewportSize = (state = {width: 1, height: 1}, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].VIEWPORT_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].VIEWPORT_CHANGE:
         return action.newViewportSize;
     default:
         return state;
@@ -22923,10 +22930,6 @@ exports.clearImmediate = clearImmediate;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SearchResultsListComponent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GraphNodeTopicListComponent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ManufactureGraphNodeTopicListComponent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return NodeTriviaListComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(9);
@@ -22974,7 +22977,7 @@ class ManufactureSidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_rea
     }
     render() {
         if(this.props.active) {
-            var headerContent = [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {style: {color:__WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].COLOR_ORANGE}}, 'Manufacturing Requirements')];
+            var headerContent = [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', {style: {color:__WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* Constants */].COLOR_ORANGE}}, 'Manufacturing Requirements')];
             var entries = this.props.nodes.map((x) => {
                 return genericSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
@@ -23002,18 +23005,6 @@ class SidebarNodeListCompoent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compo
     }
 }
 
-SidebarNodeListCompoent.propTypes = {
-    active: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.bool.isRequired,
-    nodes: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.arrayOf(
-        __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.shape({
-            id: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
-            name: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
-            quantity: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.number
-        })
-    ),
-    onNodeSelection: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired
-};
-
 class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
@@ -23030,11 +23021,11 @@ class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["C
                 if(topic.costResearch) trElems.push(` Research (Base): ${ topic.costResearch }pts.`);
                 if(topic.costManufacture) trElems.push(` Manufacture: $${ topic.costManufacture }`);
                 if(topic.costBuy) trElems.push(`Buy: $${ topic.costBuy }`);
-                if(topic.costSell) trElems.push(` Sell: $${ topic.costSell }`);
-                if(topic.costBuild) trElems.push(` Build: $${topic.costBuild}`);
+                if(topic.costSell) trElems.push(`Sell: $${ topic.costSell }`);
+                if(topic.costBuild) trElems.push(`Build: $${topic.costBuild}`);
                 if(topic.points) trElems.push(`Score Points: ${ topic.points }`);
-                if(topic.timeTotalManufacture) trElems.push(` Manufacture Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeTotalManufacture)}`);
-                if(topic.timeBuild) trElems.push(` Build Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeBuild)}`);
+                if(topic.timeTotalManufacture) trElems.push(`Manufacture Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeTotalManufacture)}`);
+                if(topic.timeBuild) trElems.push(`Build Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeBuild)}`);
             }
 
             return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)), false);
@@ -23053,7 +23044,7 @@ var nodeTriviaMapDispatchToProps = () => {return{};};
 
 let previousSearchText = null;
 const searchResultsMapStateToProps = (state) => {
-    var active =  state.searchText != __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* default */].DEFAULT_SEARCHTEXT && state.searchText != '' && state.searchText != previousSearchText;
+    var active =  state.searchText != __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* Constants */].DEFAULT_SEARCHTEXT && state.searchText != '' && state.searchText != previousSearchText;
     var nodes = [];
     if(active) {
         // this should be the filtering/search based on the current search text (lunr.js)
@@ -23099,10 +23090,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-var SearchResultsListComponent =  Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-var GraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-var ManufactureGraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
-var NodeTriviaListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);
+const SearchResultsListComponent =  Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+/* harmony export (immutable) */ __webpack_exports__["d"] = SearchResultsListComponent;
+
+const GraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = GraphNodeTopicListComponent;
+
+const ManufactureGraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
+/* harmony export (immutable) */ __webpack_exports__["b"] = ManufactureGraphNodeTopicListComponent;
+
+const NodeTriviaListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);
+/* harmony export (immutable) */ __webpack_exports__["c"] = NodeTriviaListComponent;
+
 
 
 /***/ }),
@@ -23146,7 +23145,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     Object(__WEBPACK_IMPORTED_MODULE_5__PassiveServices_js__["b" /* initScrollResetOnNodeSelection */])(__store);
 
     __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1_react_redux__["a" /* Provider */], {store: __store},
-                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__AppComponent_js__["a" /* default */], {version: __xrData.version, xpiratezVersion: __xrData.xpiratezVersion}, null)), document.getElementById('app-root'));
+                      Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__AppComponent_js__["a" /* AppComponent */], {version: __xrData.version, xpiratezVersion: __xrData.xpiratezVersion}, null)), document.getElementById('app-root'));
 })();
 
 
@@ -44038,13 +44037,14 @@ module.exports = performance || {};
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__GraphComponent__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_redux__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Constants_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constants_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__GraphComponent__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__PageNavComponent_js__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__PageSplashComponent_js__ = __webpack_require__(131);
 
 
 
@@ -44054,49 +44054,53 @@ module.exports = performance || {};
 
 
 
-class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+
+
+class AppViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
     }
     getPageNav() {
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__PageNavComponent_js__["a" /* default */], {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_7__PageNavComponent_js__["a" /* PageNavComponent */], {version: this.props.version, xpiratezVersion: this.props.xpiratezVersion}, null);
+    }
+    getPageFooter() {
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: __WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].HREF_XPIRATEZ, target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: __WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].HREF_XRESEARCH, target: '_blank'}, 'available on github'), '.');
     }
     renderMobile() {
         var leftContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                                Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
-                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)));
+                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)));
         var graphContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
-                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)));
+                                  this.props.selectedNodeId === null ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_8__PageSplashComponent_js__["a" /* PageSplashComponent */], {}, null) : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__GraphComponent__["a" /* GraphComponent */], {}, null)));
         var srContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__["d" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null)));
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["d" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null)));
         var rightContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
-                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
+                                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-12'},
-                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
-                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')));
-        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, srContentRow, graphContentRow, leftContentRow, rightContentRow, pageFooterRow);
+                                 this.getPageFooter()));
+        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__["a" /* ErrorDisplayComponent */], null, srContentRow, graphContentRow, leftContentRow, rightContentRow, pageFooterRow);
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, this.getPageNav(), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {paddingTop:'1em', paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
     }
     renderFull() {
         var contentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row', style: {paddingBottom:'1em'}},
-                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_7__Constants_js__["a" /* default */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
+                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__["a" /* LeftDetailsComponent */], {}, null)),
                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-6'},
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_1__GraphComponent__["a" /* default */], {}, null)),
-                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_7__Constants_js__["a" /* default */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__NodeListComponents_js__["d" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
+                             this.props.selectedNodeId === null ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_8__PageSplashComponent_js__["a" /* PageSplashComponent */], {}, null) : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__GraphComponent__["a" /* GraphComponent */], {}, null)),
+                           Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["d" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-md-2'}),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-md-8'},
-                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {style: {textAlign: 'center'}}, 'xresearch is a tool to explore and visualize research-tree info for the ',
-                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://openxcom.org/forum/index.php?topic=3626.0', target: '_blank'}, 'XPiratez'), ' game. It is not a product of, or endorsed by, the Xpiratez team. The source repository for this project is ', Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href: 'https://github.com/olsonjeffery/xresearch', target: '_blank'}, 'available on github'), '.')),
+                                 this.getPageFooter()),
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-2'}, null));
-        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__ErrorDisplayComponent_js__["a" /* default */], null, contentRow, pageFooterRow);
+        var app = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_6__ErrorDisplayComponent_js__["a" /* ErrorDisplayComponent */], null, contentRow, pageFooterRow);
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, this.getPageNav(), Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style: {paddingTop:'1em', paddingRight:'15px', paddingLeft:'15px', marginRight:'auto', marginLeft:'auto'},className: 'fluid-container'}, app));
     }
     render() {
@@ -44111,11 +44115,14 @@ class AppComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        selectedNodeId: state.selectedNodeId,
         height: state.viewportSize.height,
         isMobile: state.viewportSize.width < 576
     };
 };
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_6_react_redux__["b" /* connect */])(mapStateToProps, () => {return {};})(AppComponent));
+const AppComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, () => {return {};})(AppViewComponent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = AppComponent;
+
 
 
 /***/ }),
@@ -44241,47 +44248,47 @@ var cyStyle = [
     {"selector": ".dep",
      "style": {
          "width": "1px",
-         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GREEN,
+         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GREEN,
          "mid-target-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-target-arrow-shape": "triangle",
-         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GREEN
+         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GREEN
      }},
     {"selector": ".unlocks",
      "style": {
          "width": "1px",
-         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_BLUE,
+         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_BLUE,
          "mid-source-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
-         "mid-source-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_BLUE
+         "mid-source-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_BLUE
      }},
     {"selector": ".getOneFree",
      "style": {
          "width": "1px",
-         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_RED,
+         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_RED,
          "mid-source-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-source-arrow-shape": "triangle",
-         "mid-source-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_RED
+         "mid-source-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_RED
      }},
     {"selector": ".manufacture",
      "style": {
          "width": "1px",
-         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_ORANGE,
+         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_ORANGE,
          "mid-target-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-target-arrow-shape": "triangle",
-         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_ORANGE
+         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_ORANGE
      }},
     {"selector": ".requires",
      "style": {
          "width": "1px",
-         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT,
+         "line-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT,
          "mid-target-arrow-fill": 'filled',
          "arrow-scale": 1,
          "mid-target-arrow-shape": "triangle",
-         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT
+         "mid-target-arrow-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT
      }},
     // node styles
     {"selector": "node.facility",
@@ -44292,7 +44299,7 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_RED,
+         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_RED,
          "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
@@ -44308,7 +44315,7 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_BLUE,
+         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_BLUE,
          "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
@@ -44324,7 +44331,7 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GREEN,
+         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GREEN,
          "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
@@ -44340,7 +44347,7 @@ var cyStyle = [
          "font-size": "9px",
          "text-valign": "center",
          "text-halign": "center",
-         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT,
+         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT,
          "text-outline-color": "#000",
          "text-outline-width": "1px",
          "color": "#fff",
@@ -44377,7 +44384,16 @@ var randomLayout = {
 
 var __allElems = {};
 
-class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+const initCyQueryCollection = () => {
+    window.__cyQuery = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
+        headless: true,
+        elements: buildElementsFromAllResearchData(),
+        layout: concentricTotalLayout,
+        style: cyStyle
+    });
+};
+
+class GraphViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
         this.containerId = 'cy-container';
@@ -44385,38 +44401,30 @@ class GraphComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
     componentDidMount() {
         var self = this;
-        self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__StateManagement_js__["c" /* graphUpdatingChange */])(true));
+        this.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__StateManagement_js__["c" /* graphUpdatingChange */])(true));
         setTimeout(() => {
-            self.cyQuery = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
-                headless: true,
-                elements: buildElementsFromAllResearchData(),
-                layout: concentricTotalLayout,
-                style: cyStyle
-            });
+            if(window.__cyQuery == undefined) {
+                initCyQueryCollection();
+            }
             setTimeout(() => {
-                self.cy = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
-                    container: document.getElementById(this.containerId),
+                let cy = __WEBPACK_IMPORTED_MODULE_1_cytoscape___default()({
+                    container: document.getElementById(__WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].CY_CONTAINER_ID),
                     elements: [],
                     layout: null,
                     style: cyStyle
                 });
-                window.__cy = self.cy;
-                self.cy.add(self.cyQuery.elements());
-                var layout = self.cy.layout(concentricTotalLayout);
-                layout.run();
-                self.cy.reset();
-                self.cy.on('tap', 'node', (e) => {
+                window.__cy = cy;
+                cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-                self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__StateManagement_js__["c" /* graphUpdatingChange */])(false));
+                showSelectedNodeInGraph(self.props.selectedNodeId, self, {graphFilteringCategories: self.props.graphFilteringCategories});
             }, TIMEOUT_LENGTH_MS);
-            window.__cyQuery = self.cyQuery;
         }, TIMEOUT_LENGTH_MS);
     }
 
     render() {
-        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{backgroundColor: __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].COLOR_GRAY_DARK}, className: 'xr-shadow'},
-                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {id: this.containerId, style:{width: '100%',height: `${this.props.viewportHeight - __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* default */].VIEWPORT_OFFSET}px`}}, null));
+        return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{backgroundColor: __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GRAY_DARK}, className: 'xr-shadow'},
+                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {id: this.containerId, style:{width: '100%',height: `${this.props.viewportHeight - __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].VIEWPORT_OFFSET}px`}}, null));
     }
 }
 
@@ -44429,6 +44437,10 @@ const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, cate
     }
 };
 const showSelectedNodeInGraph = (targetId, self, state) => {
+    if(window.__cy === undefined) {
+        // we bail if __cy isn't defined yet; defer it to componentDidMount
+        return;
+    }
     var newNodes = [];
     var selectedLayout = {};
     self.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_7__StateManagement_js__["c" /* graphUpdatingChange */])(true));
@@ -44471,7 +44483,7 @@ const mapStateToProps = (state, ownProps) => {
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     }
-    return {viewportHeight: state.viewportSize.height};
+    return {graphFilteringCategories: state.graphFilteringCategories, selectedNodeId: state.selectedNodeId, viewportHeight: state.viewportSize.height};
 };
 
 const mapDispatchToProps = (dispatch, state) => {
@@ -44490,7 +44502,9 @@ const mapDispatchToProps = (dispatch, state) => {
     };
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_3_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(GraphComponent));
+const GraphComponent = Object(__WEBPACK_IMPORTED_MODULE_3_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(GraphViewComponent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = GraphComponent;
+
 
 
 /***/ }),
@@ -75003,8 +75017,6 @@ const parseBuildTime = (totalTimeHours) => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LeftDetailsComponent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return RightDetailsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(9);
@@ -75063,23 +75075,23 @@ class RightNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_
             }
             if(topic.dependedUponBy && topic.dependedUponBy.length > 0) {
                 let edgeName = 'dependedUponBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GREEN}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GREEN}, null));
             }
             if(topic.unlocks && topic.unlocks.length > 0) {
                 let edgeName = 'unlocks';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_BLUE}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_BLUE}, null));
             }
             if(topic.getOneFree && topic.getOneFree.length > 0) {
                 let edgeName = 'getOneFree';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_RED}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_RED}, null));
             }
             if(topic.requiredBy && topic.requiredBy.length > 0) {
                 let edgeName = 'requiredBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
                 let edgeName = 'requiredToManufacture';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_ORANGE}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_ORANGE}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -75108,23 +75120,23 @@ class LeftNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_r
             children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["c" /* NodeTriviaListComponent */], {}, null));
             if(topic.dependencies && topic.dependencies.length > 0) {
                 let edgeName = 'dependencies';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GREEN}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GREEN}, null));
             }
             if(topic.unlockedBy && topic.unlockedBy.length > 0) {
                 let edgeName = 'unlockedBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_BLUE}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_BLUE}, null));
             }
             if(topic.giveOneFree && topic.giveOneFree.length > 0) {
                 let edgeName = 'giveOneFree';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_RED}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_RED}, null));
             }
             if(topic.requires && topic.requires.length > 0) {
                 let edgeName = 'requires';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
             }
             if(topic.requiresBuy && topic.requiresBuy.length > 0) {
                 let edgeName = 'requiresBuy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* default */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -75149,8 +75161,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {};
 };
 
-let LeftDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(leftMapStateToProps, mapDispatchToProps)(LeftNodeDetailsPresentationComponent);
-let RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(rightMapStateToProps, mapDispatchToProps)(RightNodeDetailsPresentationComponent);
+const LeftDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(leftMapStateToProps, mapDispatchToProps)(LeftNodeDetailsPresentationComponent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = LeftDetailsComponent;
+
+const RightDetailsComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(rightMapStateToProps, mapDispatchToProps)(RightNodeDetailsPresentationComponent);
+/* harmony export (immutable) */ __webpack_exports__["b"] = RightDetailsComponent;
+
 
 
 /***/ }),
@@ -75187,8 +75203,8 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
         return this.props.children;
     }
 }
+/* harmony export (immutable) */ __webpack_exports__["a"] = ErrorDisplayComponent;
 
-/* harmony default export */ __webpack_exports__["a"] = (ErrorDisplayComponent);
 
 
 /***/ }),
@@ -75208,7 +75224,7 @@ class ErrorDisplayComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Compone
 
 
 
-class PageNavComponentImpl extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+class PageNavViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
     }
@@ -75222,17 +75238,13 @@ class PageNavComponentImpl extends __WEBPACK_IMPORTED_MODULE_0_react__["Componen
             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {className: ''},
               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-right fa-fw'}, null), this.props.nodeLabel)
             : '';
-        var showAllButton = this.props.showNodeDetails ?
-            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href:'#', className: '', onClick: this.props.onShowAllTopics}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', { className: 'fa fa-times fa-fw'}, null))
-            : '';
         return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary', style: {backgroundImage: 'linear-gradient(#484e55, #3A3F44 60%, #313539)',boxShadow: '0 0.125em 0.125em black'}},
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'navbar-brand'},
                    navbarPageTitle,
-                   navbarSelectedTitle,
-                   showAllButton),
+                   navbarSelectedTitle),
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('button', {type:'button', className:'navbar-toggler collapsed', "data-target":"#navbarResponsive", "data-toggle":"collapse", "aria-controls":"navbarResponsive", "aria-expanded":"false", "aria-label":"Toggle navigation"}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {className: 'navbar-toggler-icon'})),
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {id: "navbarResponsive", className:'navbar-collapse collapse'},
-                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* default */], {searchText: 'Enter topic name...'}, null)));
+                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_2__SearchBarComponent__["a" /* SearchBarComponent */], {searchText: 'Enter topic name...'}, null)));
     }
 }
 
@@ -75259,7 +75271,9 @@ const mapDispatchToProps = (dispatch, state, ownProps) => {
     };
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(PageNavComponentImpl));
+const PageNavComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(PageNavViewComponent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = PageNavComponent;
+
 
 
 /***/ }),
@@ -75281,7 +75295,7 @@ const mapDispatchToProps = (dispatch, state, ownProps) => {
 
 
 
-class SearchBarComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+class SearchBarViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
     }
@@ -75291,28 +75305,117 @@ class SearchBarComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"
                  Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'input-group mr-sm-2'},
                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('span', {className: 'input-group-addon'}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-search'}, null)),
                    Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {id: 'search', className: 'form-control form-control-sm mr-sm-2', type: 'text', placeholder: this.props.searchText, onChange: (e) => this.props.onChange(e)})));
-                }
+    }
+}
+
+SearchBarViewComponent.propTypes = {
+    onChange: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired,
+    searchText: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired
+};
+
+var mapStateToProps = (state) => {
+    return {
+        searchText: state.searchText
+    };
+};
+var mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        onChange: (e) => {
+            dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["f" /* searchTextChange */])(e.currentTarget.value));
+        }
+    };
+};
+
+const SearchBarComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(SearchBarViewComponent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = SearchBarComponent;
+
+
+
+/***/ }),
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_redux__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Constants_js__ = __webpack_require__(3);
+
+
+
+
+class PageSplashViewComponent extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
+    constructor(props) {
+        super(props);
     }
 
-    SearchBarComponent.propTypes = {
-        onChange: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired,
-        searchText: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired
-    };
+    buildCopy() {
+        return Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('ul', {},
+                 Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('li', {}, 'Use the search bar to look up topics by name'),
+                 Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('li', {}, 'When viewing research topics, clicking the "xresearch" title at the top-left will reset the application to its initial state (displaying this splash page)'),
+                 Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('li', {}, 'You can also ',Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('a', {href:__WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].HREF_XRESEARCH, target: '_blank'}, 'visit the Github Repository'), ' for xresearch or ', Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('a', {href: __WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].HREF_XPIRATEZ, target: '_blank'}, 'check out the XPiratez page'))
+                );
+    }
 
-    var mapStateToProps = (state) => {
-        return {
-            searchText: state.searchText
-        };
-    };
-    var mapDispatchToProps = (dispatch, ownProps) => {
-        return {
-            onChange: (e) => {
-                dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__StateManagement_js__["f" /* searchTextChange */])(e.currentTarget.value));
-            }
-        };
-    };
+    render() {
+        if(this.props.active) {
+            return Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'xr-shadow', style: {backgroundColor: __WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].COLOR_GRAY_DARK, overflowY: 'scroll', width: '100%', height: this.props.heightPx}},
+                     Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'container', style: {paddingTop:'2em'}},
+                       Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'row'},
+                         Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'col-12', style:{textAlign:'center'}},
+                           Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('i', {className: 'fa fa-info-circle fa-5x fa-fw'}, null))),
+                       Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'row'},
+                         Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'col-12', style:{textAlign:'center'}},
+                           Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('h3', {}, 'Welcome to xresearch!'))),
+                       Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'row', style:{paddingTop:'2em'}},
+                         Object(__WEBPACK_IMPORTED_MODULE_1_react__["createElement"])('div', {className: 'col-12', style:{}},
+                           this.buildCopy()))));
+        } else {
+            return null;
+        }
+    }
+}
 
-    /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(SearchBarComponent));
+const mapStateToProps = (state, ownProps) => {
+    return {
+        heightPx: `${state.viewportSize.height - __WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].VIEWPORT_OFFSET}px`,
+        active: state.selectedNodeId === null
+    };
+};
+
+const mapDispatchToProps = (state, ownProps) => {
+    return {
+    };
+};
+
+const PageSplashComponent = Object(__WEBPACK_IMPORTED_MODULE_0_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(PageSplashViewComponent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = PageSplashComponent;
+
 
 
 /***/ })

@@ -1,7 +1,7 @@
 import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Constants from './Constants.js';
+import {Constants} from './Constants.js';
 import {NodeTriviaListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent}  from './NodeListComponents.js';
 
 import {researchById} from './XrDataQueries.js';
@@ -134,5 +134,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {};
 };
 
-export let LeftDetailsComponent = connect(leftMapStateToProps, mapDispatchToProps)(LeftNodeDetailsPresentationComponent);
-export let RightDetailsComponent = connect(rightMapStateToProps, mapDispatchToProps)(RightNodeDetailsPresentationComponent);
+export const LeftDetailsComponent = connect(leftMapStateToProps, mapDispatchToProps)(LeftNodeDetailsPresentationComponent);
+export const RightDetailsComponent = connect(rightMapStateToProps, mapDispatchToProps)(RightNodeDetailsPresentationComponent);

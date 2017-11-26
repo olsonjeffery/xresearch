@@ -1,10 +1,10 @@
 import { createElement as e, Component } from 'react';
 import { connect } from 'react-redux';
-import SearchBarComponent from './SearchBarComponent';
+import {SearchBarComponent} from './SearchBarComponent';
 import {researchById} from './XrDataQueries.js';
 import {nodeSelection} from './StateManagement.js';
 
-class PageNavComponentImpl extends Component {
+class PageNavViewComponent extends Component {
     constructor(props) {
         super(props);
     }
@@ -18,14 +18,10 @@ class PageNavComponentImpl extends Component {
             e('a', {className: ''},
               e('i', {className: 'fa fa-chevron-right fa-fw'}, null), this.props.nodeLabel)
             : '';
-        var showAllButton = this.props.showNodeDetails ?
-            e('a', {href:'#', className: '', onClick: this.props.onShowAllTopics}, e('i', { className: 'fa fa-times fa-fw'}, null))
-            : '';
         return e('nav', {className: 'navbar navbar-expand-lg navbar-dark bg-primary', style: {backgroundImage: 'linear-gradient(#484e55, #3A3F44 60%, #313539)',boxShadow: '0 0.125em 0.125em black'}},
                  e('div', {className: 'navbar-brand'},
                    navbarPageTitle,
-                   navbarSelectedTitle,
-                   showAllButton),
+                   navbarSelectedTitle),
                  e('button', {type:'button', className:'navbar-toggler collapsed', "data-target":"#navbarResponsive", "data-toggle":"collapse", "aria-controls":"navbarResponsive", "aria-expanded":"false", "aria-label":"Toggle navigation"}, e('span', {className: 'navbar-toggler-icon'})),
                  e('div', {id: "navbarResponsive", className:'navbar-collapse collapse'},
                    e(SearchBarComponent, {searchText: 'Enter topic name...'}, null)));
@@ -55,4 +51,4 @@ const mapDispatchToProps = (dispatch, state, ownProps) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageNavComponentImpl);
+export const PageNavComponent = connect(mapStateToProps, mapDispatchToProps)(PageNavViewComponent);

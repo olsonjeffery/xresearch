@@ -1,5 +1,5 @@
 import {combineReducers, createStore } from 'redux';
-import Constants from './Constants.js';
+import {Constants} from './Constants.js';
 
 // action dispatchers
 export function actionViewportChange(newViewportSize) {
@@ -54,7 +54,7 @@ const selectedNodeId = (state = null, action) => {
     }
 };
 
-const graphUpdating = (state = true, action) => {
+const graphUpdating = (state = false, action) => {
     switch(action.type) {
     case Constants.GRAPH_UPDATING_CHANGE:
         return action.graphUpdating;

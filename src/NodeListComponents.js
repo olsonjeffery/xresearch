@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
-import Constants from './Constants.js';
+import {Constants} from './Constants.js';
 import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js';
 import {parseBuildTime} from './Utility.js';
 import {topicsBySearchText} from './PassiveServices.js';
@@ -63,18 +63,6 @@ class SidebarNodeListCompoent extends Component {
     }
 }
 
-SidebarNodeListCompoent.propTypes = {
-    active: PropTypes.bool.isRequired,
-    nodes: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            quantity: PropTypes.number
-        })
-    ),
-    onNodeSelection: PropTypes.func.isRequired
-};
-
 class NodeTriviaListViewComponent extends Component {
     constructor(props) {
         super(props);
@@ -91,11 +79,11 @@ class NodeTriviaListViewComponent extends Component {
                 if(topic.costResearch) trElems.push(` Research (Base): ${ topic.costResearch }pts.`);
                 if(topic.costManufacture) trElems.push(` Manufacture: $${ topic.costManufacture }`);
                 if(topic.costBuy) trElems.push(`Buy: $${ topic.costBuy }`);
-                if(topic.costSell) trElems.push(` Sell: $${ topic.costSell }`);
-                if(topic.costBuild) trElems.push(` Build: $${topic.costBuild}`);
+                if(topic.costSell) trElems.push(`Sell: $${ topic.costSell }`);
+                if(topic.costBuild) trElems.push(`Build: $${topic.costBuild}`);
                 if(topic.points) trElems.push(`Score Points: ${ topic.points }`);
-                if(topic.timeTotalManufacture) trElems.push(` Manufacture Time: ${parseBuildTime(topic.timeTotalManufacture)}`);
-                if(topic.timeBuild) trElems.push(` Build Time: ${parseBuildTime(topic.timeBuild)}`);
+                if(topic.timeTotalManufacture) trElems.push(`Manufacture Time: ${parseBuildTime(topic.timeTotalManufacture)}`);
+                if(topic.timeBuild) trElems.push(`Build Time: ${parseBuildTime(topic.timeBuild)}`);
             }
 
             return genericAsideTableBuilder(headerContent, trElems.map(x=>genericSidebarPlainTextRow(x)), false);
@@ -160,7 +148,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-export var SearchResultsListComponent =  connect(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-export var GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-export var ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
-export var NodeTriviaListComponent = connect(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);
+export const SearchResultsListComponent =  connect(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export const GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
+export const ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
+export const NodeTriviaListComponent = connect(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);

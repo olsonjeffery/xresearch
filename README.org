@@ -38,20 +38,11 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 ** HOWTO: Regenerate static HTML (only needed if index_template.html or parser logic changes, resulting in JSON data differences)
 1. Run 'npm run genstatic'
 
-** TODO CHANGELOG
-- PENDING [0/19]
-  - [ ] REFACTOR: audit/fix & document relationships across rulesetParser, graph and node list display ::
+** CHANGELOG
+- PENDING [0/12]
+  - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in PageSplashComponent ::
+  - [ ] REFACTOR: audit/fix & document relationships across rulesetParser, graph and node list display :: 
   - [ ] FEATURE: add graph legend ::
-  - [ ] FEATURE: UX overhaul ::
-    - [ ] create some mockups
-      - [ ] existing UX layout w/ left/right asides and center graph
-      - [ ] half/half layout with graph on right and left/right navs on other side side-by-side
-    - what moves out of the summary/header and into the sidebars?
-    - collapsable sidebars
-    - item count in sidebar tables
-    - graph location vis-a-vis node details display
-  - [ ] FEATURE: show manufacturing outputs, not just manufacturing inputs
-    - more useful for rob/slavery
   - [ ] FEATURE: "recent nodes" list via localStorage ::
     - [ ] add redux store listener to catch all nodeSelection actions
     - [ ] maintain running list of ten-most-recent nodes visited
@@ -60,19 +51,27 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - [ ] when multiple nodes are displayed or during show-all-topics, show a special summary instead
     - [ ] top-10 most-linked
     - [ ] top-10 most needed to manufacturing
+  - [ ] FEATURE: effort-value-sell ratio ::
     - [ ] top-10 effort-value-sell ratio, possible algo:
       - [ ] compute an "effort value" for each item (sum of child-component "effort value" + buildTime*(cost or 1, whichever is greater)
       - [ ] compute EVS ratio by doing costSell/ev
+  - [ ] FEATURE: view raw JSON payload for a given node details ::
+    - [ ] a json tree visualization library to display within a div...
+  - [ ] FEATURE: allow "multipled selected nodes" in graph display ::
+  - [ ] FEATURE: increase neighorhood depth from 1 to 2 ::
+  - [ ] FEATURE: router support in URL ::
+    - [ ] all routes represent redux actions
+  - [ ] BUG: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
+  - [ ] BUG: deal with SYNTH_CORPSE_ETC entries and their missing lang info ::
+    - [ ] items with both 'type' and 'name' entries (all corpses)
+    - [ ] the 'type' STR_ values all point to stuff not in the lang
+    - [ ] maybe just remove them
+- VERSION 0.1.1 [2/9]
+  - [ ] FEATURE: collapsable node list components ::
+  - [ ] FEATURE: item count in sidebar tables ::
   - [ ] FEATURE: integrate requiresBaseFunc/provideBaseFunc ::
     - [ ] shows up in manufacture
     - [ ] shows up in facilities
-  - [ ] FEATURE: view raw JSON payload for a given node details ::
-    - [ ] a json tree visualization library to display within a div...
-  - [ ] FEATURE: build time display to factor in the number of runts assigned ::
-  - [ ] FEATURE: allow "multipled selected nodes" in graph display ::
-  - [ ] FEATURE: no more "show all topics" :: default is three initial research topics
-  - [ ] FEATURE: crunch data on nodes and pull down a list of "most connected topics" ::
-    - [ ] show list as part of "show all topics" display
   - [ ] FEATURE: hover polish ::
     - [ ] hovering over node list <td> triggers :hover that sets color to match its header coloring
     - [ ] hovering on node list entry highlights matching edge in cytoscape
@@ -84,14 +83,18 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] add `edgeHighlight: string` to state
       - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
       - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
-  - [ ] FEATURE: add craft data
-  - [ ] FEATURE: increase neighorhood depth from 1 to 2 ::
-  - [ ] FEATURE: router support in URL ::
-    - [ ] all routes represent redux actions
-  - [ ] BUG: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
-  - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in app ::
+  - [ ] FEATURE: build time display to factor in the number of runts assigned ::
+  - [ ] FEATURE: add craft data ::
+  - [ ] FEATURE: show manufacturing outputs, not just manufacturing inputs ::
+    - more useful for rob/slavery
+  - [X] FEATURE: UX overhaul ::
+    - [X] create some mockups
+      - [X] existing UX layout w/ left/right asides and center graph
+      - [X] half/half layout with graph on right and left/right navs on other side side-by-side
+    - [X] add intro page instead of show all, based on ux mockup
+    - [X] no more "show all topics"
     - use org-mode-parser npm package from within ./ruleset-parser.js
-  - [ ] FEATURE: extra double-plus gold plating: Create a webfont based upon the XCOM bitmap  :: fontset and use that in xresearch; enforce overall mid-90s DOS euro-game aesthetic
+  - [X] REFACTOR: get rid of all the uses of export default
 - VERSION 0.1.0 [8/8]
   - [X] FEATURE: handling research topics from the vanilla (e.g. STR_ALIEN_TERROR) ::
     - [X] make parse not complain w/ loading of unmodified YAML 

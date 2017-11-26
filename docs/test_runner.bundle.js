@@ -306,10 +306,17 @@ const constants ={
     COLOR_GRAY_LIGHT: '#e9ecef',
     COLOR_GRAY_DARK: '#141618',
 
-    VIEWPORT_OFFSET: 140
+    VIEWPORT_OFFSET: 140,
+
+    CY_CONTAINER_ID: 'cy-container',
+
+    HREF_XPIRATEZ: 'https://openxcom.org/forum/index.php?topic=3626.0',
+    HREF_XRESEARCH: 'https://github.com/olsonjeffery/xresearch'
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (constants);
+const Constants = constants;
+/* harmony export (immutable) */ __webpack_exports__["a"] = Constants;
+
 
 
 /***/ }),
@@ -402,32 +409,32 @@ function isTopicInGraphNodes(id) {
 // action dispatchers
 function actionViewportChange(newViewportSize) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].VIEWPORT_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].VIEWPORT_CHANGE,
         newViewportSize
     };
 }
 function graphFilteringCategoryChange(changedCategory, newValue) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_FILTERING_CATEGORY_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_FILTERING_CATEGORY_CHANGE,
         changedCategory,
         newValue
     };
 };
 function graphUpdatingChange(graphUpdating) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_UPDATING_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_UPDATING_CHANGE,
         graphUpdating
     };
 };
 function nodeSelection(id) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION,
         selectedNodeId: id
     };
 };
 function searchTextChange(searchText) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE,
+        type: __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].SEARCH_TEXT_CHANGE,
         searchText
     };
 };
@@ -435,9 +442,9 @@ function searchTextChange(searchText) {
 // reducers
 const searchText = (state = 'Search by topic...', action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].SEARCH_TEXT_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].SEARCH_TEXT_CHANGE:
         return action.searchText;
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION:
         return '';
     default:
         return state;
@@ -445,16 +452,16 @@ const searchText = (state = 'Search by topic...', action) => {
 };
 const selectedNodeId = (state = null, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION:
         return action.selectedNodeId;
     default:
         return state;
     }
 };
 
-const graphUpdating = (state = true, action) => {
+const graphUpdating = (state = false, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_UPDATING_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_UPDATING_CHANGE:
         return action.graphUpdating;
     default:
         return state;
@@ -463,12 +470,12 @@ const graphUpdating = (state = true, action) => {
 
 const graphFilteringCategories = (state = {dependencies: true, dependedUponBy: true, unlocks: true, unlockedBy: true, getOneFree: true, giveOneFree: true, requires: true, requiredBy: true, requiredToManufacture: true, requiresBuy: true}, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].GRAPH_FILTERING_CATEGORY_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].GRAPH_FILTERING_CATEGORY_CHANGE:
         var newState = {};
         Object.assign(newState, state);
         newState[action.changedCategory] = action.newValue;
         return newState;
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].NODE_SELECTION:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].NODE_SELECTION:
         switch(action.selectedNodeId) {
         case null:
             return {
@@ -493,7 +500,7 @@ const graphFilteringCategories = (state = {dependencies: true, dependedUponBy: t
 
 const viewportSize = (state = {width: 1, height: 1}, action) => {
     switch(action.type) {
-    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* default */].VIEWPORT_CHANGE:
+    case __WEBPACK_IMPORTED_MODULE_1__Constants_js__["a" /* Constants */].VIEWPORT_CHANGE:
         return action.newViewportSize;
     default:
         return state;

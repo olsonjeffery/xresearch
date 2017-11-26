@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import ReactDOM from 'react-dom';
 
 import { actionViewportChange, initializeStore } from './StateManagement.js';
-import AppComponent from './AppComponent.js';
+import {AppComponent} from './AppComponent.js';
 import {initViewportChangeListener, initScrollResetOnNodeSelection, getViewportSize } from "./PassiveServices.js";
 
 (() => {

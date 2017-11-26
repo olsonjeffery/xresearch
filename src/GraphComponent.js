@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
-import Constants from './Constants.js';
+import {Constants} from './Constants.js';
 import {researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
 import {nodeSelection, graphUpdatingChange} from './StateManagement.js';
 
@@ -240,7 +240,16 @@ var randomLayout = {
 
 var __allElems = {};
 
-class GraphComponent extends Component {
+const initCyQueryCollection = () => {
+    window.__cyQuery = cytoscape({
+        headless: true,
+        elements: buildElementsFromAllResearchData(),
+        layout: concentricTotalLayout,
+        style: cyStyle
+    });
+};
+
+class GraphViewComponent extends Component {
     constructor(props) {
         super(props);
         this.containerId = 'cy-container';
@@ -248,32 +257,24 @@ class GraphComponent extends Component {
 
     componentDidMount() {
         var self = this;
-        self.props.dispatch(graphUpdatingChange(true));
+        this.props.dispatch(graphUpdatingChange(true));
         setTimeout(() => {
-            self.cyQuery = cytoscape({
-                headless: true,
-                elements: buildElementsFromAllResearchData(),
-                layout: concentricTotalLayout,
-                style: cyStyle
-            });
+            if(window.__cyQuery == undefined) {
+                initCyQueryCollection();
+            }
             setTimeout(() => {
-                self.cy = cytoscape({
-                    container: document.getElementById(this.containerId),
+                let cy = cytoscape({
+                    container: document.getElementById(Constants.CY_CONTAINER_ID),
                     elements: [],
                     layout: null,
                     style: cyStyle
                 });
-                window.__cy = self.cy;
-                self.cy.add(self.cyQuery.elements());
-                var layout = self.cy.layout(concentricTotalLayout);
-                layout.run();
-                self.cy.reset();
-                self.cy.on('tap', 'node', (e) => {
+                window.__cy = cy;
+                cy.on('tap', 'node', (e) => {
                     self.props.onNodeSelection(e);
                 });
-                self.props.dispatch(graphUpdatingChange(false));
+                showSelectedNodeInGraph(self.props.selectedNodeId, self, {graphFilteringCategories: self.props.graphFilteringCategories});
             }, TIMEOUT_LENGTH_MS);
-            window.__cyQuery = self.cyQuery;
         }, TIMEOUT_LENGTH_MS);
     }
 
@@ -292,6 +293,10 @@ const applyGraphFilteringCategories = (cy, targetNode, filteringCategories, cate
     }
 };
 const showSelectedNodeInGraph = (targetId, self, state) => {
+    if(window.__cy === undefined) {
+        // we bail if __cy isn't defined yet; defer it to componentDidMount
+        return;
+    }
     var newNodes = [];
     var selectedLayout = {};
     self.props.dispatch(graphUpdatingChange(true));
@@ -334,7 +339,7 @@ const mapStateToProps = (state, ownProps) => {
         previousGraphFilteringCateogories = state.graphFilteringCategories;
         showSelectedNodeInGraph(state.selectedNodeId, dispatchProps, state);
     }
-    return {viewportHeight: state.viewportSize.height};
+    return {graphFilteringCategories: state.graphFilteringCategories, selectedNodeId: state.selectedNodeId, viewportHeight: state.viewportSize.height};
 };
 
 const mapDispatchToProps = (dispatch, state) => {
@@ -353,4 +358,4 @@ const mapDispatchToProps = (dispatch, state) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GraphComponent);
+export const GraphComponent = connect(mapStateToProps, mapDispatchToProps)(GraphViewComponent);

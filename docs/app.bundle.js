@@ -22962,11 +22962,15 @@ const buildNodeListTable = (thElems, trElemsInput, showHover = true, isCollapsed
                ...trElems));
 };
 
-const buildCollapsableTableHeader = (content, targetInst, color = null) => {
+const buildNodeListTableHeader = (content, color = null) => {
     let config = {};
     if(color != null) {
         config.style = {color};
     }
+    return [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', config, ...content)];
+};
+
+const buildCollapsableControl = (targetInst) => {
     const onToggleCollapse = () => {
         targetInst.setState({isCollapsed: !targetInst.state.isCollapsed});
     };
@@ -22974,7 +22978,7 @@ const buildCollapsableTableHeader = (content, targetInst, color = null) => {
     if(targetInst.state.isCollapsed) {
         chevron = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
     }
-    return [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('th', config, chevron, ' ', ...content)];
+    return [chevron, ' '];
 };
 
 const buildSidebarClickableRow = (data, onClick) => {
@@ -22983,8 +22987,24 @@ const buildSidebarClickableRow = (data, onClick) => {
              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', cellConfig, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href:'#'}, data.content)));
 };
 
-const buildSidebarPlaintextRow = (text) => {
-    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', {}, text));
+const buildSidebarPlaintextRow = (contentArr) => {
+    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', {}, ...contentArr));
+};
+
+const buildLeftAndRightAlignedContent = (leftContent, rightContent, maxLeftWidth=50, maxRightWidth=50) => {
+    return [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{float:'left',maxWidth:`${maxLeftWidth}%`, textAlign:'left'}}, ...leftContent),
+            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{float:'right',maxWidth:`${maxRightWidth}%`, textAlign:'right'}}, ...rightContent)];
+};
+
+const buildRuntAugmentedManufactureTime = (timeTotalManufacture, targetInst) => {
+    const onRuntCountChange = (e) => {
+        var runts = parseInt(e.target.value);
+        targetInst.setState({runts});
+    };
+    return buildLeftAndRightAlignedContent(
+        [`Manufacture Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(timeTotalManufacture, targetInst.state.runts)}`],
+        [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {style: {display:'inline', maxWidth:'50%'}, className: 'form-control form-control-sm', type:'number', onChange: onRuntCountChange, value: `${targetInst.state.runts}`, min:'1', max:'1024'}), ' Runt(s)'],
+        65, 35);
 };
 
 class CollapsableNodeListComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
@@ -23004,7 +23024,7 @@ class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     }
     render() {
         if(this.props.active) {
-            var headerContent = buildCollapsableTableHeader(['Manufacturing Requirements'], this, __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* Constants */].COLOR_ORANGE);
+            var headerContent = buildNodeListTableHeader([...buildCollapsableControl(this), 'Manufacturing Requirements'], __WEBPACK_IMPORTED_MODULE_4__Constants_js__["a" /* Constants */].COLOR_ORANGE);
             var rowEntries = this.props.nodes.map((x) => {
                 return buildSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
@@ -23021,8 +23041,12 @@ class SidebarNodeListCompoent extends CollapsableNodeListComponent {
     render() {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
-                buildCollapsableTableHeader([this.props.title], this)
-                : buildCollapsableTableHeader([this.props.titlePrefix,this.props.titleSuffix, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked})], this, this.props.highlightColor);
+                buildNodeListTableHeader([...buildCollapsableControl(this), this.props.title])
+                : buildNodeListTableHeader(
+                    buildLeftAndRightAlignedContent(
+                        [...buildCollapsableControl(this), this.props.titlePrefix,this.props.titleSuffix],
+                        [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}, null)]),
+                    this.props.highlightColor);
             var rowEntries = this.props.nodes.map((x) => {
                 return buildSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
@@ -23035,6 +23059,7 @@ class SidebarNodeListCompoent extends CollapsableNodeListComponent {
 class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     constructor(props) {
         super(props);
+        this.state = {runts: 1};
     }
     render() {
         if(this.props.active) {
@@ -23051,11 +23076,14 @@ class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["C
                 if(topic.costSell) trElems.push(`Sell: $${ topic.costSell }`);
                 if(topic.costBuild) trElems.push(`Build: $${topic.costBuild}`);
                 if(topic.points) trElems.push(`Score Points: ${ topic.points }`);
-                if(topic.timeTotalManufacture) trElems.push(`Manufacture Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeTotalManufacture)}`);
+                if(topic.timeTotalManufacture) trElems.push([...buildRuntAugmentedManufactureTime(topic.timeTotalManufacture, this)]);
                 if(topic.timeBuild) trElems.push(`Build Time: ${Object(__WEBPACK_IMPORTED_MODULE_6__Utility_js__["a" /* parseBuildTime */])(topic.timeBuild)}`);
             }
 
-            return buildNodeListTable(headerContent, trElems.map(x=>buildSidebarPlaintextRow(x)), false, false);
+            const rowMapper = (x)=> {
+                return buildSidebarPlaintextRow(Array.isArray(x) ? x : [x]);
+            };
+            return buildNodeListTable(headerContent, trElems.map(rowMapper), false, false);
         }
         return null;
     }
@@ -75019,9 +75047,10 @@ module.exports = debounce;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const parseBuildTime = (totalTimeHours) => {
-    var days = totalTimeHours > 24 ? Math.floor(totalTimeHours / 24) : 0;
-    var hours = totalTimeHours > 24 ? totalTimeHours % 24 : totalTimeHours;
+const parseBuildTime = (totalTimeHours, runts = 1) => {
+    var totalTimeSplit = totalTimeHours / runts;
+    var days = Math.round(totalTimeSplit > 24 ? Math.floor(totalTimeSplit / 24) : 0);
+    var hours = Math.round((totalTimeSplit > 24 ? totalTimeSplit % 24 : totalTimeSplit)*100) / 100;
     if(days === 0 && hours === 0) {
         return '0hr';
     } else if (days === 0) {
@@ -75033,7 +75062,6 @@ const parseBuildTime = (totalTimeHours) => {
             return `${days}d${hours}hr`;
         }
     }
-
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = parseBuildTime;
 

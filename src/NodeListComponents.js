@@ -20,11 +20,15 @@ const buildNodeListTable = (thElems, trElemsInput, showHover = true, isCollapsed
                ...trElems));
 };
 
-const buildCollapsableTableHeader = (content, targetInst, color = null) => {
+const buildNodeListTableHeader = (content, color = null) => {
     let config = {};
     if(color != null) {
         config.style = {color};
     }
+    return [e('th', config, ...content)];
+};
+
+const buildCollapsableControl = (targetInst) => {
     const onToggleCollapse = () => {
         targetInst.setState({isCollapsed: !targetInst.state.isCollapsed});
     };
@@ -32,7 +36,7 @@ const buildCollapsableTableHeader = (content, targetInst, color = null) => {
     if(targetInst.state.isCollapsed) {
         chevron = e('i', {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
     }
-    return [e('th', config, chevron, ' ', ...content)];
+    return [chevron, ' '];
 };
 
 const buildSidebarClickableRow = (data, onClick) => {
@@ -41,8 +45,24 @@ const buildSidebarClickableRow = (data, onClick) => {
              e('td', cellConfig, e('a', {href:'#'}, data.content)));
 };
 
-const buildSidebarPlaintextRow = (text) => {
-    return e('tr', {}, e('td', {}, text));
+const buildSidebarPlaintextRow = (contentArr) => {
+    return e('tr', {}, e('td', {}, ...contentArr));
+};
+
+const buildLeftAndRightAlignedContent = (leftContent, rightContent, maxLeftWidth=50, maxRightWidth=50) => {
+    return [e('div', {style:{float:'left',maxWidth:`${maxLeftWidth}%`, textAlign:'left'}}, ...leftContent),
+            e('div', {style:{float:'right',maxWidth:`${maxRightWidth}%`, textAlign:'right'}}, ...rightContent)];
+};
+
+const buildRuntAugmentedManufactureTime = (timeTotalManufacture, targetInst) => {
+    const onRuntCountChange = (e) => {
+        var runts = parseInt(e.target.value);
+        targetInst.setState({runts});
+    };
+    return buildLeftAndRightAlignedContent(
+        [`Manufacture Time: ${parseBuildTime(timeTotalManufacture, targetInst.state.runts)}`],
+        [e('input', {style: {display:'inline', maxWidth:'50%'}, className: 'form-control form-control-sm', type:'number', onChange: onRuntCountChange, value: `${targetInst.state.runts}`, min:'1', max:'1024'}), ' Runt(s)'],
+        65, 35);
 };
 
 class CollapsableNodeListComponent extends Component {
@@ -62,7 +82,7 @@ class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     }
     render() {
         if(this.props.active) {
-            var headerContent = buildCollapsableTableHeader(['Manufacturing Requirements'], this, Constants.COLOR_ORANGE);
+            var headerContent = buildNodeListTableHeader([...buildCollapsableControl(this), 'Manufacturing Requirements'], Constants.COLOR_ORANGE);
             var rowEntries = this.props.nodes.map((x) => {
                 return buildSidebarClickableRow({id: x.id, content:`${x.name} x${x.quantity}`}, this.props.onNodeSelection);
             });
@@ -79,8 +99,12 @@ class SidebarNodeListCompoent extends CollapsableNodeListComponent {
     render() {
         if(this.props.active) {
             var headerContent = this.props.title != undefined ?
-                buildCollapsableTableHeader([this.props.title], this)
-                : buildCollapsableTableHeader([this.props.titlePrefix,this.props.titleSuffix, e('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked})], this, this.props.highlightColor);
+                buildNodeListTableHeader([...buildCollapsableControl(this), this.props.title])
+                : buildNodeListTableHeader(
+                    buildLeftAndRightAlignedContent(
+                        [...buildCollapsableControl(this), this.props.titlePrefix,this.props.titleSuffix],
+                        [e('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}, null)]),
+                    this.props.highlightColor);
             var rowEntries = this.props.nodes.map((x) => {
                 return buildSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
@@ -93,6 +117,7 @@ class SidebarNodeListCompoent extends CollapsableNodeListComponent {
 class NodeTriviaListViewComponent extends Component {
     constructor(props) {
         super(props);
+        this.state = {runts: 1};
     }
     render() {
         if(this.props.active) {
@@ -109,11 +134,14 @@ class NodeTriviaListViewComponent extends Component {
                 if(topic.costSell) trElems.push(`Sell: $${ topic.costSell }`);
                 if(topic.costBuild) trElems.push(`Build: $${topic.costBuild}`);
                 if(topic.points) trElems.push(`Score Points: ${ topic.points }`);
-                if(topic.timeTotalManufacture) trElems.push(`Manufacture Time: ${parseBuildTime(topic.timeTotalManufacture)}`);
+                if(topic.timeTotalManufacture) trElems.push([...buildRuntAugmentedManufactureTime(topic.timeTotalManufacture, this)]);
                 if(topic.timeBuild) trElems.push(`Build Time: ${parseBuildTime(topic.timeBuild)}`);
             }
 
-            return buildNodeListTable(headerContent, trElems.map(x=>buildSidebarPlaintextRow(x)), false, false);
+            const rowMapper = (x)=> {
+                return buildSidebarPlaintextRow(Array.isArray(x) ? x : [x]);
+            };
+            return buildNodeListTable(headerContent, trElems.map(rowMapper), false, false);
         }
         return null;
     }

@@ -39,7 +39,14 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** CHANGELOG
-- PENDING [0/12]
+- PENDING [0/13]
+  - [ ] REFACTOR: pay down technical debt and improve composition in NodeListComponents ::
+    - [ ] exported components themselves should move into their own modules
+    - [ ] UX study of different nodelist component types and how the build* utilities are used
+      - [ ] create a mockup of UX components
+      - [ ] all of the build* helper funcs should be in a util module at the top level of a nodelist directory that contains the other modueles
+      - [ ] possibly move away from build* methods and use actual components for different row types within the top-level nodelist tables
+    - [ ] a look at composition vs data config (ie how SidebarNodeListCompoent is overloaded via props for use by SearchResultsListComponent vs GraphNodeTopicListComponent and how that pattern isn't re-used anywhere else)
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in PageSplashComponent ::
   - [ ] REFACTOR: audit/fix & document relationships across rulesetParser, graph and node list display :: 
   - [ ] FEATURE: add graph legend ::
@@ -66,13 +73,19 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - [ ] items with both 'type' and 'name' entries (all corpses)
     - [ ] the 'type' STR_ values all point to stuff not in the lang
     - [ ] maybe just remove them
-- VERSION 0.1.1 [2/9]
-  - [ ] FEATURE: collapsable node list components ::
+- VERSION 0.1.1 [3/9]
+  - [-] FEATURE: build time display to factor in the number of runts assigned ::
+    - [X] modify "manufacture time" entry in node trivia list to include num input and link to component state
+    - [ ] add unit test for parseBuildTime to include different run counts
   - [ ] FEATURE: item count in sidebar tables ::
   - [ ] FEATURE: integrate requiresBaseFunc/provideBaseFunc ::
-    - [ ] shows up in manufacture
-    - [ ] shows up in facilities
-  - [ ] FEATURE: hover polish ::
+    - [ ] map providesBaseFunc in facilities entries to baseFuncKey->facilities STR_ keys
+    - [ ] show "provides" entries in facilities that provide them
+    - [ ] show requires entries + matching facilities in entries that require them
+    - requires shows up in manufacture
+    - provides shows up in facilities
+  - [ ] FEATURE: UX & hover polish ::
+    - [ ] when a graphFilteringCategory is deselected, make its displayed elements read-only and collapse the node list 
     - [ ] hovering over node list <td> triggers :hover that sets color to match its header coloring
     - [ ] hovering on node list entry highlights matching edge in cytoscape
       - [ ] add edge id (FOO->BAR) to link entries
@@ -83,10 +96,11 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] add `edgeHighlight: string` to state
       - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
       - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
-  - [ ] FEATURE: build time display to factor in the number of runts assigned ::
+    - [ ] hovering on a node in the graph component highlights the entry in its nodelist
   - [ ] FEATURE: add craft data ::
   - [ ] FEATURE: show manufacturing outputs, not just manufacturing inputs ::
     - more useful for rob/slavery
+  - [X] FEATURE: collapsable node list components ::
   - [X] FEATURE: UX overhaul ::
     - [X] create some mockups
       - [X] existing UX layout w/ left/right asides and center graph

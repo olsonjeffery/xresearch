@@ -23342,7 +23342,31 @@ module.exports = function getOwnEnumerablePropertySymbols(obj) {
 /* 98 */,
 /* 99 */,
 /* 100 */,
-/* 101 */,
+/* 101 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const parseBuildTime = (totalTimeHours, runts = 1) => {
+    var totalTimeSplit = totalTimeHours / runts;
+    var days = Math.round(totalTimeSplit > 24 ? Math.floor(totalTimeSplit / 24) : 0);
+    var hours = Math.round((totalTimeSplit > 24 ? totalTimeSplit % 24 : totalTimeSplit)*100) / 100;
+    if(days === 0 && hours === 0) {
+        return '0hr';
+    } else if (days === 0) {
+        return `${hours}hr`;
+    } else {
+        if(hours === 0) {
+            return `${days}d`;
+        } else {
+            return `${days}d${hours}hr`;
+        }
+    }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = parseBuildTime;
+
+
+
+/***/ }),
 /* 102 */,
 /* 103 */,
 /* 104 */,
@@ -23369,6 +23393,8 @@ mocha.run();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_chai___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_chai__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__XrDataQueries_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PassiveServices_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Utility_js__ = __webpack_require__(101);
+
 
 
 
@@ -23404,6 +23430,15 @@ describe('lunr search', () => {
     it('should return a result when enough input is provided', () => {
         var results = Object(__WEBPACK_IMPORTED_MODULE_2__PassiveServices_js__["d" /* topicsBySearchText */])('futu');
         Object(__WEBPACK_IMPORTED_MODULE_0_chai__["expect"])(results.length).to.be.equal(1);
+    });
+});
+
+describe("parseBuildTime", () => {
+    it('when only one parameter is provided, should turn 36 hours into 1d12hr', () => {
+        Object(__WEBPACK_IMPORTED_MODULE_0_chai__["expect"])(Object(__WEBPACK_IMPORTED_MODULE_3__Utility_js__["a" /* parseBuildTime */])(36)).to.be.equal('1d12hr');
+    });
+    it('when a second parameter is provided and is equal to 2, should turn 36 hours into 18hr', () => {
+        Object(__WEBPACK_IMPORTED_MODULE_0_chai__["expect"])(Object(__WEBPACK_IMPORTED_MODULE_3__Utility_js__["a" /* parseBuildTime */])(36, 2)).to.be.equal('18hr');
     });
 });
 

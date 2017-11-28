@@ -5,7 +5,7 @@ export const parseBuildTime = (totalTimeHours, runts = 1) => {
     if(days === 0 && hours === 0) {
         return '0hr';
     } else if (days === 0) {
-        return `${hours}hrs`;
+        return `${hours}hr`;
     } else {
         if(hours === 0) {
             return `${days}d`;

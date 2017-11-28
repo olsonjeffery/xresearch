@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import {researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
 import {topicsBySearchText} from './PassiveServices.js';
+import {parseBuildTime} from './Utility.js';
 
 const STR_ELERIUM_115 = 'STR_ELERIUM_115';
 
@@ -33,5 +34,14 @@ describe('lunr search', () => {
     it('should return a result when enough input is provided', () => {
         var results = topicsBySearchText('futu');
         expect(results.length).to.be.equal(1);
+    });
+});
+
+describe("parseBuildTime", () => {
+    it('when only one parameter is provided, should turn 36 hours into 1d12hr', () => {
+        expect(parseBuildTime(36)).to.be.equal('1d12hr');
+    });
+    it('when a second parameter is provided and is equal to 2, should turn 36 hours into 18hr', () => {
+        expect(parseBuildTime(36, 2)).to.be.equal('18hr');
     });
 });

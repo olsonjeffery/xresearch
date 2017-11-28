@@ -22975,8 +22975,12 @@ const buildCollapsableControl = (targetInst) => {
         targetInst.setState({isCollapsed: !targetInst.state.isCollapsed});
     };
     let chevron = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-circle-down', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
-    if(targetInst.state.isCollapsed) {
-        chevron = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
+    if(targetInst.state.isCollapsed || (targetInst.props.isChecked != undefined && targetInst.props.isChecked === false)) {
+        let config = {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}};
+        if(targetInst.props.isChecked != undefined && targetInst.props.isChecked === true) {
+            config.onClick = onToggleCollapse;
+        }
+        chevron = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('i', config, null);
     }
     return [chevron, ' '];
 };
@@ -22987,11 +22991,16 @@ const buildSidebarClickableRow = (data, onClick) => {
              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', cellConfig, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('a', {href:'#'}, data.content)));
 };
 
-const buildSidebarPlaintextRow = (contentArr) => {
-    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', {}, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', {}, ...contentArr));
+const buildSidebarPlaintextRow = (contentArr, style = null) => {
+    let config = {};
+    if(style != null) {
+        config.style = style;
+    }
+
+    return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('tr', config, Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('td', {}, ...contentArr));
 };
 
-const buildLeftAndRightAlignedContent = (leftContent, rightContent, maxLeftWidth=50, maxRightWidth=50) => {
+const buildLeftAndRightAlignedContent = (leftContent, rightContent, maxLeftWidth=80, maxRightWidth=20) => {
     return [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{float:'left',maxWidth:`${maxLeftWidth}%`, textAlign:'left'}}, ...leftContent),
             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {style:{float:'right',maxWidth:`${maxRightWidth}%`, textAlign:'right'}}, ...rightContent)];
 };
@@ -23039,18 +23048,19 @@ class SidebarNodeListCompoent extends CollapsableNodeListComponent {
         super(props);
     }
     render() {
+        let isSearchResults = this.props.title != undefined;
         if(this.props.active) {
-            var headerContent = this.props.title != undefined ?
+            let headerContent = isSearchResults ?
                 buildNodeListTableHeader([...buildCollapsableControl(this), this.props.title])
                 : buildNodeListTableHeader(
                     buildLeftAndRightAlignedContent(
                         [...buildCollapsableControl(this), this.props.titlePrefix,this.props.titleSuffix],
                         [Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}, null)]),
                     this.props.highlightColor);
-            var rowEntries = this.props.nodes.map((x) => {
+            let rowEntries = this.props.nodes.map((x) => {
                 return buildSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
-            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed || this.props.isChecked === false);
         }
         return null;
     }
@@ -23105,7 +23115,7 @@ const searchResultsMapStateToProps = (state) => {
         // this should be the filtering/search based on the current search text (lunr.js)
         nodes = Object(__WEBPACK_IMPORTED_MODULE_7__PassiveServices_js__["d" /* topicsBySearchText */])(state.searchText);
     }
-    return {active, nodes};
+    return {active, nodes, isChecked: true};
 };
 
 const nodeLinkMapStateToProps = (state, ownProps) => {
@@ -75054,7 +75064,7 @@ const parseBuildTime = (totalTimeHours, runts = 1) => {
     if(days === 0 && hours === 0) {
         return '0hr';
     } else if (days === 0) {
-        return `${hours}hrs`;
+        return `${hours}hr`;
     } else {
         if(hours === 0) {
             return `${days}d`;

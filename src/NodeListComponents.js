@@ -33,8 +33,12 @@ const buildCollapsableControl = (targetInst) => {
         targetInst.setState({isCollapsed: !targetInst.state.isCollapsed});
     };
     let chevron = e('i', {className: 'fa fa-chevron-circle-down', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
-    if(targetInst.state.isCollapsed) {
-        chevron = e('i', {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
+    if(targetInst.state.isCollapsed || (targetInst.props.isChecked != undefined && targetInst.props.isChecked === false)) {
+        let config = {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}};
+        if(targetInst.props.isChecked != undefined && targetInst.props.isChecked === true) {
+            config.onClick = onToggleCollapse;
+        }
+        chevron = e('i', config, null);
     }
     return [chevron, ' '];
 };
@@ -45,11 +49,16 @@ const buildSidebarClickableRow = (data, onClick) => {
              e('td', cellConfig, e('a', {href:'#'}, data.content)));
 };
 
-const buildSidebarPlaintextRow = (contentArr) => {
-    return e('tr', {}, e('td', {}, ...contentArr));
+const buildSidebarPlaintextRow = (contentArr, style = null) => {
+    let config = {};
+    if(style != null) {
+        config.style = style;
+    }
+
+    return e('tr', config, e('td', {}, ...contentArr));
 };
 
-const buildLeftAndRightAlignedContent = (leftContent, rightContent, maxLeftWidth=50, maxRightWidth=50) => {
+const buildLeftAndRightAlignedContent = (leftContent, rightContent, maxLeftWidth=80, maxRightWidth=20) => {
     return [e('div', {style:{float:'left',maxWidth:`${maxLeftWidth}%`, textAlign:'left'}}, ...leftContent),
             e('div', {style:{float:'right',maxWidth:`${maxRightWidth}%`, textAlign:'right'}}, ...rightContent)];
 };
@@ -97,18 +106,19 @@ class SidebarNodeListCompoent extends CollapsableNodeListComponent {
         super(props);
     }
     render() {
+        let isSearchResults = this.props.title != undefined;
         if(this.props.active) {
-            var headerContent = this.props.title != undefined ?
+            let headerContent = isSearchResults ?
                 buildNodeListTableHeader([...buildCollapsableControl(this), this.props.title])
                 : buildNodeListTableHeader(
                     buildLeftAndRightAlignedContent(
                         [...buildCollapsableControl(this), this.props.titlePrefix,this.props.titleSuffix],
                         [e('input', {className:'ml-auto',type:'checkbox', onChange: (e)=> this.props.onFilterToggle(e), checked: this.props.isChecked}, null)]),
                     this.props.highlightColor);
-            var rowEntries = this.props.nodes.map((x) => {
+            let rowEntries = this.props.nodes.map((x) => {
                 return buildSidebarClickableRow({id: x.id, content: `${x.name}`}, this.props.onNodeSelection);
             });
-            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed || this.props.isChecked === false);
         }
         return null;
     }
@@ -163,7 +173,7 @@ const searchResultsMapStateToProps = (state) => {
         // this should be the filtering/search based on the current search text (lunr.js)
         nodes = topicsBySearchText(state.searchText);
     }
-    return {active, nodes};
+    return {active, nodes, isChecked: true};
 };
 
 const nodeLinkMapStateToProps = (state, ownProps) => {

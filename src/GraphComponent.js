@@ -220,7 +220,6 @@ var coseLayout = {
     avoidOverlap: true,
     nodeDimensionsIncludeLabels: true
 };
-
 var concentricTotalLayout = {
     name: 'concentric',
     concentric: function( ele ){ return ele.data('weight'); },

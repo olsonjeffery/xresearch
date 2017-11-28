@@ -35,7 +35,7 @@ const buildCollapsableControl = (targetInst) => {
     let chevron = e('i', {className: 'fa fa-chevron-circle-down', style: {color:'#fff'}, onClick: onToggleCollapse}, null);
     if(targetInst.state.isCollapsed || (targetInst.props.isChecked != undefined && targetInst.props.isChecked === false)) {
         let config = {className: 'fa fa-chevron-circle-right', style: {color:'#fff'}};
-        if(targetInst.props.isChecked != undefined && targetInst.props.isChecked === true) {
+        if(targetInst.props.isChecked == undefined || (targetInst.props.isChecked != undefined && targetInst.props.isChecked === true)) {
             config.onClick = onToggleCollapse;
         }
         chevron = e('i', config, null);

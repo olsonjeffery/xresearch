@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 
 let parser = require('../rulesetParser.js');
 
+const STR_PLOTTING = 'STR_PLOTTING';
 const STR_NO_AGGRESSION = 'STR_NO_AGGRESSION';
 const STR_MORTAR = 'STR_MORTAR';
 const STR_AIRBALLS = 'STR_AIRBALLS';
@@ -14,6 +15,13 @@ const STR_ALIEN_ORIGINS = 'STR_ALIEN_ORIGINS';
 const STR_PERSONAL_ARMOR = 'STR_PERSONAL_ARMOR';
 const STR_ALIEN_RESEARCH = 'STR_ALIEN_RESEARCH';
 const STR_EXPERIMENT_VICTIM = 'STR_EXPERIMENT_VICTIM';
+const STR_COMPUTER_CORE = 'STR_COMPUTER_CORE';
+const STR_GROG_BARREL = 'STR_GROG_BARREL';
+const STR_STUDY_ROOM = 'STR_STUDY_ROOM';
+const CPU = 'CPU';
+const WORKS = 'WORKS';
+const SHOP = 'SHOP';
+const ALKO = 'ALKO';
 
 describe('ruleset-parser', () => {
     describe('when running the total parser', () => {
@@ -99,6 +107,32 @@ describe('ruleset-parser', () => {
         describe('vanilla content integration', () => {
             it("should remove unwanted vanilla entries", () => {
                 expect(output.graphNodes[STR_PERSONAL_ARMOR]).to.be.equal(undefined);
+            });
+        });
+
+        describe('base functionality', () => {
+            it('should include baseFunctionalities in parserPayload', () => {
+                expect(output.baseFunctionalities).to.not.be.equal(undefined);
+            });
+            it('should contain entries for various base func types', () => {
+                expect(output.baseFunctionalities[CPU]).to.be.an('array');
+                expect(output.baseFunctionalities[CPU]).to.include(STR_COMPUTER_CORE);
+            });
+            it('should show requiresBaseFunc entries on matching manufacture nodes', () => {
+                expect(output.graphNodes[STR_GROG_BARREL].requiresBaseFunc).to.be.an('array');
+                expect(output.graphNodes[STR_GROG_BARREL].requiresBaseFunc).to.include(ALKO);
+            });
+            it('should show requiresBaseFunc entries on matching research nodes', () => {
+                expect(output.graphNodes[STR_PLOTTING].requiresBaseFunc).to.be.an('array');
+                expect(output.graphNodes[STR_PLOTTING].requiresBaseFunc).to.include("CULT");
+            });
+            it('should show requiresBaseFunc entries on matching facility nodes', () => {
+                expect(output.graphNodes[STR_STUDY_ROOM].requiresBaseFunc).to.be.an('array');
+                expect(output.graphNodes[STR_STUDY_ROOM].requiresBaseFunc).to.include(ALKO);
+            });
+            it('should show providesBaseFunc entries on matching facility nodes', () => {
+                expect(output.graphNodes[STR_COMPUTER_CORE].provideBaseFunc).to.be.an('array');
+                expect(output.graphNodes[STR_COMPUTER_CORE].provideBaseFunc).to.include(CPU);
             });
         });
     });

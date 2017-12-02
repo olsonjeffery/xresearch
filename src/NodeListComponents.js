@@ -1,8 +1,9 @@
 import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
-import {allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
+import {getFacilitiesForBaseFunc, allResearchData, researchById, isTopicInGraphNodes} from './XrDataQueries.js';
 import {Constants} from './Constants.js';
 import {nodeSelection, graphFilteringCategoryChange} from './StateManagement.js';
 import {parseBuildTime} from './Utility.js';
@@ -101,6 +102,29 @@ class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     }
 }
 
+class RequiresBaseFuncSidebarNodeListViewComponent extends CollapsableNodeListComponent {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return buildNodeListTable(
+            buildNodeListTableHeader(
+                [...buildCollapsableControl(this),
+                 'Required Base Functionality']),
+            Reflect.ownKeys(this.props.baseFuncs).map(baseFunc => {
+                let facilityLinks = _.reduce(this.props.baseFuncs[baseFunc], (memo, facility) => {
+                    var facilityTopic = researchById(facility);
+                    if(memo.length > 0) {
+                        memo.push(', ');
+                    }
+                    memo.push(e('a', {href:'#', onClick: this.props.onNodeSelection, "data-id": facility}, facilityTopic.label));
+                    return memo;
+                }, []);
+                return buildSidebarPlaintextRow([baseFunc, ' (', ...facilityLinks, ')']);
+            }), false, this.state.isCollapsed);
+    }
+}
+
 class SidebarNodeListCompoent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
@@ -146,6 +170,16 @@ class NodeTriviaListViewComponent extends Component {
                 if(topic.points) trElems.push(`Score Points: ${ topic.points }`);
                 if(topic.timeTotalManufacture) trElems.push([...buildRuntAugmentedManufactureTime(topic.timeTotalManufacture, this)]);
                 if(topic.timeBuild) trElems.push(`Build Time: ${parseBuildTime(topic.timeBuild)}`);
+                if(topic.provideBaseFunc) {
+                    let providesItems = _.reduce(topic.provideBaseFunc, (memo, x) => {
+                        let prefix = '';
+                        if(memo !== '') {
+                            prefix = ', ';
+                        }
+                        return memo + prefix + x;
+                    }, '');
+                    trElems.push(`Provides Base Func.: ${providesItems}`);
+                }
             }
 
             const rowMapper = (x)=> {
@@ -201,6 +235,15 @@ const nodeLinkMapStateToProps = (state, ownProps) => {
     return {active: true, isChecked: state.graphFilteringCategories[edgeName]};
 };
 
+const rbfMapStateToProps = (state, ownProps) => {
+    var topic = researchById(state.selectedNodeId);
+    let baseFuncs = _.reduce(topic.requiresBaseFunc, (memo, baseFunc) => {
+        memo[baseFunc] = getFacilitiesForBaseFunc(baseFunc);
+        return memo;
+    }, {});
+    return {baseFuncs};
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onNodeSelection: (e) => {
@@ -217,3 +260,4 @@ export const SearchResultsListComponent =  connect(searchResultsMapStateToProps,
 export const GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export const ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
 export const NodeTriviaListComponent = connect(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);
+export const RequiresBaseFuncSidebarNodeListComponent = connect(rbfMapStateToProps, mapDispatchToProps)(RequiresBaseFuncSidebarNodeListViewComponent);

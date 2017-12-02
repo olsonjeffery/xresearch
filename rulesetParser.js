@@ -97,6 +97,9 @@ const initializeGraphNodesFromResearchContent = (research, lang) => {
             // this is a pure research topic
             output.topicKind = 'idea';
         }
+        if(item.requiresBaseFunc) {
+            output.requiresBaseFunc = item.requiresBaseFunc;
+        }
         mapRelationship('dependencies', item, output, reverseRels, item.name);
         mapRelationship('getOneFree', item, output, reverseRels, item.name);
         mapRelationship('unlocks', item, output, reverseRels, item.name);
@@ -146,6 +149,9 @@ const addManufactureToGraphNodes = (manufacture, inputGraphNodes, reverseRels, l
             memo[output.id] = output;
         }
 
+        if(item.requiresBaseFunc) {
+            output.requiresBaseFunc = item.requiresBaseFunc;
+        }
         if(item.cost) {
             output.costManufacture = item.cost;
         }
@@ -174,6 +180,12 @@ const addFacilitiesToGraphNodes = (facilities, inputGraphNodes, reverseRels, lan
         output.costRefund = item.refundValue;
         if(item.labs) {
             output.labs = item.labs;
+        }
+        if(item.provideBaseFunc) {
+            output.provideBaseFunc = item.provideBaseFunc;
+        }
+        if(item.requiresBaseFunc) {
+            output.requiresBaseFunc = item.requiresBaseFunc;
         }
 
         mapRelationship('requires', item, output, reverseRels, item.type);
@@ -216,6 +228,22 @@ const buildOrphanLang = (graphNodes, lang) => {
     return output;
 };
 
+const getProvidedFunctionalitiesFrom = (facilities) => {
+    let baseFunctionalities = {};
+    Reflect.ownKeys(facilities).forEach(fKey => {
+        var facility = facilities[fKey];
+        if(facility.provideBaseFunc) {
+            facility.provideBaseFunc.forEach(baseFunc => {
+                if(!baseFunctionalities[baseFunc]) {
+                    baseFunctionalities[baseFunc] = [];
+                }
+                baseFunctionalities[baseFunc].push(fKey);
+            });
+        }
+    });
+    return baseFunctionalities;
+};
+
 const parseAppDataFrom = ({allResearch, allManufacture, allItems, allFacilities, allLangsets, package}) => {
     let lang = mergeAndKeyLangsets(allLangsets);
     let research = mergeAndKeyRulesets(allResearch, 'name');
@@ -227,6 +255,7 @@ const parseAppDataFrom = ({allResearch, allManufacture, allItems, allFacilities,
     let itemGN = addItemsToGraphNodes(items, researchGN.graphNodes, researchGN.reverseRels, lang);
     let manGN = addManufactureToGraphNodes(manufacture, itemGN.graphNodes, itemGN.reverseRels, lang);
     let facilitiesGN = addFacilitiesToGraphNodes(facilities, manGN.graphNodes, manGN.reverseRels, lang);
+    let baseFunctionalities = getProvidedFunctionalitiesFrom(facilities);
 
     remapAllReverseRelationships(facilitiesGN.graphNodes, facilitiesGN.reverseRels);
 
@@ -236,7 +265,8 @@ const parseAppDataFrom = ({allResearch, allManufacture, allItems, allFacilities,
         xpiratezVersion: package.xpiratezVersion,
         version: package.version,
         orphanLang: buildOrphanLang(graphNodes, lang),
-        graphNodes: graphNodes
+        graphNodes: graphNodes,
+        baseFunctionalities
     };
 };
 
@@ -283,6 +313,7 @@ const getRulesetPayload = () => {
     let xcom1ManufactureFilePath = 'rulesets/xcom1.manufacture.rul';
     let xcom1LangFilePath = 'rulesets/xcom1.en-US.yml';
     let xcom1FacilitiesFilePath = 'rulesets/xcom1.facilities.rul';
+    let xcom1CraftsFilePath = 'rulesets/xcom1.crafts.rul';
     let xpRulesetFilePath = 'rulesets/Piratez.rul';
     let xpLangFilePath = 'rulesets/Piratez_lang.rul';
 
@@ -312,6 +343,10 @@ const getRulesetPayload = () => {
         yamlLoad(xcom1FacilitiesFilePath).facilities,
         xpRuleset.facilities
     ];
+    let allCrafts = [
+        yamlLoad(xcom1CraftsFilePath).crafts,
+        xpRuleset.crafts
+    ];
 
     return {
         allLangsets,
@@ -319,6 +354,7 @@ const getRulesetPayload = () => {
         allManufacture,
         allItems,
         allFacilities,
+        allCrafts,
         package
     };
 };

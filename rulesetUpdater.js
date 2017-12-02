@@ -27,4 +27,5 @@ copyFileAtLocation(importPath, 'standard/xcom1', 'research.rul', 'xcom1.', destF
 copyFileAtLocation(importPath, 'standard/xcom1', 'manufacture.rul', 'xcom1.', destFolder);
 copyFileAtLocation(importPath, 'standard/xcom1', 'facilities.rul', 'xcom1.', destFolder);
 copyFileAtLocation(importPath, 'standard/xcom1', 'items.rul', 'xcom1.', destFolder);
+copyFileAtLocation(importPath, 'standard/xcom1', 'crafts.rul', 'xcom1.', destFolder);
 copyFileAtLocation(importPath, 'standard/xcom1/Language', 'en-US.yml', 'xcom1.', destFolder);

@@ -65,7 +65,7 @@ var buildElementsFromAllResearchData = () => {
     _.each(researchData, (topic, idx) => {
         if(topic.dependencies) {
             _.each(topic.dependencies, function(dep) {
-                addEdge(dep, topic.id, 'dep', idx);
+                addEdge(dep, topic.id, 'dependencies', idx);
             });
         }
         if(topic.unlocks) {
@@ -101,7 +101,7 @@ var buildElementsFromAllResearchData = () => {
 
 var cyStyle = [
     // edge styles
-    {"selector": ".dep",
+    {"selector": ".dependencies",
      "style": {
          "width": "1px",
          "line-color": Constants.COLOR_GREEN,

@@ -17,3 +17,7 @@ export function allResearchData() {
 export function isTopicInGraphNodes(id) {
     return getXrData().graphNodes[id] ? true : false;
 }
+
+export function getFacilitiesForBaseFunc(baseFunc) {
+    return getXrData().baseFunctionalities[baseFunc];
+};

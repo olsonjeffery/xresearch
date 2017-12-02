@@ -2,7 +2,7 @@ import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Constants} from './Constants.js';
-import {NodeTriviaListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent}  from './NodeListComponents.js';
+import {NodeTriviaListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent, RequiresBaseFuncSidebarNodeListComponent}  from './NodeListComponents.js';
 
 import {researchById} from './XrDataQueries.js';
 
@@ -43,6 +43,9 @@ class RightNodeDetailsPresentationComponent extends Component {
         if(this.props.active) {
             let topic = researchById(this.props.targetId);
             let children = [];
+            if(topic.requiresBaseFunc && topic.requiresBaseFunc.length > 0) {
+                children.push(e(RequiresBaseFuncSidebarNodeListComponent, {}, null));
+            }
             if(topic.requiredItems && topic.requiredItems.length > 0) {
                 children.push(e(ManufactureGraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems')}, null));
             }

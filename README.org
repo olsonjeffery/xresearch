@@ -39,7 +39,15 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** CHANGELOG
-- PENDING [0/14]
+- PENDING [0/15]
+  - [ ] FEATURE: router support in URL ::
+    - [ ] all routes represent redux actions
+  - [ ] FEATURE: prefix clickable node list entries w/ colored icon for their ruleset kind ::
+    - [ ] items: briefcase
+    - [ ] facilities: building/building-o
+    - [ ] ideas: lightblub-o
+    - [ ] craft: fighter-jet
+    - [ ] they shouldn't change color on highlight
   - [ ] FEATURE: item count in sidebar tables ::
   - [ ] REFACTOR: pay down technical debt and improve composition in NodeListComponents ::
     - [ ] exported components themselves should move into their own modules
@@ -49,7 +57,11 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
       - [ ] possibly move away from build* methods and use actual components for different row types within the top-level nodelist tables
     - [ ] a look at composition vs data config (ie how SidebarNodeListCompoent is overloaded via props for use by SearchResultsListComponent vs GraphNodeTopicListComponent and how that pattern isn't re-used anywhere else)
   - [ ] FEATURE: parse this document and build JSON changelog/todo list and show in PageSplashComponent ::
-  - [ ] REFACTOR: audit/fix & document relationships across rulesetParser, graph and node list display :: 
+  - [ ] REFACTOR: audit/fix getOneFree relationships in parser, node details and graphcomponent ::
+    - [ ] "giveOneFree" should be "gottenForFreeFrom"
+    - [ ] getOneFree should move to the righthand side, relationship-wise, if it isn't
+    - [ ] fix the edge mapping for getOneFree entries (or just map off of gottenForFreeFrom)
+    - [ ] fix style to have arrows always pointing in the right direction
   - [ ] FEATURE: add graph legend ::
   - [ ] FEATURE: "recent nodes" list via localStorage ::
     - [ ] add redux store listener to catch all nodeSelection actions
@@ -66,37 +78,40 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
   - [ ] FEATURE: view raw JSON payload for a given node details ::
     - [ ] a json tree visualization library to display within a div...
   - [ ] FEATURE: allow "multipled selected nodes" in graph display ::
-  - [ ] FEATURE: increase neighorhood depth from 1 to 2 ::
-  - [ ] FEATURE: router support in URL ::
-    - [ ] all routes represent redux actions
-  - [ ] BUG: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked)
-  - [ ] BUG: deal with SYNTH_CORPSE_ETC entries and their missing lang info ::
-    - [ ] items with both 'type' and 'name' entries (all corpses)
-    - [ ] the 'type' STR_ values all point to stuff not in the lang
-    - [ ] maybe just remove them
-- VERSION 0.1.1 [4/8]
-  - [-] FEATURE: UX & hover polish ::
-    - [ ] hovering over node list <td> triggers :hover that sets color to match its header coloring
+    - [ ] use cases:
+      - [ ] "initial search topics": Call A Meeting, Visit Nearby Town, Inspect Machinery
+  - [ ] FEATURE: UX & hover polish ::
     - [ ] hovering on node list entry highlights matching edge in cytoscape
       - [ ] add edge id (FOO->BAR) to link entries
       - [ ] on hover-enter, find matching entity via __cy.$() and change its style
       - [ ] on hover-exit, find again and change style back
+    - [ ] hovering over node list <td> triggers :hover that sets color to match its header coloring
     - [ ] hovering on node list title highlights all matching edge-styles in ctyoscape
       - [ ] make all edge styles match existing edgeNames and add styles for the inverse of existing edgeNames (+dependedUponBy, unlockedBy, giveOneFree)
       - [ ] add `edgeHighlight: string` to state
       - [ ] add SET_EDGE_HIGHLIGHT action type w/ args of "edgeName"
       - [ ] GraphComponent listens for edgeHighlight changes and sets the line-bolding in the approp style and restyles the graph
     - [ ] hovering on a node in the graph component highlights the entry in its nodelist
-    - [X] when a graphFilteringCategory is deselected, make its displayed elements read-only and collapse the node list 
-  - [ ] FEATURE: integrate requiresBaseFunc/provideBaseFunc ::
-    - [ ] map providesBaseFunc in facilities entries to baseFuncKey->facilities STR_ keys
-    - [ ] show "provides" entries in facilities that provide them
-    - [ ] show requires entries + matching facilities in entries that require them
-    - requires shows up in manufacture
-    - provides shows up in facilities
+  - [ ] BUG: only remove node on graph filtering changes if all of its dependency links to the selected node are removed (currently hides a node if any are unchecked) ::
+  - [ ] BUG: deal with SYNTH_CORPSE_ETC entries and their missing lang info ::
+    - [ ] items with both 'type' and 'name' entries (all corpses)
+    - [ ] the 'type' STR_ values all point to stuff not in the lang
+    - [ ] maybe just remove them
+- VERSION 0.1.1 [6/10]
   - [ ] FEATURE: add craft data ::
+    - [ ] add craft data in payload
+    - [ ] is there anything worth adding?
+  - [ ] FEATURE: show "provides labs" in node trivia is present on facilities ::
+  - [ ] FEATURE: include/show buildCostItems data in facilities ::
   - [ ] FEATURE: show manufacturing outputs, not just manufacturing inputs ::
     - more useful for rob/slavery
+  - [X] FEATURE: integrate requiresBaseFunc/provideBaseFunc ::
+    - [X] map providesBaseFunc in facilities entries to baseFuncKey->facilities STR_ keys
+    - [X] show "provides" entries in facilities that provide them
+    - [X] show requires entries + matching facilities in entries that require them
+    - requires shows up in manufacture
+    - provides shows up in facilities
+  - [X] FEATURE: when a graphFilteringCategory is deselected, make its displayed elements read-only and collapse the node list ::
   - [X] FEATURE: build time display to factor in the number of runts assigned ::
     - [X] modify "manufacture time" entry in node trivia list to include num input and link to component state
     - [X] add unit test for parseBuildTime to include different run counts

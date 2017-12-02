@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
+import {getFacilitiesForBaseFunc, researchById, allResearchData, isTopicInGraphNodes} from './XrDataQueries.js';
 import {topicsBySearchText} from './PassiveServices.js';
 import {parseBuildTime} from './Utility.js';
 
@@ -21,6 +21,13 @@ describe('xresearch data queries', () => {
         });
         it('should return true for valid topics by key', () => {
             expect(isTopicInGraphNodes(STR_ELERIUM_115)).to.be.equal(true);
+        });
+    });
+    describe('getFacilitiesForBaseFunc', () => {
+        it('should provide associated facilities from xrData', () => {
+            let result = getFacilitiesForBaseFunc('CPU');
+            expect(result).to.be.an('array');
+            expect(result).to.include('STR_COMPUTER_CORE');
         });
     });
 });

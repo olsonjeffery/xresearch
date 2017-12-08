@@ -18,6 +18,7 @@ const STR_EXPERIMENT_VICTIM = 'STR_EXPERIMENT_VICTIM';
 const STR_COMPUTER_CORE = 'STR_COMPUTER_CORE';
 const STR_GROG_BARREL = 'STR_GROG_BARREL';
 const STR_STUDY_ROOM = 'STR_STUDY_ROOM';
+const STR_UFO_NAVIGATION = 'STR_UFO_NAVIGATION';
 const CPU = 'CPU';
 const WORKS = 'WORKS';
 const SHOP = 'SHOP';
@@ -133,6 +134,15 @@ describe('ruleset-parser', () => {
             it('should show providesBaseFunc entries on matching facility nodes', () => {
                 expect(output.graphNodes[STR_COMPUTER_CORE].provideBaseFunc).to.be.an('array');
                 expect(output.graphNodes[STR_COMPUTER_CORE].provideBaseFunc).to.include(CPU);
+            });
+        });
+
+        describe('buildCostItems', () => {
+            it('should map buildCostItems on matching facilities', () => {
+                expect(output.graphNodes[STR_COMPUTER_CORE].buildCostItems.map(x=>x.id)).to.include(STR_UFO_NAVIGATION);
+            });
+            it('should add requiredToConstruct on matching dependencies', () => {
+                expect(output.graphNodes[STR_UFO_NAVIGATION].requiredToConstruct).to.include(STR_COMPUTER_CORE);
             });
         });
     });

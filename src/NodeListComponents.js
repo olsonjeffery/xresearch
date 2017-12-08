@@ -102,6 +102,22 @@ class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     }
 }
 
+class ConstructionSidebarNodeListCompoent extends CollapsableNodeListComponent {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if(this.props.active) {
+            var headerContent = buildNodeListTableHeader([...buildCollapsableControl(this), 'Build Requirements'], Constants.COLOR_ORANGE);
+            var rowEntries = this.props.nodes.map((x) => {
+                return buildSidebarClickableRow({id: x.id, content:`${x.name} (Build: x${x.build} Refund: x${x.refund})`}, this.props.onNodeSelection);
+            });
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
+        }
+        return null;
+    }
+}
+
 class RequiresBaseFuncSidebarNodeListViewComponent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
@@ -162,8 +178,9 @@ class NodeTriviaListViewComponent extends Component {
             if(topic === undefined || topic == null) {
                 trElems.push('No further info: Topic not in ruleset data');
             } else {
-                if(topic.costResearch) trElems.push(` Research (Base): ${ topic.costResearch }pts.`);
-                if(topic.costManufacture) trElems.push(` Manufacture: $${ topic.costManufacture }`);
+                if(topic.labs) trElems.push(`Lab Research Space: ${topic.labs}`);
+                if(topic.costResearch) trElems.push(`Research (Base): ${ topic.costResearch }pts.`);
+                if(topic.costManufacture) trElems.push(`Manufacture: $${ topic.costManufacture }`);
                 if(topic.costBuy) trElems.push(`Buy: $${ topic.costBuy }`);
                 if(topic.costSell) trElems.push(`Sell: $${ topic.costSell }`);
                 if(topic.costBuild) trElems.push(`Build: $${topic.costBuild}`);
@@ -212,25 +229,6 @@ const searchResultsMapStateToProps = (state) => {
 
 const nodeLinkMapStateToProps = (state, ownProps) => {
     var edgeName = ownProps.edgeName;
-    var nodes = [];
-    var matchedNode = researchById(state.selectedNodeId);
-    if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
-        nodes = [];
-    } else {
-        var previousEntries = {};
-        nodes = matchedNode[edgeName].filter(x=> {
-            var shouldInclude = true;
-            if(previousEntries[x]) {
-                shouldInclude = false;
-            }
-            previousEntries[x] = true;
-            return shouldInclude;
-        }).map((x) => {
-            var node = researchById(x);
-            var label = node !== undefined ? node.label : x;
-            return {id: x, name: label};
-        });
-    }
 
     return {active: true, isChecked: state.graphFilteringCategories[edgeName]};
 };
@@ -259,5 +257,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export const SearchResultsListComponent =  connect(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export const GraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
 export const ManufactureGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
+export const ConstructionGraphNodeTopicListComponent = connect(nodeLinkMapStateToProps, mapDispatchToProps)(ConstructionSidebarNodeListCompoent);
 export const NodeTriviaListComponent = connect(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);
 export const RequiresBaseFuncSidebarNodeListComponent = connect(rbfMapStateToProps, mapDispatchToProps)(RequiresBaseFuncSidebarNodeListViewComponent);

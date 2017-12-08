@@ -23,6 +23,9 @@ var buildElementsFromAllResearchData = () => {
         }
         addedTopics[topic.id] = true;
 
+        if(topic.id === 'STR_NIGHTMARE') {
+            console.log('nightmare');
+        }
         // add node here
         elements.push({
             data: {
@@ -93,6 +96,11 @@ var buildElementsFromAllResearchData = () => {
         if(topic.requiredItems) {
             _.each(topic.requiredItems, x => {
                 addEdge(x.id, topic.id, 'manufacture', idx);
+            });
+        }
+        if(topic.requiredToConstruct) {
+            _.each(topic.requiredToConstruct, x => {
+                addEdge(x, topic.id, 'manufacture', idx);
             });
         }
     });
@@ -188,6 +196,22 @@ var cyStyle = [
          "text-valign": "center",
          "text-halign": "center",
          "background-color": Constants.COLOR_GREEN,
+         "text-outline-color": '#000',
+         "text-outline-width": "1px",
+         "color": "#fff",
+         "overlay-padding": "6px",
+         "z-index": "10",
+         shape: "ellipse"
+     }},
+    {"selector": "node.manufacture",
+     "style": {
+         "width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+         "height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+         "content": "data(name)",
+         "font-size": "9px",
+         "text-valign": "center",
+         "text-halign": "center",
+         "background-color": Constants.COLOR_ORANGE,
          "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",

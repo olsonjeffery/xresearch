@@ -39,7 +39,18 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
 1. Run 'npm run genstatic'
 
 ** CHANGELOG
-- PENDING [0/15]
+- PENDING [0/17]
+  - [ ] FEATURE: add requiredToPurchase in rulesetParser/nodeList ::
+  - [ ] FEATURE: aggregate/list views as per the xp wiki ::
+    - probably should drive it off of react-table 
+    - [ ] a top-level /list route with all supported with implemented lists ::
+    - [ ] a sidebar list with implemented lists :: 
+    - [ ] crafts::
+    - [ ] weapons ::
+    - [ ] armor ::
+    - [ ] units: gals etc ::
+    - [ ] units: enemies ::
+    - [ ] research topics & base time ::
   - [ ] FEATURE: router support in URL ::
     - [ ] all routes represent redux actions
   - [ ] FEATURE: prefix clickable node list entries w/ colored icon for their ruleset kind ::
@@ -97,14 +108,17 @@ This application was conceived-of and developed-by Jeffery Olson for the sake of
     - [ ] items with both 'type' and 'name' entries (all corpses)
     - [ ] the 'type' STR_ values all point to stuff not in the lang
     - [ ] maybe just remove them
-- VERSION 0.1.1 [6/10]
-  - [ ] FEATURE: add craft data ::
-    - [ ] add craft data in payload
-    - [ ] is there anything worth adding?
-  - [ ] FEATURE: show "provides labs" in node trivia is present on facilities ::
-  - [ ] FEATURE: include/show buildCostItems data in facilities ::
+- VERSION 0.1.1 [9/10]
   - [ ] FEATURE: show manufacturing outputs, not just manufacturing inputs ::
     - more useful for rob/slavery
+  - [X] FEATURE: include/show buildCostItems data in facilities ::
+    - [X] add buildCostItems in NodeList / Details
+    - [X] test/impl in rulesetParser
+    - [X] add requiredToConstruct in NodeList / Details
+    - [X] build out graph edges for requiredtoConstruct 
+  - [X] FEATURE: show "provides labs" in node trivia is present on facilities ::
+  - [X] FEATURE: add craft data ::
+    - [X] add craft data in payload
   - [X] FEATURE: integrate requiresBaseFunc/provideBaseFunc ::
     - [X] map providesBaseFunc in facilities entries to baseFuncKey->facilities STR_ keys
     - [X] show "provides" entries in facilities that provide them

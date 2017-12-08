@@ -15,12 +15,23 @@ const initializeOutput = (id, lang) => {
 };
 
 const inverseRelationship = {
+    buildCostItems: 'requiredToConstruct',
     requiredItems: 'requiredToManufacture',
     requires : 'requiredBy',
-    requiresBuy : 'requiredBy',
+    requiresBuy : 'requiredBy', // TODO: add requiredToPurchase
     getOneFree : 'giveOneFree',
     dependencies : 'dependedUponBy',
     unlocks: 'unlockedBy'
+};
+const stubReverseRelationships = () => {
+    return {
+        requiredToConstruct: {},
+        requiredToManufacture:{},
+        dependedUponBy: {},
+        unlockedBy: {},
+        giveOneFree: {},
+        requiredBy: {}
+    };
 };
 
 // help to add entry in reverse-relationships collections
@@ -29,6 +40,22 @@ const createOrUpdateItemInObject = (obj, key, item) => {
         obj[key] = [];
     }
     obj[key].push(item);
+};
+
+const mapBuildCostItemRelationship = (currentItem, output, reverseRels, currentId) => {
+    let edgeName = 'buildCostItems';
+    if(currentItem[edgeName]) {
+        if(!output[edgeName]) {
+            output[edgeName] = [];
+        }
+        _.each(Reflect.ownKeys(currentItem[edgeName]), x => {
+            if(x != null) {
+                let bci = currentItem[edgeName][x];
+                output[edgeName].push({id: x, build: bci.build, refund: bci.refund});
+                createOrUpdateItemInObject(reverseRels[inverseRelationship[edgeName]], x, currentId);
+            }
+        });
+    }
 };
 
 const mapRequiredItemsRelationship = (currentItem, output, reverseRels, currentId) => {
@@ -69,18 +96,13 @@ const remapAllReverseRelationships = (graphNodes, reverseRels) => {
         item.giveOneFree = reverseRels.giveOneFree[item.id] ? reverseRels.giveOneFree[item.id] : [];
         item.requiredBy = reverseRels.requiredBy[item.id] ? reverseRels.requiredBy[item.id] : [];
         item.requiredToManufacture = reverseRels.requiredToManufacture[item.id] ? reverseRels.requiredToManufacture[item.id] : [];
+        item.requiredToConstruct = reverseRels.requiredToConstruct[item.id] ? reverseRels.requiredToConstruct[item.id] : [];
     });
 };
 
 const initializeGraphNodesFromResearchContent = (research, lang) => {
     // reverse-relationships that need to be mapped
-    let reverseRels = {
-        requiredToManufacture:{},
-        dependedUponBy: {},
-        unlockedBy: {},
-        giveOneFree: {},
-        requiredBy: {}
-    };
+    let reverseRels = stubReverseRelationships();
 
     let graphNodes = _.reduce(Reflect.ownKeys(research), (memo, itemKey) => {
         var item = research[itemKey];
@@ -144,7 +166,7 @@ const addManufactureToGraphNodes = (manufacture, inputGraphNodes, reverseRels, l
         if(!memo[item.name]) {
             output = {
                 ...initializeOutput(item.name, lang),
-                topicKind: 'item'
+                topicKind: 'manufacture'
             };
             memo[output.id] = output;
         }
@@ -186,6 +208,9 @@ const addFacilitiesToGraphNodes = (facilities, inputGraphNodes, reverseRels, lan
         }
         if(item.requiresBaseFunc) {
             output.requiresBaseFunc = item.requiresBaseFunc;
+        }
+        if(item.buildCostItems) {
+            mapBuildCostItemRelationship(item, output, reverseRels, itemKey);
         }
 
         mapRelationship('requires', item, output, reverseRels, item.type);

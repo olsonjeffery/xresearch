@@ -2,11 +2,21 @@ import {Component, createElement as e} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Constants} from './Constants.js';
-import {NodeTriviaListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent, RequiresBaseFuncSidebarNodeListComponent}  from './NodeListComponents.js';
+import {NodeTriviaListComponent, GraphNodeTopicListComponent, ManufactureGraphNodeTopicListComponent, RequiresBaseFuncSidebarNodeListComponent, ConstructionGraphNodeTopicListComponent}  from './NodeListComponents.js';
 
 import {researchById} from './XrDataQueries.js';
 
-const mapTopicEdgeToNodes = (targetId, edgeName) => {
+const manufactureValueMapper = (x) => {
+    let node = researchById(x.id);
+    let label = node !== undefined ? node.label : x.id;
+    return {id: x.id, name: label, quantity: x.quantity};
+};
+const facilityBuildValueMapper = (x) => {
+    let node = researchById(x.id);
+    let label = node !== undefined ? node.label : x.id;
+    return {id: x.id, name: label, build: x.build, refund: x.refund};
+};
+const mapTopicEdgeToNodes = (targetId, edgeName, converter = null) => {
     let nodes = [];
     let matchedNode = researchById(targetId);
     if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
@@ -23,10 +33,8 @@ const mapTopicEdgeToNodes = (targetId, edgeName) => {
             return shouldInclude;
         }).map((x) => {
             let retVal = {};
-            if(x.id) {
-                let node = researchById(x.id);
-                let label = node !== undefined ? node.label : x.id;
-                retVal = {id: x.id, name: label, quantity: x.quantity};
+            if(converter != null) {
+                retVal = converter(x);
             } else {
                 let node = researchById(x);
                 let label = node !== undefined ? node.label : x;
@@ -45,9 +53,6 @@ class RightNodeDetailsPresentationComponent extends Component {
             let children = [];
             if(topic.requiresBaseFunc && topic.requiresBaseFunc.length > 0) {
                 children.push(e(RequiresBaseFuncSidebarNodeListComponent, {}, null));
-            }
-            if(topic.requiredItems && topic.requiredItems.length > 0) {
-                children.push(e(ManufactureGraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems')}, null));
             }
             if(topic.dependedUponBy && topic.dependedUponBy.length > 0) {
                 let edgeName = 'dependedUponBy';
@@ -68,6 +73,10 @@ class RightNodeDetailsPresentationComponent extends Component {
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
                 let edgeName = 'requiredToManufacture';
                 children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: Constants.COLOR_ORANGE}, null));
+            }
+            if(topic.requiredToConstruct && topic.requiredToConstruct.length > 0) {
+                let edgeName = 'requiredToConstruct';
+                children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Construct (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: Constants.COLOR_ORANGE}, null));
             }
             return e('div', {}, ...children);
         }
@@ -94,6 +103,12 @@ class LeftNodeDetailsPresentationComponent extends Component {
             let topic = researchById(this.props.targetId);
             let children = [];
             children.push(e(NodeTriviaListComponent, {}, null));
+            if(topic.requiredItems && topic.requiredItems.length > 0) {
+                children.push(e(ManufactureGraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems', manufactureValueMapper)}, null));
+            }
+            if(topic.buildCostItems && topic.buildCostItems.length > 0) {
+                children.push(e(ConstructionGraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, 'buildCostItems', facilityBuildValueMapper)}, null));
+            }
             if(topic.dependencies && topic.dependencies.length > 0) {
                 let edgeName = 'dependencies';
                 children.push(e(GraphNodeTopicListComponent, {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: Constants.COLOR_GREEN}, null));

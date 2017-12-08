@@ -23051,6 +23051,22 @@ class ManufactureSidebarNodeListCompoent extends CollapsableNodeListComponent {
     }
 }
 
+class ConstructionSidebarNodeListCompoent extends CollapsableNodeListComponent {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if(this.props.active) {
+            var headerContent = buildNodeListTableHeader([...buildCollapsableControl(this), 'Build Requirements'], __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_ORANGE);
+            var rowEntries = this.props.nodes.map((x) => {
+                return buildSidebarClickableRow({id: x.id, content:`${x.name} (Build: x${x.build} Refund: x${x.refund})`}, this.props.onNodeSelection);
+            });
+            return buildNodeListTable(headerContent, rowEntries, true, this.state.isCollapsed);
+        }
+        return null;
+    }
+}
+
 class RequiresBaseFuncSidebarNodeListViewComponent extends CollapsableNodeListComponent {
     constructor(props) {
         super(props);
@@ -23111,8 +23127,9 @@ class NodeTriviaListViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["C
             if(topic === undefined || topic == null) {
                 trElems.push('No further info: Topic not in ruleset data');
             } else {
-                if(topic.costResearch) trElems.push(` Research (Base): ${ topic.costResearch }pts.`);
-                if(topic.costManufacture) trElems.push(` Manufacture: $${ topic.costManufacture }`);
+                if(topic.labs) trElems.push(`Lab Research Space: ${topic.labs}`);
+                if(topic.costResearch) trElems.push(`Research (Base): ${ topic.costResearch }pts.`);
+                if(topic.costManufacture) trElems.push(`Manufacture: $${ topic.costManufacture }`);
                 if(topic.costBuy) trElems.push(`Buy: $${ topic.costBuy }`);
                 if(topic.costSell) trElems.push(`Sell: $${ topic.costSell }`);
                 if(topic.costBuild) trElems.push(`Build: $${topic.costBuild}`);
@@ -23161,25 +23178,6 @@ const searchResultsMapStateToProps = (state) => {
 
 const nodeLinkMapStateToProps = (state, ownProps) => {
     var edgeName = ownProps.edgeName;
-    var nodes = [];
-    var matchedNode = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["d" /* researchById */])(state.selectedNodeId);
-    if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
-        nodes = [];
-    } else {
-        var previousEntries = {};
-        nodes = matchedNode[edgeName].filter(x=> {
-            var shouldInclude = true;
-            if(previousEntries[x]) {
-                shouldInclude = false;
-            }
-            previousEntries[x] = true;
-            return shouldInclude;
-        }).map((x) => {
-            var node = Object(__WEBPACK_IMPORTED_MODULE_4__XrDataQueries_js__["d" /* researchById */])(x);
-            var label = node !== undefined ? node.label : x;
-            return {id: x, name: label};
-        });
-    }
 
     return {active: true, isChecked: state.graphFilteringCategories[edgeName]};
 };
@@ -23206,19 +23204,22 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const SearchResultsListComponent =  Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(searchResultsMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-/* harmony export (immutable) */ __webpack_exports__["e"] = SearchResultsListComponent;
+/* harmony export (immutable) */ __webpack_exports__["f"] = SearchResultsListComponent;
 
 const GraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(SidebarNodeListCompoent);
-/* harmony export (immutable) */ __webpack_exports__["a"] = GraphNodeTopicListComponent;
+/* harmony export (immutable) */ __webpack_exports__["b"] = GraphNodeTopicListComponent;
 
 const ManufactureGraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(ManufactureSidebarNodeListCompoent);
-/* harmony export (immutable) */ __webpack_exports__["b"] = ManufactureGraphNodeTopicListComponent;
+/* harmony export (immutable) */ __webpack_exports__["c"] = ManufactureGraphNodeTopicListComponent;
+
+const ConstructionGraphNodeTopicListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeLinkMapStateToProps, mapDispatchToProps)(ConstructionSidebarNodeListCompoent);
+/* harmony export (immutable) */ __webpack_exports__["a"] = ConstructionGraphNodeTopicListComponent;
 
 const NodeTriviaListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(nodeTriviaMapStateToProps, nodeTriviaMapDispatchToProps)(NodeTriviaListViewComponent);
-/* harmony export (immutable) */ __webpack_exports__["c"] = NodeTriviaListComponent;
+/* harmony export (immutable) */ __webpack_exports__["d"] = NodeTriviaListComponent;
 
 const RequiresBaseFuncSidebarNodeListComponent = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(rbfMapStateToProps, mapDispatchToProps)(RequiresBaseFuncSidebarNodeListViewComponent);
-/* harmony export (immutable) */ __webpack_exports__["d"] = RequiresBaseFuncSidebarNodeListComponent;
+/* harmony export (immutable) */ __webpack_exports__["e"] = RequiresBaseFuncSidebarNodeListComponent;
 
 
 
@@ -41934,7 +41935,7 @@ class AppViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] 
                                   this.props.selectedNodeId === null ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_8__PageSplashComponent_js__["a" /* PageSplashComponent */], {}, null) : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__GraphComponent__["a" /* GraphComponent */], {}, null)));
         var srContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
-                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["e" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null)));
+                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["f" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null)));
         var rightContentRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                                 Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className:'col-12'},
                                   Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
@@ -41951,7 +41952,7 @@ class AppViewComponent extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] 
                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-6'},
                              this.props.selectedNodeId === null ? Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_8__PageSplashComponent_js__["a" /* PageSplashComponent */], {}, null) : Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_3__GraphComponent__["a" /* GraphComponent */], {}, null)),
                            Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'col-md-3', style:{height: `${this.props.height-__WEBPACK_IMPORTED_MODULE_2__Constants_js__["a" /* Constants */].VIEWPORT_OFFSET}px`,overflowY:'scroll'}},
-                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["e" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
+                             Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["f" /* SearchResultsListComponent */], {active: false, nodes: [], title: 'Search Results'}, null),
                              Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_5__NodeDetailsComponent_js__["b" /* RightDetailsComponent */], {}, null)));
         var pageFooterRow = Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {className: 'row'},
                               Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]) ('div', {className: 'col-md-2'}),
@@ -42025,6 +42026,9 @@ var buildElementsFromAllResearchData = () => {
         }
         addedTopics[topic.id] = true;
 
+        if(topic.id === 'STR_NIGHTMARE') {
+            console.log('nightmare');
+        }
         // add node here
         elements.push({
             data: {
@@ -42095,6 +42099,11 @@ var buildElementsFromAllResearchData = () => {
         if(topic.requiredItems) {
             __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.requiredItems, x => {
                 addEdge(x.id, topic.id, 'manufacture', idx);
+            });
+        }
+        if(topic.requiredToConstruct) {
+            __WEBPACK_IMPORTED_MODULE_4_lodash___default.a.each(topic.requiredToConstruct, x => {
+                addEdge(x, topic.id, 'manufacture', idx);
             });
         }
     });
@@ -42190,6 +42199,22 @@ var cyStyle = [
          "text-valign": "center",
          "text-halign": "center",
          "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_GREEN,
+         "text-outline-color": '#000',
+         "text-outline-width": "1px",
+         "color": "#fff",
+         "overlay-padding": "6px",
+         "z-index": "10",
+         shape: "ellipse"
+     }},
+    {"selector": "node.manufacture",
+     "style": {
+         "width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+         "height": "mapData(score, 0, 0.006769776522008331, 20, 60)",
+         "content": "data(name)",
+         "font-size": "9px",
+         "text-valign": "center",
+         "text-halign": "center",
+         "background-color": __WEBPACK_IMPORTED_MODULE_5__Constants_js__["a" /* Constants */].COLOR_ORANGE,
          "text-outline-color": '#000',
          "text-outline-width": "1px",
          "color": "#fff",
@@ -72865,7 +72890,17 @@ module.exports = debounce;
 
 
 
-const mapTopicEdgeToNodes = (targetId, edgeName) => {
+const manufactureValueMapper = (x) => {
+    let node = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(x.id);
+    let label = node !== undefined ? node.label : x.id;
+    return {id: x.id, name: label, quantity: x.quantity};
+};
+const facilityBuildValueMapper = (x) => {
+    let node = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(x.id);
+    let label = node !== undefined ? node.label : x.id;
+    return {id: x.id, name: label, build: x.build, refund: x.refund};
+};
+const mapTopicEdgeToNodes = (targetId, edgeName, converter = null) => {
     let nodes = [];
     let matchedNode = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(targetId);
     if(matchedNode == undefined || typeof(matchedNode[edgeName]) == 'undefined') {
@@ -72882,10 +72917,8 @@ const mapTopicEdgeToNodes = (targetId, edgeName) => {
             return shouldInclude;
         }).map((x) => {
             let retVal = {};
-            if(x.id) {
-                let node = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(x.id);
-                let label = node !== undefined ? node.label : x.id;
-                retVal = {id: x.id, name: label, quantity: x.quantity};
+            if(converter != null) {
+                retVal = converter(x);
             } else {
                 let node = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(x);
                 let label = node !== undefined ? node.label : x;
@@ -72903,30 +72936,31 @@ class RightNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_
             let topic = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(this.props.targetId);
             let children = [];
             if(topic.requiresBaseFunc && topic.requiresBaseFunc.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["d" /* RequiresBaseFuncSidebarNodeListComponent */], {}, null));
-            }
-            if(topic.requiredItems && topic.requiredItems.length > 0) {
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* ManufactureGraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems')}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["e" /* RequiresBaseFuncSidebarNodeListComponent */], {}, null));
             }
             if(topic.dependedUponBy && topic.dependedUponBy.length > 0) {
                 let edgeName = 'dependedUponBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GREEN}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Depended Upon By (', titleColored: 'Green', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GREEN}, null));
             }
             if(topic.unlocks && topic.unlocks.length > 0) {
                 let edgeName = 'unlocks';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_BLUE}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocks (', titleColored: 'Blue', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_BLUE}, null));
             }
             if(topic.getOneFree && topic.getOneFree.length > 0) {
                 let edgeName = 'getOneFree';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_RED}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Give One Free (', titleColored: 'Red', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_RED}, null));
             }
             if(topic.requiredBy && topic.requiredBy.length > 0) {
                 let edgeName = 'requiredBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required By (', titleColored: 'Gray', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
             }
             if(topic.requiredToManufacture && topic.requiredToManufacture.length > 0) {
                 let edgeName = 'requiredToManufacture';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_ORANGE}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Manufacture (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_ORANGE}, null));
+            }
+            if(topic.requiredToConstruct && topic.requiredToConstruct.length > 0) {
+                let edgeName = 'requiredToConstruct';
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Required To Construct (', titleColored: 'Orange', titleSuffix: 'away)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_ORANGE}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
@@ -72952,26 +72986,32 @@ class LeftNodeDetailsPresentationComponent extends __WEBPACK_IMPORTED_MODULE_0_r
         if(this.props.active) {
             let topic = Object(__WEBPACK_IMPORTED_MODULE_5__XrDataQueries_js__["d" /* researchById */])(this.props.targetId);
             let children = [];
-            children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["c" /* NodeTriviaListComponent */], {}, null));
+            children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["d" /* NodeTriviaListComponent */], {}, null));
+            if(topic.requiredItems && topic.requiredItems.length > 0) {
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["c" /* ManufactureGraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'requiredItems', manufactureValueMapper)}, null));
+            }
+            if(topic.buildCostItems && topic.buildCostItems.length > 0) {
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* ConstructionGraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, 'buildCostItems', facilityBuildValueMapper)}, null));
+            }
             if(topic.dependencies && topic.dependencies.length > 0) {
                 let edgeName = 'dependencies';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GREEN}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Dependencies (', titleColored: 'Green', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GREEN}, null));
             }
             if(topic.unlockedBy && topic.unlockedBy.length > 0) {
                 let edgeName = 'unlockedBy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_BLUE}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Unlocked By (', titleColored: 'Blue', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_BLUE}, null));
             }
             if(topic.giveOneFree && topic.giveOneFree.length > 0) {
                 let edgeName = 'giveOneFree';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_RED}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Get For Free From (', titleColored: 'Red', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_RED}, null));
             }
             if(topic.requires && topic.requires.length > 0) {
                 let edgeName = 'requires';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
             }
             if(topic.requiresBuy && topic.requiresBuy.length > 0) {
                 let edgeName = 'requiresBuy';
-                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["a" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
+                children.push(Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])(__WEBPACK_IMPORTED_MODULE_4__NodeListComponents_js__["b" /* GraphNodeTopicListComponent */], {nodes: mapTopicEdgeToNodes(this.props.targetId, edgeName), edgeName, titlePrefix: 'Requires For Purchase (', titleColored: 'Gray', titleSuffix: 'towards)', highlightColor: __WEBPACK_IMPORTED_MODULE_3__Constants_js__["a" /* Constants */].COLOR_GRAY_LIGHT}, null));
             }
             return Object(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"])('div', {}, ...children);
         }
